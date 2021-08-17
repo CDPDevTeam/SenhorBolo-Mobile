@@ -8,7 +8,7 @@
 
 O projeto ainda está em desenvolvimento e as próximas atualizações serão voltadas nas seguintes tarefas:
 
-- [x] Fazer as telas do APP
+- [ ] Fazer as telas do APP
 - [ ] Conexão com o banco de dados
 - [ ] POO
 - [ ] Testes de qualidade
