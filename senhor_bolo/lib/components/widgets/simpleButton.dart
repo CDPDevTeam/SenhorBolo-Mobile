@@ -12,7 +12,7 @@ Widget simpleButton (double width, double height, String btnText, VoidCallback o
         style: ElevatedButton.styleFrom(
           primary: cor,
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(defaultRadius)
+              borderRadius: BorderRadius.circular(Radius)
           ),
           textStyle: TextStyle(
               fontFamily: 'Raleway',

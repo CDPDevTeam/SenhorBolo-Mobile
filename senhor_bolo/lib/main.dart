@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:senhor_bolo/components/login.dart';
+import 'package:senhor_bolo/components/boloPersonalizado.dart';
 import 'package:senhor_bolo/constants.dart';
 
 void main(){
@@ -10,7 +10,7 @@ void main(){
         fontFamily: 'Raleway',
         scaffoldBackgroundColor: backgroundColor
     ),
-    home: LoginApp(),
+    home: BoloPersonalizado(),
     ),
   );
 }

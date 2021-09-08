@@ -6,7 +6,7 @@ class ProdutoVertical extends StatelessWidget {
 
   final String nomeProduto;
   final String categoriaProduto;
-  final String precoProduto;
+  final double precoProduto;
   final String imgProduto;
 
   const ProdutoVertical({Key? key, required this.nomeProduto,
@@ -18,7 +18,10 @@ class ProdutoVertical extends StatelessWidget {
     return GestureDetector(
         onTap: () {
           Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => DetalheProduto())
+              MaterialPageRoute(builder: (context) => DetalheProduto(
+                nomeProduto: nomeProduto,
+                categoriaProduto: categoriaProduto,
+                imgProduto: imgProduto,))
           );
         },
         child: Container(
@@ -53,7 +56,7 @@ class ProdutoVertical extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      'R\$ $precoProduto',
+                      'R\$' + precoProduto.toString() + " - 30,00",
                       style: TextStyle(
                           fontFamily: 'Montserrat',
                           fontSize: 14,
@@ -66,21 +69,22 @@ class ProdutoVertical extends StatelessWidget {
               Positioned(
                   right: 0,
                   top: 0,
-                  child: Container(
-                    width: 161,
-                    height: 161,
-                    decoration: BoxDecoration(
-                        color: mainColor,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20),
-                          bottomLeft: Radius.circular(20),
+                  child: Hero(
+                      tag: nomeProduto,
+                      child: Container(
+                        width: 161,
+                        height: 161,
+                        decoration: BoxDecoration(
+                            color: Color(0xff64CBC7),
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(20),
+                              topRight: Radius.circular(20),
+                              bottomLeft: Radius.circular(20),
+                            ),
+                            image: DecorationImage(image: NetworkImage('https://thespacefox.github.io/SenhorBolo-Imagens/images/' + imgProduto),
+                                fit: BoxFit.contain)
                         ),
-                        image: DecorationImage(
-                            image: AssetImage(imgProduto),
-                            fit: BoxFit.contain
-                        )
-                    ),
+                      )
                   )
               )
             ],

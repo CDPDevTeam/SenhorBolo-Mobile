@@ -4,7 +4,13 @@ import 'package:senhor_bolo/components/widgets/simpleButton.dart';
 import 'package:senhor_bolo/constants.dart';
 
 class DetalheProduto extends StatefulWidget {
-  const DetalheProduto({Key? key}) : super(key: key);
+
+  final String nomeProduto;
+  final String categoriaProduto;
+  final String imgProduto;
+
+  const DetalheProduto({Key? key, required this.nomeProduto,
+    required this.categoriaProduto, required this.imgProduto}) : super(key: key);
 
   @override
   _DetalheProdutoState createState() => _DetalheProdutoState();
@@ -109,15 +115,17 @@ class _DetalheProdutoState extends State<DetalheProduto> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          // Imagem do Bolo
-                          height: 291,
-                          decoration: BoxDecoration(
-                              color: Color(0xff64CBC7),
-                              borderRadius: BorderRadius.circular(25),
-                              image: DecorationImage(
-                                  image: AssetImage('images/brigadeiro.png'),
-                                  fit: BoxFit.fitWidth)),
+                        Hero(
+                          tag: widget.nomeProduto,
+                           child: Container(
+                              // Imagem do Bolo
+                              height: 291,
+                              decoration: BoxDecoration(
+                                  color: Color(0xff64CBC7),
+                                  borderRadius: BorderRadius.circular(25),
+                                  image: DecorationImage(image: NetworkImage('https://thespacefox.github.io/SenhorBolo-Imagens/images/' + widget.imgProduto),
+                                      fit: BoxFit.contain)),
+                            )
                         ),
                         Container(
                           // Informações do produto
@@ -128,12 +136,12 @@ class _DetalheProdutoState extends State<DetalheProduto> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Brigadeiro',
+                                widget.nomeProduto,
                                 style: TextStyle(
                                     fontSize: 36, fontWeight: FontWeight.w900),
                               ),
                               Text(
-                                'Bolo doce',
+                                widget.categoriaProduto,
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
@@ -311,9 +319,9 @@ class _DetalheProdutoState extends State<DetalheProduto> {
                 if (_defaultChoice == 0){
                   _precoItem = '12';
                 } else if (_defaultChoice == 1){
-                  _precoItem = '20';
+                  _precoItem = '24';
                 } else {
-                  _precoItem = '32';
+                  _precoItem = '30';
                 }
               });
             },

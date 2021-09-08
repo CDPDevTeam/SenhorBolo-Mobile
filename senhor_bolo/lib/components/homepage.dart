@@ -1,8 +1,88 @@
+import 'dart:ffi';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:senhor_bolo/components/widgets/produtoVertical.dart';
 import '../constants.dart';
 
 class Homepage extends StatelessWidget {
+  static List<String> _bolosChocolate = [
+    'Brigadeiro',
+    'Raimunda',
+    'Francesa',
+    'Crocante'
+  ];
+
+  static List<String> _categoriaBolosChocolate = [
+    'Bolo doce',
+    'Bolo doce',
+    'Torta doce',
+    'Bolo doce'
+  ];
+
+  static List<double> _precoProdutoChocolate = [
+    12.00,
+    12.00,
+    24.00,
+    12.00,
+  ];
+
+  static List<String> _imagensBoloChocolate = [
+    'brigadeiro.png',
+    'raimunda.png',
+    'francesa_chocolate.png',
+    'crocante.png'
+  ];
+
+  static List<String> _bolosSimples = [
+    'Bolo de nada',
+    'Laranja',
+    'Chocolate',
+    'Formigueiro'
+  ];
+
+  static List<String> _categoriaBolosSimples = [
+    "Bolo simples",
+    "Bolo simples",
+    "Bolo simples",
+    "Bolo simples",
+  ];
+
+  static List<double> _precoBoloSimples = [
+    12.00,
+    12.00,
+    12.00,
+    12.00,
+  ];
+
+  static List<String> _imagensBolosSimples = [
+    'bolo_nada.png',
+    'laranja.png',
+    'chocolate.png',
+    'formigueiro.png'
+  ];
+
+  static List<String> _bolosNovidade = [
+    'Portuguesa',
+    'Formigueiro',
+    'Mesclado',
+    'Cocada'
+  ];
+
+  static List<String> _categoriaNovidades = [
+    'Bolo gourmet',
+    'Bolo doce',
+    'Bolo doce',
+    'Bolo doce'
+  ];
+
+  static List<String> _imagensNovidade = [
+    'baba_portuguesa.png',
+    'bolo_mesclado.png',
+    'cocada.png',
+    'formigueiro.png'
+  ];
+
   const Homepage({Key? key}) : super(key: key);
 
   @override
@@ -73,7 +153,7 @@ class Homepage extends StatelessWidget {
                     child: CircleAvatar(
                       radius: 25,
                       backgroundImage:
-                      AssetImage('images/ricardinho_betoneira.jpeg'),
+                          AssetImage('images/ricardinho_betoneira.jpeg'),
                     ),
                   ))
             ],
@@ -121,37 +201,45 @@ class Homepage extends StatelessWidget {
             )),
         SliverList(
             delegate: SliverChildListDelegate(<Widget>[
-              SizedBox(height: 22),
-              Center(
-                child: Image(
-                  image: AssetImage('images/banner_teste.png'),
-                ),
-              ),
-              SizedBox(height: 10),
-              Padding(
-                padding: EdgeInsets.only(left: 34),
-                child: Text(
-                  'Promoções',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-              ),
-              SizedBox(height: 10),
-              Produtos(),
-              SizedBox(height: 20),
-              Padding(
-                padding: EdgeInsets.only(left: 34),
-                child: Text(
-                  'Promoções',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-              ),
-              SizedBox(height: 10),
-              Produtos(),
-              SizedBox(height: 22),
-            ]))
+          SizedBox(height: 22),
+          Center(
+            child: Image(
+              image: AssetImage('images/banner_teste.png'),
+            ),
+          ),
+          ListBolos(
+              nomeLista: 'Produtos com chocolate',
+              nomes: _bolosChocolate,
+              categorias: _categoriaBolosChocolate,
+              precos: _precoProdutoChocolate,
+              imagens: _imagensBoloChocolate),
+          ListBolos(
+              nomeLista: 'Bolos simples',
+              nomes: _bolosSimples,
+              categorias: _categoriaBolosSimples,
+              precos: _precoBoloSimples,
+              imagens: _imagensBolosSimples),
+          ListBolos(
+              nomeLista: 'Novidades',
+              nomes: _bolosNovidade,
+              categorias: _categoriaNovidades,
+              precos: _precoBoloSimples,
+              imagens: _imagensNovidade),
+          SizedBox(
+            height: 30,
+          ),
+          Text(
+            'Você chegou ao fim ^_^',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 15),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+        ]))
       ]),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){
+        onPressed: () {
           print('Carrinho pressionado!');
         },
         backgroundColor: mainColor,
@@ -161,58 +249,55 @@ class Homepage extends StatelessWidget {
   }
 }
 
-class Produtos extends StatefulWidget {
-  const Produtos({Key? key}) : super(key: key);
+class ListBolos extends StatelessWidget {
+  final String nomeLista;
+  final List<String> nomes;
+  final List<String> categorias;
+  final List<double> precos;
+  final List<String> imagens;
 
-  @override
-  _ProdutosState createState() => _ProdutosState();
-}
-
-class _ProdutosState extends State<Produtos> {
-  List<String> _bolosPromocao = [
-    'Brigadeiro',
-    'Cocada',
-    'Crocante',
-    'Portuguesa'
-  ];
-  List<String> _categoriaBolos = [
-    'Bolo doce',
-    'Bolo doce',
-    'Bolo doce',
-    'Bolo gourmet'
-  ];
-  List<String> _precoProduto = [
-    '12,00 - 32,00',
-    '12,00 - 32,00',
-    '12,00 - 32,00',
-    '12,00 - 32,00',
-  ];
-  List<String> _imagensBolo = [
-    'images/brigadeiro.png',
-    'images/cocada.png',
-    'images/crocante.png',
-    'images/baba_portuguesa.png'
-  ];
+  const ListBolos(
+      {Key? key,
+      required this.nomeLista,
+      required this.nomes,
+      required this.categorias,
+      required this.precos,
+      required this.imagens})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 227,
-      child: ListView.separated(
-        separatorBuilder: (BuildContext context, int index) {
-          return SizedBox(width: 20);
-        },
-        scrollDirection: Axis.horizontal,
-        itemCount: _bolosPromocao.length,
-        itemBuilder: (context, index) {
-          return ProdutoVertical(
-            nomeProduto: _bolosPromocao[index],
-            categoriaProduto: _categoriaBolos[index],
-            precoProduto: _precoProduto[index],
-            imgProduto: _imagensBolo[index],
-          );
-        },
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: 15),
+        Padding(
+          padding: EdgeInsets.only(left: 34),
+          child: Text(
+            nomeLista,
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        ),
+        SizedBox(height: 10),
+        SizedBox(
+          height: 227,
+          child: ListView.separated(
+            separatorBuilder: (BuildContext context, int index) {
+              return SizedBox(width: 20);
+            },
+            scrollDirection: Axis.horizontal,
+            itemCount: nomes.length,
+            itemBuilder: (context, index) {
+              return ProdutoVertical(
+                nomeProduto: nomes[index],
+                categoriaProduto: categorias[index],
+                precoProduto: precos[index],
+                imgProduto: imagens[index],
+              );
+            },
+          ),
+        )
+      ],
     );
   }
 }
