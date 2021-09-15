@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
-import '../../constants.dart';
+import 'package:senhor_bolo/constants.dart';
 
-/*
-Widget inputText(var controller, var obscureText, var txtType, VoidCallback validator, String label, var mask){
+// Campo de texto com máscara
+
+Widget maskedTextField(String textFieldName,
+    TextEditingController maskedController,
+    var inputFormatter){
   return TextFormField(
-    controller: controller,
-    inputFormatters: [mask],
-    obscureText: obscureText,
-    keyboardType: txtType,
+    textInputAction: TextInputAction.next,
+    controller: maskedController,
+    keyboardType: TextInputType.number,
+    inputFormatters: [inputFormatter],
     validator: (value){
       return value == null || value.isEmpty
-          ? 'Preencha o campo $label'
+          ? 'Preencha o campo $textFieldName'
           : null;
     },
     decoration: InputDecoration(
       contentPadding: EdgeInsets.only(left: 15),
-      labelText: label,
+      labelText: textFieldName,
       filled: true,
       fillColor: Colors.white,
       border: OutlineInputBorder(
@@ -33,4 +36,3 @@ Widget inputText(var controller, var obscureText, var txtType, VoidCallback vali
     ),
   );
 }
- */

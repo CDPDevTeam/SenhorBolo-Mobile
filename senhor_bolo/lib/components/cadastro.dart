@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:senhor_bolo/components/login.dart';
+import 'package:senhor_bolo/components/widgets/emailTextField.dart';
+import 'package:senhor_bolo/components/widgets/maskedTextField.dart';
 import 'package:senhor_bolo/components/widgets/simpleButton.dart';
 import 'package:senhor_bolo/constants.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -80,7 +82,6 @@ class _FormSignInState extends State<FormSignIn> {
 
   void verifyPasswordStrength(){
     double strength = estimatePasswordStrength(txtPassword.text);
-
     setState(() {
       if (strength != 0){
         if (strength < 0.7){
@@ -139,7 +140,6 @@ class _FormSignInState extends State<FormSignIn> {
 
   @override
   Widget build(BuildContext context) {
-    print('Construído');
     return
       Form(
       key: _keyCadastro,
@@ -155,70 +155,11 @@ class _FormSignInState extends State<FormSignIn> {
         ),
         SizedBox(height: 18),
 
-        TextFormField(
-          textInputAction: TextInputAction.next,
-          controller: txtEmail,
-          keyboardType: TextInputType.emailAddress,
-          validator: (value){
-            bool emailValid = RegExp(r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$').hasMatch(value.toString());
-            if (value == ''){
-              return 'Preencha o campo e-mail';
-            } else if (emailValid != true){
-              return 'Digite um e-mail válido';
-            }
-            return null;
-          },
-          decoration: InputDecoration(
-            contentPadding: EdgeInsets.only(left: 15),
-            labelText: 'E-mail',
-            filled: true,
-            fillColor: Colors.white,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(11),
-              borderSide: BorderSide(
-                width: 0,
-                style: BorderStyle.none,
-              ),
-            ),
-            labelStyle: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.bold,
-                color: textSecondaryColor
-            ),
-          ),
-        ),
+        emailTextField(txtEmail),
 
         SizedBox(height: 18),
 
-        TextFormField(
-          textInputAction: TextInputAction.next,
-          controller: txtCPF,
-          keyboardType: TextInputType.number,
-          inputFormatters: [maskCPF],
-          validator: (cpf){
-            return cpf == null || cpf.isEmpty
-                ? 'Preencha o campo CPF'
-                : null;
-          },
-          decoration: InputDecoration(
-            contentPadding: EdgeInsets.only(left: 15),
-            labelText: 'CPF',
-            filled: true,
-            fillColor: Colors.white,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(11),
-              borderSide: BorderSide(
-                width: 0,
-                style: BorderStyle.none,
-              ),
-            ),
-            labelStyle: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.bold,
-                color: textSecondaryColor
-            ),
-          ),
-        ),
+        maskedTextField('CPF', txtCPF, maskCPF),
 
         SizedBox(height: 18),
 
@@ -228,9 +169,13 @@ class _FormSignInState extends State<FormSignIn> {
           controller: txtPassword,
           obscureText: _hidePassword,
           validator: (password){
-            return password == null || password.isEmpty
-                ? 'Preencha o campo Senha'
-                : null;
+            if (password != null){
+              if (password.length < 8){
+                return 'A senha precisa ter mais de 8 caracteres';
+              }
+            } else {
+              return 'Preencha o campo senha';
+            }
           },
           decoration: InputDecoration(
             contentPadding: EdgeInsets.only(left: 15),
@@ -285,7 +230,7 @@ class _FormSignInState extends State<FormSignIn> {
 
         TextFormField(
           controller: txtPasswordConfirm,
-          obscureText: _hidePassword,
+          obscureText: true,
           validator: (passwordConfirm){
             if (passwordConfirm == ''){
               return 'Confirme a senha';
@@ -334,7 +279,6 @@ class _FormSignInState extends State<FormSignIn> {
         SizedBox(height: 22),
 
         simpleButton(double.infinity, 50, 'Cadastrar', verificarForm, defaultRadius, 25, mainColor),
-
       ],
     )
    );

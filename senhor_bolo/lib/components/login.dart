@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:senhor_bolo/components/homepage.dart';
-import 'package:senhor_bolo/components/widgets/simpleButton.dart';
 import 'package:senhor_bolo/constants.dart';
+import 'package:senhor_bolo/components/cadastro.dart';
+import 'package:senhor_bolo/components/homepage.dart';
+import 'package:senhor_bolo/components/widgets/emailTextField.dart';
+import 'package:senhor_bolo/components/widgets/passwordTextField.dart';
+import 'package:senhor_bolo/components/widgets/simpleButton.dart';
 
 class LoginApp extends StatelessWidget {
   const LoginApp({Key? key}) : super(key: key);
@@ -20,7 +22,7 @@ class LoginApp extends StatelessWidget {
           child: Column(children: <Widget>[
             Container(
               width: double.infinity,
-              height: 344,
+              height: MediaQuery.of(context).size.height * 0.42,
               decoration: BoxDecoration(
                 color: mainColor,
                 image: DecorationImage(
@@ -49,7 +51,7 @@ class LoginApp extends StatelessWidget {
             ),
             Padding(
               padding: EdgeInsets.symmetric(
-                vertical: 31,
+                vertical: 30,
                 horizontal: 40,
               ),
               child: FormLogin(),
@@ -67,16 +69,17 @@ class FormLogin extends StatefulWidget {
 }
 
 class _FormLoginState extends State<FormLogin> {
-  final _formKey = GlobalKey<FormState>();
-  bool _hidePassword = true;
+
+  final _formKey = GlobalKey<FormState>(); // Chave que define o formulário
+
   TextEditingController _txtEmail = TextEditingController();
   TextEditingController _txtPassword = TextEditingController();
 
-  void validarForm() {
+  void validarForm() { // Dps mudar para PostgreSQL
     if (_formKey.currentState!.validate()) {
       print('Validado!');
       if (_txtEmail.text == 'lricardosp@gmail.com' &&
-          _txtPassword.text == 'teste') {
+          _txtPassword.text == 'edsonlindo') {
         print('Usuário aceito');
         Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (context) => Homepage()));
@@ -88,84 +91,13 @@ class _FormLoginState extends State<FormLogin> {
 
   @override
   Widget build(BuildContext context) {
-    print('Construído');
     return Form(
       key: _formKey,
       child: Column(
         children: <Widget>[
-          TextFormField(
-            textInputAction: TextInputAction.next,
-            controller: _txtEmail,
-            keyboardType: TextInputType.emailAddress,
-            validator: (value) {
-              bool emailValid =
-                  RegExp(r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$')
-                      .hasMatch(value.toString());
-              if (value == '') {
-                return 'Preencha o campo e-mail';
-              } else if (emailValid != true) {
-                return 'Digite um e-mail válido';
-              }
-              return null;
-            },
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.only(left: 15),
-              labelText: 'E-mail',
-              filled: true,
-              fillColor: Colors.white,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(11),
-                borderSide: BorderSide(
-                  width: 0,
-                  style: BorderStyle.none,
-                ),
-              ),
-              labelStyle: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.bold,
-                  color: textSecondaryColor),
-            ),
-          ),
+          emailTextField(_txtEmail),
           SizedBox(height: 15),
-          TextFormField(
-            textInputAction: TextInputAction.next,
-            controller: _txtPassword,
-            obscureText: _hidePassword,
-            validator: (password) {
-              return password == null || password.isEmpty
-                  ? 'Preencha o campo Senha'
-                  : null;
-            },
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.only(left: 15),
-              labelText: 'Senha',
-              filled: true,
-              fillColor: Colors.white,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(11),
-                borderSide: BorderSide(
-                  width: 0,
-                  style: BorderStyle.none,
-                ),
-              ),
-              suffixIcon: IconButton(
-                onPressed: () {
-                  setState(() {
-                    _hidePassword = !_hidePassword;
-                  });
-                },
-                padding: EdgeInsets.zero,
-                icon: _hidePassword
-                    ? Icon(Icons.visibility_off)
-                    : Icon(Icons.visibility),
-                color: textSecondaryColor,
-              ),
-              labelStyle: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.bold,
-                  color: textSecondaryColor),
-            ),
-          ),
+          passwordTextField(passwordController: _txtPassword),
           SizedBox(height: 7),
           Align(
             alignment: Alignment.topLeft,
@@ -179,6 +111,21 @@ class _FormLoginState extends State<FormLogin> {
           ),
           simpleButton(double.infinity, 50, 'Entrar', validarForm,
               defaultRadius, 25, mainColor),
+          SizedBox(height: 15),
+          GestureDetector(
+            onTap: (){
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => CadastroApp()));
+            },
+            child: Text(
+              'Não tenho cadastro',
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+                color: Color(0xffB2B2B2)
+              ),
+            ),
+          ),
         ],
       ),
     );
