@@ -97,13 +97,13 @@ flutter:
           style: italic
         - asset: fonts/Raleway-Bold.ttf
           weight: 700
-        - asset: fonts/Raleway-Semibold.ttf
+        - asset: fonts/Raleway-SemiBold.ttf
           weight: 500
         - asset: fonts/Raleway-ExtraBold.ttf
           weight: 900 
     - family: Montserrat
       fonts:
-        - asset: fonts/Montserrat-Semibold.ttf
+        - asset: fonts/Montserrat-SemiBold.ttf
   # fonts:
   #   - family: Schyler
   #     fonts:
