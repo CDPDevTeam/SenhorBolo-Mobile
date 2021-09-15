@@ -45,7 +45,7 @@ class _DetalheProdutoState extends State<DetalheProduto> {
             child: Icon(
               Icons.keyboard_arrow_left,
               color: Colors.white,
-              size: 60,
+              size: 50,
             ),
           ),
           title: GestureDetector(

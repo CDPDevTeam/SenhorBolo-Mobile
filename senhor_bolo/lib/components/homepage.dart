@@ -1,11 +1,19 @@
-import 'dart:ffi';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:senhor_bolo/components/boloPersonalizado.dart';
+import 'package:senhor_bolo/components/creditcardTeste.dart';
 import 'package:senhor_bolo/components/widgets/produtoVertical.dart';
 import '../constants.dart';
 
-class Homepage extends StatelessWidget {
+class Homepage extends StatefulWidget {
+  const Homepage({Key? key}) : super(key: key);
+
+  @override
+  _HomepageState createState() => _HomepageState();
+}
+
+class _HomepageState extends State<Homepage> {
+
   static List<String> _bolosChocolate = [
     'Brigadeiro',
     'Raimunda',
@@ -35,10 +43,10 @@ class Homepage extends StatelessWidget {
   ];
 
   static List<String> _bolosSimples = [
+    'Formigueiro',
     'Bolo de nada',
     'Laranja',
     'Chocolate',
-    'Formigueiro'
   ];
 
   static List<String> _categoriaBolosSimples = [
@@ -64,7 +72,6 @@ class Homepage extends StatelessWidget {
 
   static List<String> _bolosNovidade = [
     'Portuguesa',
-    'Formigueiro',
     'Mesclado',
     'Cocada'
   ];
@@ -73,21 +80,67 @@ class Homepage extends StatelessWidget {
     'Bolo gourmet',
     'Bolo doce',
     'Bolo doce',
-    'Bolo doce'
   ];
 
   static List<String> _imagensNovidade = [
     'baba_portuguesa.png',
     'bolo_mesclado.png',
     'cocada.png',
-    'formigueiro.png'
   ];
 
-  const Homepage({Key? key}) : super(key: key);
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
+      drawer: Drawer(
+        child: Material(
+          color: mainColor,
+          child: ListView(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            children: <Widget>[
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.only(top: 40),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    CircleAvatar(
+                      radius: 67,
+                      backgroundImage: AssetImage('images/ricardinho_betoneira.jpeg'),
+                    ),
+                    SizedBox(height: 10,),
+                    Text(
+                      'Lulz Ricardo',
+                      style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white
+                      ),
+                    ),
+                    Text(
+                      'lricardosp@gmail.com',
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 20),
+              buildMenuItem(texto: 'Minha conta', icone: Icons.account_circle),
+              buildMenuItem(texto: 'Meus pedidos', icone: Icons.cake),
+              buildMenuItem(texto: 'Cupons', icone: Icons.local_offer),
+              buildMenuItem(texto: 'Ajuda', icone: Icons.help),
+              buildMenuItem(texto: 'Sobre nós', icone: Icons.info),
+              Divider(color: Colors.white),
+              buildMenuItem(texto: 'Logout', icone: Icons.logout)
+            ],
+          ),
+        ),
+      ),
       body: CustomScrollView(slivers: <Widget>[
         SliverAppBar(
             pinned: true,
@@ -98,9 +151,7 @@ class Homepage extends StatelessWidget {
                     bottomLeft: Radius.circular(25),
                     bottomRight: Radius.circular(25))),
             leading: InkWell(
-                onTap: () {
-                  print('Tocou no menu');
-                },
+                onTap: () => _scaffoldKey.currentState!.openDrawer(),
                 child: Padding(
                   padding: EdgeInsets.only(left: 18),
                   child: Icon(
@@ -146,14 +197,15 @@ class Homepage extends StatelessWidget {
             actions: <Widget>[
               GestureDetector(
                   onTap: () {
-                    print('Tocou na foto');
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => FormCartaoTeste()));
                   },
                   child: Padding(
                     padding: EdgeInsets.only(right: 18),
                     child: CircleAvatar(
                       radius: 25,
                       backgroundImage:
-                          AssetImage('images/ricardinho_betoneira.jpeg'),
+                      AssetImage('images/ricardinho_betoneira.jpeg'),
                     ),
                   ))
             ],
@@ -201,43 +253,49 @@ class Homepage extends StatelessWidget {
             )),
         SliverList(
             delegate: SliverChildListDelegate(<Widget>[
-          SizedBox(height: 22),
-          Center(
-            child: Image(
-              image: AssetImage('images/banner_teste.png'),
-            ),
-          ),
-          ListBolos(
-              nomeLista: 'Produtos com chocolate',
-              nomes: _bolosChocolate,
-              categorias: _categoriaBolosChocolate,
-              precos: _precoProdutoChocolate,
-              imagens: _imagensBoloChocolate),
-          ListBolos(
-              nomeLista: 'Bolos simples',
-              nomes: _bolosSimples,
-              categorias: _categoriaBolosSimples,
-              precos: _precoBoloSimples,
-              imagens: _imagensBolosSimples),
-          ListBolos(
-              nomeLista: 'Novidades',
-              nomes: _bolosNovidade,
-              categorias: _categoriaNovidades,
-              precos: _precoBoloSimples,
-              imagens: _imagensNovidade),
-          SizedBox(
-            height: 30,
-          ),
-          Text(
-            'Você chegou ao fim ^_^',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 15),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-        ]))
-      ]),
+              SizedBox(height: 22),
+              GestureDetector(
+                  onTap: (){
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => BoloPersonalizado()));
+                  },
+                  child: Center(
+                    child: Image(
+                      image: AssetImage('images/banner_teste.png'),
+                    ),
+                  )
+              ),
+              ListBolos(
+                  nomeLista: 'Produtos com chocolate',
+                  nomes: _bolosChocolate,
+                  categorias: _categoriaBolosChocolate,
+                  precos: _precoProdutoChocolate,
+                  imagens: _imagensBoloChocolate),
+              ListBolos(
+                  nomeLista: 'Bolos simples',
+                  nomes: _bolosSimples,
+                  categorias: _categoriaBolosSimples,
+                  precos: _precoBoloSimples,
+                  imagens: _imagensBolosSimples),
+              ListBolos(
+                  nomeLista: 'Novidades',
+                  nomes: _bolosNovidade,
+                  categorias: _categoriaNovidades,
+                  precos: _precoBoloSimples,
+                  imagens: _imagensNovidade),
+              SizedBox(
+                height: 30,
+              ),
+              Text(
+                'Você chegou ao fim ^_^',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 15),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+            ])
+        )]),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           print('Carrinho pressionado!');
@@ -247,7 +305,28 @@ class Homepage extends StatelessWidget {
       ),
     );
   }
+  Widget buildMenuItem({
+    required String texto,
+    IconData? icone,
+  }){
+    final hoverColor = Color(0xff14A8A2);
+    return ListTile(
+      leading: Icon(icone, color: Colors.white, size: 30,),
+      title: Text(
+        texto,
+        style: TextStyle(
+            fontSize: 22,
+            color: Colors.white
+        ),
+      ),
+      hoverColor: hoverColor,
+      onTap: (){},
+    );
+  }
 }
+
+
+
 
 class ListBolos extends StatelessWidget {
   final String nomeLista;

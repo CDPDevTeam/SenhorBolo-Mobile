@@ -29,7 +29,7 @@ class _BoloPersonalizadoState extends State<BoloPersonalizado> {
   }
 
   void prosseguir(){
-    if (indexPagina < 4){
+    if (indexPagina < 3){
       setState(() {
         indexPagina++;
         txtBtnVermelho = 'Voltar';

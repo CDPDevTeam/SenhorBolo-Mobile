@@ -1,8 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'dart:math' as math;
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:senhor_bolo/components/homepage.dart';
 import 'package:senhor_bolo/components/widgets/cardBackView.dart';
 import 'package:senhor_bolo/components/widgets/cardFrontView.dart';
 import 'package:senhor_bolo/components/widgets/simpleButton.dart';
@@ -11,14 +13,15 @@ import 'package:credit_card_validator/credit_card_validator.dart';
 
 import 'widgets/maskedTextBox.dart';
 
-class FormCartao extends StatefulWidget {
-  const FormCartao({Key? key}) : super(key: key);
+
+class FormCartaoTeste extends StatefulWidget {
+  const FormCartaoTeste({Key? key}) : super(key: key);
 
   @override
-  _FormCartaoState createState() => _FormCartaoState();
+  _FormCartaoTesteState createState() => _FormCartaoTesteState();
 }
 
-class _FormCartaoState extends State<FormCartao>
+class _FormCartaoTesteState extends State<FormCartaoTeste>
     with SingleTickerProviderStateMixin{
 
   final _formKey = GlobalKey<FormState>();
@@ -174,99 +177,97 @@ class _FormCartaoState extends State<FormCartao>
     });
   }
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      /*
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(size.height * 0.19),
-        child: ,
-    */
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                height: size.height * 0.22,
-                decoration: BoxDecoration(
-                    color: mainColor,
-                    borderRadius: BorderRadius.only(
-                        bottomRight: Radius.circular(25),
-                        bottomLeft: Radius.circular(25)
-                    )
+      body: CustomScrollView(slivers: <Widget>[
+      SliverAppBar(
+          pinned: true,
+          toolbarHeight: 88,
+          centerTitle: true,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(25),
+                  bottomRight: Radius.circular(25))),
+          leading: InkWell(
+            onTap:  () => Navigator.of(context).pop(),
+            child: Icon(
+              Icons.keyboard_arrow_left,
+              color: Colors.white,
+              size: 50,
+            ),
+          ),
+          title: GestureDetector(
+            onTap: () {
+              print('Tocou no endereço');
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Column(
+                  children: <Text>[
+                    Text(
+                      'Entregar em',
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                    Text(
+                      'Rua Humaitá, 538',
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w100,
+                          color: Colors.white),
+                    ),
+                  ],
                 ),
-                child: SafeArea(
-                  top: true,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          InkWell(
-                            onTap:  () => Navigator.of(context).pop(),
-                            child: Icon(
-                              Icons.keyboard_arrow_left,
-                              color: Colors.white,
-                              size: 60,
-                            ),
-                          ),
-                          GestureDetector(
-                              child: Row(
-                                  children: [
-                                    Column(
-                                        children: <Widget>[
-                                          Text(
-                                            'Entregar em',
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white
-                                            ),
-                                          ),
-                                          Text(
-                                            'Rua Humaitá, 538',
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w100,
-                                                color: Colors.white
-                                            ),
-                                          ),
-                                        ]),
-                                    Icon(
-                                      Icons.location_on,
-                                      color: Colors.white,
-                                      size: 20,
-                                    )
-                                  ]
-                              )
-                          ),
-
-                          GestureDetector(
-                            onTap: (){},
-                            child: CircleAvatar(
-                              radius: 25,
-                              backgroundImage:
-                              AssetImage('images/ricardinho_betoneira.jpeg'),
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      Container(
-                        margin: EdgeInsets.only(bottom: 20),
-                        child: Text(
-                          'Cadastrar Cartão',
-                          style: TextStyle(
-                              fontSize: 35,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white
-                          ),
-                        ),
-                      )
-                    ],
+                Icon(
+                  Icons.location_on,
+                  color: Colors.white,
+                  size: 20,
+                )
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => FormCartaoTeste()));
+                },
+                child: Padding(
+                  padding: EdgeInsets.only(right: 18),
+                  child: CircleAvatar(
+                    radius: 25,
+                    backgroundImage:
+                    AssetImage('images/ricardinho_betoneira.jpeg'),
                   ),
-                ),
+                ))
+          ],
+          expandedHeight: 150,
+          flexibleSpace: FlexibleSpaceBar(
+            background: Container(
+              padding: EdgeInsets.only(top: 100),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Cadastrar cartão',
+                    style: TextStyle(
+                        fontSize: 44,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  ),
+                ],
               ),
+            ),
+          )),
+          SliverList(
+            delegate: SliverChildListDelegate(<Widget>[
               Container(
                   padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                   child: Column(
@@ -356,7 +357,7 @@ class _FormCartaoState extends State<FormCartao>
               )
             ],
           ),
-        ),
+          )]),
 
         bottomNavigationBar: Container(
           height: size.height * 0.13,
@@ -375,6 +376,24 @@ class _FormCartaoState extends State<FormCartao>
             ],
           ),
         )
+    );
+  }
+  Widget buildMenuItem({
+    required String texto,
+    IconData? icone,
+  }){
+    final hoverColor = Color(0xff14A8A2);
+    return ListTile(
+      leading: Icon(icone, color: Colors.white, size: 30,),
+      title: Text(
+        texto,
+        style: TextStyle(
+            fontSize: 22,
+            color: Colors.white
+        ),
+      ),
+      hoverColor: hoverColor,
+      onTap: (){},
     );
   }
 }

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import '../../constants.dart';
 
-Widget maskedInput ({
+// 
+
+Widget maskedTextBox ({
   required String txtLabel,
   required TextEditingController txtController,
   required TextInputType inputType,
   required var mask,
   double? widthButton
-
 
 }){
   return Column(
