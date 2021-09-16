@@ -25,3 +25,27 @@ Widget simpleButton (double width, double height, String btnText, VoidCallback o
   );
 }
 
+Widget simpleButtonIcon (double width, double height, String btnText, VoidCallback onPressed, double Radius, double fontSize, Color cor, Icon btnIcon, FontWeight fontPeso){
+  return SizedBox(
+    width: width,
+    height: height,
+    child: ElevatedButton.icon(
+      onPressed: onPressed,
+      icon: btnIcon,
+      label: Text(btnText),
+      style: ElevatedButton.styleFrom(
+        primary: cor,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(Radius)
+        ),
+        textStyle: TextStyle(
+            fontFamily: 'Raleway',
+            color: Colors.white,
+            fontSize: fontSize,
+            fontWeight: fontPeso,
+        ),
+      ),
+    ),
+  );
+}
+
