@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:senhor_bolo/components/cadastro.dart';
 import 'package:senhor_bolo/components/pedidoEntregue.dart';
+import 'package:senhor_bolo/components/ratingScreen.dart';
 import 'package:senhor_bolo/constants.dart';
 
 
@@ -18,7 +19,7 @@ void main(){
         scaffoldBackgroundColor: backgroundColor
     ),
 
-    home: PedidoEntregue(),
+    home: RatingScreen(),
 
     ),
   );
