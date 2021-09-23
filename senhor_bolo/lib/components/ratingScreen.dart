@@ -84,69 +84,134 @@ class _RatingScreenState extends State<RatingScreen> {
           )  ,
         ),
         body:
-        Container(
-          padding: EdgeInsets.only(left: 20 ,right: 20),
-          width: MediaQuery.of(context).size.width,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Text("Pedido #0000",style: TextStyle(fontSize: 25), ),
-              SizedBox(height: 10),
-              ProdutoHorizontal(nomeProduto: "Bolo Crente", categoriaProduto: "", precoProduto: "999", imgProduto: "images/davi.png"),
-              SizedBox(height: 10),
-              Text("Dê uma nota ao produto:",style: TextStyle(color: textSecondaryColor,fontSize: 17, fontWeight: FontWeight.w700),),
-              SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            /*SingleChildScrollView(
+              padding: EdgeInsets.only(left: 20 ,right: 20),
+              child:*/
+        Padding(
+          padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+          child:
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                Rating((rating){
-                  setState(() {
-                    _rating = rating;
-                  });
-                }),
-                  Text("$_rating/5", style: TextStyle(fontSize: 30),)
+                  Text("Pedido #0000",style: TextStyle(fontSize: 25), ),
+                  //SizedBox(height: 10),
+                  ProdutoHorizontal(nomeProduto: "Bolo Crente", categoriaProduto: "", precoProduto: "999", imgProduto: "images/davi.png"),
+                  //SizedBox(height: 10),
+                  Text("Dê uma nota ao produto:",style: TextStyle(color: textSecondaryColor,fontSize: 17, fontWeight: FontWeight.w700),),
+                  //SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                    Rating((rating){
+                      setState(() {
+                        _rating = rating;
+                      });
+                    }),
+                      Text("$_rating/5", style: TextStyle(fontSize: 30),)
 
-              ],),
-              SizedBox(height: 10),
-              Scrollbar(
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.vertical,
-                          reverse: true,
-                          child:
-                              SizedBox(
-                                height: 224,
-                                child: TextField(
-                                  maxLines: 8,
-                                  decoration: const InputDecoration(
-                                      fillColor: Colors.white,
-                                      filled: true,
-                                      border: OutlineInputBorder(),
-                                      hintText: "Escreva o que achou do bolo"
+                  ],),
+                  //SizedBox(height: 10),
+                  Scrollbar(
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.vertical,
+                              reverse: true,
+                              child:
+                                  SizedBox(
+                                    //height: 224,
+                                    child: TextField(
+                                      maxLines: 8,
+                                      decoration: const InputDecoration(
+                                          fillColor: Colors.white,
+                                          filled: true,
+                                          border: OutlineInputBorder(),
+                                          hintText: "Escreva o que achou do bolo"
+                                      ),
+                                    ),
+                                  )
+
+                            ),
+                          ) ,
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                            child: Container(
+                              height: 100,
+                              child: ListView(
+                                scrollDirection: Axis.horizontal,
+                                children: [
+                                  GestureDetector(
+                                    onTap: (){
+
+                                    },
+                                    child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Hero(
+                                          tag: 'ImageViewer',
+                                          child: Image.asset("images/davi.png", ),
+                                        )
+                                    ),
                                   ),
-                                ),
-                              )
 
+                                  SizedBox(width: 5,),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image.asset("images/davi.png", ),
+                                  ),
+                                  SizedBox(width: 5,),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image.asset("images/davi.png", ),
+                                  ),
+                                  SizedBox(width: 5,),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image.asset("images/davi.png", ),
+                                  ),
+                                  SizedBox(width: 5,),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image.asset("images/davi.png", ),
+                                  ),
+                                ],
+                              ),
+                            )
                         ),
-                      ) ,
+                        SizedBox(width: 10,),
+                        simpleButtonIconeOnly(85, 55, (){}, 10, 10, mainColor, Icon(Icons.add_a_photo), FontWeight.normal)
+                        //simpleButtonIcon(83, 55, "", (){}, 25, 0, mainColor, Icon(Icons.camera), FontWeight.normal)
 
+                      ],
+                    ),
+                  ),
+                  ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minWidth: MediaQuery.of(context).size.width ,
+                        minHeight: 55,
+                      ),
+                    child: simpleButtonIcon(368, 51, "Enviar Feedback", (){}, 25, 20, mainColor, Icon(Icons.edit), FontWeight.normal),
+                  ),
+                  /*Container(
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
 
+                      ],
+                    )
 
+                  ),*/
 
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: 70,
-                child: Column(
-                  children: [
-                    simpleButtonIcon(368, 51, "Enviar Feedback", (){}, 25, 20, mainColor, Icon(Icons.edit), FontWeight.normal) ,
-                  ],
-                )
-
+                ],
               ),
-
-            ],
-          ),
         )
+            //),
+
+
 
 
     );
