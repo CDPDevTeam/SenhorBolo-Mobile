@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import "package:flutter/material.dart";
+import 'package:senhor_bolo/components/imageViewer.dart';
 import 'package:senhor_bolo/components/widgets/produtoHorizontal.dart';
 import 'package:senhor_bolo/components/widgets/simpleButton.dart';
 import 'package:senhor_bolo/components/widgets/starRating.dart';
@@ -84,12 +85,11 @@ class _RatingScreenState extends State<RatingScreen> {
           )  ,
         ),
         body:
-            /*SingleChildScrollView(
-              padding: EdgeInsets.only(left: 20 ,right: 20),
-              child:*/
+
         Padding(
           padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-          child:
+         // child:SingleChildScrollView(
+              child:
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -146,7 +146,8 @@ class _RatingScreenState extends State<RatingScreen> {
                                 children: [
                                   GestureDetector(
                                     onTap: (){
-
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(builder: (context) => ImageViewer()));
                                     },
                                     child: ClipRRect(
                                         borderRadius: BorderRadius.circular(10),

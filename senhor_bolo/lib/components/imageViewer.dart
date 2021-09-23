@@ -29,7 +29,9 @@ class _ImageViewerState extends State<ImageViewer> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                     iconSize: 40,
                     color: Colors.white,
                     icon: Icon(Icons.arrow_back_ios)),

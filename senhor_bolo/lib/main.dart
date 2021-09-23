@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:senhor_bolo/components/addressPicker.dart';
 import 'package:senhor_bolo/components/cadastro.dart';
 import 'package:senhor_bolo/components/imageViewer.dart';
 import 'package:senhor_bolo/components/pedidoEntregue.dart';
@@ -20,7 +21,7 @@ void main(){
         scaffoldBackgroundColor: backgroundColor
     ),
 
-    home: ImageViewer(),
+    home: AddressPicker(),
 
     ),
   );
