@@ -22,7 +22,7 @@ void main(){
         scaffoldBackgroundColor: backgroundColor
     ),
 
-    home: MeusPedidos(),
+    home: MeusPedidos()
 
     ),
   );
