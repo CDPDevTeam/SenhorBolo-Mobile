@@ -28,6 +28,53 @@ class _AddressPickerState extends State<AddressPicker> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      drawer: Drawer(
+        child: Material(
+          color: mainColor,
+          child: ListView(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            children: <Widget>[
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.only(top: 40),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    CircleAvatar(
+                      radius: 67,
+                      backgroundImage: AssetImage('images/ricardinho_betoneira.jpeg'),
+                    ),
+                    SizedBox(height: 10,),
+                    Text(
+                      'Lulz Ricardo',
+                      style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white
+                      ),
+                    ),
+                    Text(
+                      'lricardosp@gmail.com',
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 20),
+              buildMenuItem(texto: 'Minha conta', icone: Icons.account_circle),
+              buildMenuItem(texto: 'Meus pedidos', icone: Icons.cake),
+              buildMenuItem(texto: 'Cupons', icone: Icons.local_offer),
+              buildMenuItem(texto: 'Ajuda', icone: Icons.help),
+              buildMenuItem(texto: 'Sobre nós', icone: Icons.info),
+              Divider(color: Colors.white),
+              buildMenuItem(texto: 'Logout', icone: Icons.logout)
+            ],
+          ),
+        ),
+      ),
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(224),
         child:
@@ -49,12 +96,13 @@ class _AddressPickerState extends State<AddressPicker> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        IconButton(
-                            onPressed: () {},
-                            iconSize: 40,
-
-                            color: Colors.white,
-                            icon: Icon(Icons.menu)),
+                        Builder(builder: (context){
+                          return IconButton(
+                              onPressed: () {Scaffold.of(context).openDrawer();},
+                              iconSize: 40,
+                              color: Colors.white,
+                              icon: Icon(Icons.menu));
+                        }),
 
                         GestureDetector(
                           onTap: () {},
