@@ -194,7 +194,7 @@ class _RatingScreenState extends State<RatingScreen> {
                         minWidth: MediaQuery.of(context).size.width ,
                         minHeight: 55,
                       ),
-                    child: simpleButtonIcon(368, 51, "Enviar Feedback", (){}, 25, 20, mainColor, Icon(Icons.edit), FontWeight.normal),
+                    child: simpleButtonIcon(368, 51, "Enviar avaliação", (){}, 25, 20, mainColor, Icon(Icons.edit), FontWeight.normal),
                   ),
                   /*Container(
                     width: MediaQuery.of(context).size.width,

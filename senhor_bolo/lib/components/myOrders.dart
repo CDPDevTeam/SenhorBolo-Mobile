@@ -124,6 +124,8 @@ class _MeusPedidosState extends State<MeusPedidos> {
                                   color: Colors.white,
                                   icon: Icon(Icons.menu));
                             }),
+
+
                             GestureDetector(
                                 child: Row(
                                     children: [
@@ -341,6 +343,7 @@ Widget openOrder (String nome, String preco, String img, BuildContext context){
       alignment: Alignment.topCenter,
       children: [
         Material(
+          borderRadius: BorderRadius.circular(25),
           child: Ink(
             decoration:BoxDecoration(color: mainColor,borderRadius: BorderRadius.all(Radius.circular(25))) ,
             child: InkWell(

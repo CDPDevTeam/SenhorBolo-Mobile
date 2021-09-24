@@ -6,6 +6,8 @@ import 'package:senhor_bolo/components/imageViewer.dart';
 import 'package:senhor_bolo/components/myOrders.dart';
 import 'package:senhor_bolo/components/pedidoEntregue.dart';
 import 'package:senhor_bolo/components/ratingScreen.dart';
+import 'package:senhor_bolo/components/reportarProblema.dart';
+import 'package:senhor_bolo/components/widgets/addressPicker.dart';
 import 'package:senhor_bolo/constants.dart';
 
 
