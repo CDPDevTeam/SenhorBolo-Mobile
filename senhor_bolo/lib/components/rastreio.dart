@@ -25,81 +25,70 @@ class _RastreioState extends State<Rastreio> {
   ];
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: PreferredSize(
-          preferredSize: Size.fromHeight(224),
-          child:
-          Container(
-            height: 224,
-            decoration: BoxDecoration(
-                color: mainColor,
-                borderRadius: BorderRadius.only(
-                    bottomRight: Radius.circular(25),
-                    bottomLeft: Radius.circular(25)
-                )
-            ),
-            padding: EdgeInsets.only(left: 20 ,right: 20),
-            child: SafeArea(
-              top: true,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      IconButton(
-                          onPressed: () {},
-                          iconSize: 40,
-
-                          color: Colors.white,
-                          icon: Icon(Icons.menu)),
-
-                      GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                          width: 43,
-                          height: 43,
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                  image: AssetImage('images/ricardinho_betoneira.jpeg'),
-                                  fit: BoxFit.cover
-                              )
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-
-                  Container(
-                      margin: EdgeInsets.only(bottom: 20),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Icon(Icons.edit_location, color: textMainColor),
-                              Text("Entregar em",style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: textMainColor),)
-                            ],
-                          ),
-                          TextField(
-                            style: TextStyle(color: textMainColor),
-                            decoration: const InputDecoration(
-                              hintText: "Rua Humaítá, 638",
-                              hintStyle: TextStyle(color: textMainColorFade),
-                              labelStyle: TextStyle(color: textMainColor),
-
-                            ),
-                          )
-                        ],
-                      )
+        preferredSize: Size.fromHeight(size.height * 0.20),
+        child: Column(
+          children: [
+            Container(
+              height: size.height * 0.22,
+              decoration: BoxDecoration(
+                  color: mainColor,
+                  borderRadius: BorderRadius.only(
+                      bottomRight: Radius.circular(25),
+                      bottomLeft: Radius.circular(25)
                   )
-                ],
               ),
-            ),
-          )
+              padding: EdgeInsets.only(left: 20 ,right: 20),
+              child: SafeArea(
+                top: true,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                            onPressed: () {},
+                            iconSize: 40,
+                            color: Colors.white,
+                            icon: Icon(Icons.arrow_back_ios)),
 
+                        GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            width: 43,
+                            height: 43,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    image: AssetImage('images/ricardinho_betoneira.jpeg'),
+                                    fit: BoxFit.cover
+                                )
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
 
+                    Container(
+                      margin: EdgeInsets.only(bottom: 20),
+                      child: Text(
+                        'Seu pedido',
+                        style: TextStyle(
+                            fontSize: 35,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            )
+          ],
+        )  ,
       ),
 
       bottomNavigationBar: Container(
