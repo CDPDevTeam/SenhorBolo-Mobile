@@ -1,3 +1,5 @@
+import 'package:flutter/rendering.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:senhor_bolo/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:senhor_bolo/components/widgets/simpleButton.dart';
@@ -15,12 +17,14 @@ class _PerfilState extends State<Perfil> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      extendBodyBehindAppBar: true,
+      //extendBodyBehindAppBar: true,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(464),
         child: Stack(
           children: [
             Container(
+              height: 464,
+              width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                   color: Color(0xffE6E6E6),
                   borderRadius: BorderRadius.only(
@@ -35,6 +39,38 @@ class _PerfilState extends State<Perfil> {
                 )
               ]),
                 padding: EdgeInsets.only(left: 20 ,right: 20),
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child:Container(
+                  height: 161,
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.person),
+                          Flexible(
+                          child: Text('Felipe Ribeiro Guerreiro Da Silva Cunha', overflow: TextOverflow.ellipsis,maxLines: 1,),
+                          ),
+
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text('000.***.***-55'),
+                        ],
+                      ),
+                      simpleButton(127, 41, 'Editar', (){}, 10, 17, Color(0xff707070))
+                    ],
+                  ),
+
+                ),
+              )
+
             ),
             Container(
               padding: EdgeInsets.all(20),
@@ -53,73 +89,53 @@ class _PerfilState extends State<Perfil> {
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Builder(builder: (context){
                         return IconButton(
                             onPressed: () {Scaffold.of(context).openDrawer();},
                             iconSize: 40,
                             color: Colors.white,
-                            icon: Icon(Icons.menu));
+                            icon: Icon(Icons.arrow_back_ios));
                       }),
 
-
-                      GestureDetector(
-                          child: Row(
-                              children: [
-                                Column(
-                                    children: <Widget>[
-                                      Text(
-                                        'Entregar em',
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white
-                                        ),
-                                      ),
-                                      Text(
-                                        'Rua Humaitá, 538',
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w100,
-                                            color: Colors.white
-                                        ),
-                                      ),
-                                    ]),
-                                Icon(
-                                  Icons.location_on,
-                                  color: Colors.white,
-                                  size: 20,
-                                )
-                              ]
-                          )
-                      ),
-
-                      GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                          width: 43,
-                          height: 43,
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                  image: AssetImage('images/ricardinho_betoneira.jpeg'),
-                                  fit: BoxFit.cover
-                              )
-                          ),
-                        ),
-                      )
                     ],
                   ),
-                    Container(
+                    Expanded(
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Stack(
+                          alignment: Alignment.bottomRight,
                           children: [
-                            Image.asset('images/misaka10032.png', scale: 0.3,),
-                            IconButton(onPressed: (){}, icon: Icon(Icons.home))
+                            Container(
+                              width: 130,
+                              height: 130,
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                      image: AssetImage('images/ricardinho_betoneira.jpeg'),
+                                      fit: BoxFit.cover
+                                  )
+                              ),
+                            ),
+                            Container(
+
+                                  width: 50, height: 50,
+                                  decoration: BoxDecoration(
+                                    color: textMainColor,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: IconButton(onPressed: (){}, icon: Icon(Icons.edit, size: 30, color: mainColor,)),
+                                )
+
                           ],
                         ),
-                        Text("Felipe Ribossomo")
+                        Text("Felipe Ribossomo", style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 25,
+                          color: textMainColor
+                        ),)
 
                       ],
                     ),
@@ -134,6 +150,55 @@ class _PerfilState extends State<Perfil> {
           ],
         ),
       ),
+      body: Container(
+        padding: EdgeInsets.all(20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Métodos de Pagamento'),
+              Row(
+                children: [
+                  Card(
+                    elevation: 5,
+                    color: Color(0xff818181),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                    child:
+                    InkWell(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      splashColor: textMainColorFade,
+                      onTap: (){},
+                      child: Container(
+                        height: 64, width: 64,
+                        child: Icon(Icons.add, color: textMainColor, size: 40,),
+                      ),
+                    ),
+                  ),
+                  CardCard("images/visa.png", '195')
+                ],
+              ),
+              Row(
+                children: [
+                  Card(
+                    elevation: 5,
+                    color: Color(0xff818181),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                    child:
+                    InkWell(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      splashColor: textMainColorFade,
+                      onTap: (){},
+                      child: Container(
+                        height: 64, width: 64,
+                        child: Icon(Icons.add, color: textMainColor, size: 40,),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ],
+          ),
+
+      ) ,
       bottomNavigationBar: Container(
         height: size.height * 0.13,
         decoration: BoxDecoration(
@@ -146,11 +211,36 @@ class _PerfilState extends State<Perfil> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            simpleButton(175, 55, 'Adicionar', (){}, 25, 20, mainColor),
-            simpleButton(175, 55, 'Limpar', (){}, 25, 20, redButtonColor),
+            simpleButtonIcon(177, 55, "Suporte", (){}, 25, 20, mainColor, Icon(Icons.headset), FontWeight.bold),
+            simpleButtonIcon(177, 55, "Deletar", (){}, 25, 20, redButtonColor, Icon(Icons.delete), FontWeight.bold),
+            //simpleButton(175, 55, 'Limpar', (){}, 25, 20, redButtonColor),
           ],
         ),
       ),
     );
   }
+}
+Widget CardCard (String img, String digit){
+  return Card(
+        elevation: 5,
+        color: Color(0xffE6E6E6),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+        child:
+        InkWell(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          splashColor: textMainColorFade,
+          onTap: (){},
+          child: Container(
+            height: 64, width: 123,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                FaIcon(FontAwesomeIcons.ccVisa, color: Color(0xff0855A3), size: 35,),
+                Text("1964", style: TextStyle(fontSize: 18, fontFamily: 'Roboto'))
+              ],
+            )
+            
+          ),
+        )
+  );
 }

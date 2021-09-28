@@ -26,3 +26,5 @@ Widget buildMenuItem({
     onTap: (){},
   );
 }
+
+// database placeholder variables below
