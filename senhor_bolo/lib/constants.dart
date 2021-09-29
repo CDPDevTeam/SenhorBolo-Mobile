@@ -28,3 +28,23 @@ Widget buildMenuItem({
 }
 
 // database placeholder variables below
+const List enderecos = [
+  "R. Tiro ao Pombo",
+  "R. Borboletas Psicodélicas",
+  "Rua zap"
+];
+const List cep = [
+  "03080000",
+  "04050000",
+  "00000000"
+];
+const List cardN = [
+  1964,
+  4589,
+  3390
+];
+const List issuer = [
+  "visa",
+  "visa",
+  "master"
+];

@@ -1,9 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:senhor_bolo/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:senhor_bolo/components/widgets/simpleButton.dart';
+import 'dart:math' as math;
 
+import 'package:senhor_bolo/main.dart';
 
 class Perfil extends StatefulWidget {
   const Perfil({Key? key}) : super(key: key);
@@ -17,6 +20,7 @@ class _PerfilState extends State<Perfil> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       //extendBodyBehindAppBar: true,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(464),
@@ -150,12 +154,47 @@ class _PerfilState extends State<Perfil> {
           ],
         ),
       ),
-      body: Container(
-        padding: EdgeInsets.all(20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Métodos de Pagamento'),
+              Text('Métodos de Pagamento',),
+              Container(
+                padding: EdgeInsets.only(left: 20),
+                color: mainColor,
+                height: 80,
+                child: Row(
+                  children: [
+                    Card(
+                      elevation: 5,
+                      color: Color(0xff818181),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                      child:
+                      InkWell(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        splashColor: textMainColorFade,
+                        onTap: (){},
+                        child: Container(
+                          height: 64, width: 64,
+                          child: Icon(Icons.add, color: textMainColor, size: 40,),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: 5,
+                      itemBuilder: (context, index){
+                        return CardCard(2103, "visa");
+                      })
+
+                  )
+                    //CardCard("images/visa.png", '195'),
+                  ],
+                ),
+              ),
+
+              Text('Endereços'),
               Row(
                 children: [
                   Card(
@@ -173,32 +212,13 @@ class _PerfilState extends State<Perfil> {
                       ),
                     ),
                   ),
-                  CardCard("images/visa.png", '195')
-                ],
-              ),
-              Row(
-                children: [
-                  Card(
-                    elevation: 5,
-                    color: Color(0xff818181),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-                    child:
-                    InkWell(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      splashColor: textMainColorFade,
-                      onTap: (){},
-                      child: Container(
-                        height: 64, width: 64,
-                        child: Icon(Icons.add, color: textMainColor, size: 40,),
-                      ),
-                    ),
-                  )
+                  CardCard(1223, 'master')
                 ],
               ),
             ],
           ),
 
-      ) ,
+
       bottomNavigationBar: Container(
         height: size.height * 0.13,
         decoration: BoxDecoration(
@@ -220,27 +240,39 @@ class _PerfilState extends State<Perfil> {
     );
   }
 }
-Widget CardCard (String img, String digit){
-  return Card(
+Widget CardCard (int digit, String issuer){
+  return /*SizedBox(
+    height: 64, width: 123,
+    child: */Card(
         elevation: 5,
         color: Color(0xffE6E6E6),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
         child:
         InkWell(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          splashColor: textMainColorFade,
-          onTap: (){},
-          child: Container(
-            height: 64, width: 123,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                FaIcon(FontAwesomeIcons.ccVisa, color: Color(0xff0855A3), size: 35,),
-                Text("1964", style: TextStyle(fontSize: 18, fontFamily: 'Roboto'))
-              ],
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            splashColor: textMainColorFade,
+            onTap: (){},
+            child: SizedBox(
+                height: 64, width: 123,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [ if (issuer == 'visa' )...[
+                    FaIcon(FontAwesomeIcons.ccVisa, color: Color(0xff0855A3), size: 35,),
+                    Text("$digit", style: TextStyle(fontSize: 18, fontFamily: 'Roboto'))
+                  ],
+                    if (issuer == 'master')...[
+                      FaIcon(FontAwesomeIcons.ccMastercard, color: Color(0xff0855A3), size: 35,),
+                      Text("$digit", style: TextStyle(fontSize: 18, fontFamily: 'Roboto'))
+                    ]
+
+                  ],
+                )
+
+
             )
-            
-          ),
         )
+    //)
   );
+
+
 }
