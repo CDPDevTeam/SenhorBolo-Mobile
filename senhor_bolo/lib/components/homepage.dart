@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:senhor_bolo/components/addressPicker.dart';
 import 'package:senhor_bolo/components/boloPersonalizado.dart';
 import 'package:senhor_bolo/components/creditcardTeste.dart';
 import 'package:senhor_bolo/components/widgets/produtoVertical.dart';
+import 'package:senhor_bolo/components/widgets/profileIcon.dart';
 import '../constants.dart';
 
 class Homepage extends StatefulWidget {
@@ -162,7 +164,9 @@ class _HomepageState extends State<Homepage> {
                 )),
             title: GestureDetector(
               onTap: () {
-                print('Tocou no endereço');
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const AddressPicker())
+                );
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -202,11 +206,7 @@ class _HomepageState extends State<Homepage> {
                   },
                   child: Padding(
                     padding: EdgeInsets.only(right: 18),
-                    child: CircleAvatar(
-                      radius: 25,
-                      backgroundImage:
-                      AssetImage('images/ricardinho_betoneira.jpeg'),
-                    ),
+                    child: profileIcon('images/ricardinho_betoneira.jpeg'),
                   ))
             ],
             expandedHeight: 311,
@@ -324,8 +324,6 @@ class _HomepageState extends State<Homepage> {
     );
   }
 }
-
-
 
 
 class ListBolos extends StatelessWidget {

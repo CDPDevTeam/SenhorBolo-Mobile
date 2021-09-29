@@ -1,9 +1,5 @@
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:senhor_bolo/components/TesteBolos.dart';
-import 'package:senhor_bolo/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:senhor_bolo/components/widgets/simpleButton.dart';
-import 'package:senhor_bolo/main.dart';
+import 'package:senhor_bolo/constants.dart';
 
 class Pesquisa extends StatefulWidget {
   const Pesquisa({Key? key}) : super(key: key);
@@ -186,7 +182,7 @@ class _PesquisaState extends State<Pesquisa> {
             width: MediaQuery.of(context).size.width,
             child: Text('3 resultados encontrados para "bolo Gay"', textAlign: TextAlign.center,),
           ),
-          Expanded(
+          Container(
               child: ListView.builder(
                   shrinkWrap: true,
                   itemBuilder: (context, index){
