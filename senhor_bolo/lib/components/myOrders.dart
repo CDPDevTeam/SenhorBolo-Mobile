@@ -95,7 +95,64 @@ class _MeusPedidosState extends State<MeusPedidos> {
           ),
         ),
       ),
-      appBar: /*PreferredSize(
+      appBar: AppBar(
+        centerTitle: true,
+        leading: Builder(builder: (context){
+          return IconButton(
+              onPressed: () {Scaffold.of(context).openDrawer();},
+              iconSize: 40,
+              color: Colors.white,
+              icon: Icon(Icons.menu));
+        }),
+        title: GestureDetector(
+            child: Row(
+                children: [
+                  Column(
+                      children: <Widget>[
+                        Text(
+                          'Entregar em',
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white
+                          ),
+                        ),
+                        Text(
+                          'Rua Humaitá, 538',
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w100,
+                              color: Colors.white
+                          ),
+                        ),
+                      ]),
+                  Icon(
+                    Icons.location_on,
+                    color: Colors.white,
+                    size: 20,
+                  )
+                ]
+            )
+        ),
+        actions: [
+          GestureDetector(
+            onTap: () {},
+            child: Container(
+              width: 43,
+              height: 43,
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                      image: AssetImage('images/ricardinho_betoneira.jpeg'),
+                      fit: BoxFit.cover
+                  )
+              ),
+            ),
+          )
+        ],
+      )
+
+      /*PreferredSize(
           preferredSize: Size.fromHeight(size.height * 0.20),
           child: Column(
               children: [
