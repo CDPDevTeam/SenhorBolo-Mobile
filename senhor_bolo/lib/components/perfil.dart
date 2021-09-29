@@ -162,7 +162,7 @@ class _PerfilState extends State<Perfil> {
               Container(
                 padding: EdgeInsets.only(left: 20),
                 color: mainColor,
-                height: 80,
+                height: 120,
                 child: Row(
                   children: [
                     Card(

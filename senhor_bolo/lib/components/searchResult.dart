@@ -179,22 +179,7 @@ class _PesquisaState extends State<Pesquisa> {
                   ),
                 )])
       ),
-      body: ListView(
-        children: [
-          Container(
-            height: 30,
-            width: MediaQuery.of(context).size.width,
-            child: Text('3 resultados encontrados para "bolo Gay"', textAlign: TextAlign.center,),
-          ),
-          Expanded(
-              child: ListView.builder(
-                  shrinkWrap: true,
-                  itemBuilder: (context, index){
-                    return SearchResult(context, "Bolo Sexo", 25.00, true, "images/garma.jpeg", "bolo de caterpi com caldo de caterpi");
-                  }
-              ))
-        ],
-      )
+
     );
   }
 }

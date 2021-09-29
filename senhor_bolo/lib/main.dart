@@ -29,7 +29,7 @@ void main(){
         scaffoldBackgroundColor: backgroundColor
     ),
 
-    home: Pesquisa()
+    home: MeusPedidos()
 
     ),
   );

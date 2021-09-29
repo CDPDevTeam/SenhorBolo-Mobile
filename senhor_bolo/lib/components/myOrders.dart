@@ -95,7 +95,7 @@ class _MeusPedidosState extends State<MeusPedidos> {
           ),
         ),
       ),
-      appBar: PreferredSize(
+      appBar: /*PreferredSize(
           preferredSize: Size.fromHeight(size.height * 0.20),
           child: Column(
               children: [
@@ -112,7 +112,7 @@ class _MeusPedidosState extends State<MeusPedidos> {
                   child: SafeArea(
                     top: true,
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -197,7 +197,7 @@ class _MeusPedidosState extends State<MeusPedidos> {
                     ),
                   ),
                 )])
-      ),
+      ),*/
       body:  ListView(
         physics: BouncingScrollPhysics(),
         scrollDirection: Axis.vertical,
