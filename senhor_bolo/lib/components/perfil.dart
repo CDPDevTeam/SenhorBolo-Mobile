@@ -4,9 +4,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:senhor_bolo/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:senhor_bolo/components/widgets/simpleButton.dart';
-import 'dart:math' as math;
-
-import 'package:senhor_bolo/main.dart';
 
 class Perfil extends StatefulWidget {
   const Perfil({Key? key}) : super(key: key);
@@ -52,20 +49,42 @@ class _PerfilState extends State<Perfil> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                    Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.email,
+                        color: Color(0xff707070),
+                      ),
+                      SizedBox(width: 10),
+                      Text(
+                        'thespacefox@protonmail.com',
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: TextStyle(
+                            fontSize: 15,
+                            color: Color(0xff707070)
+                        ),
+                      ),
+                    ],
+                  ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.person),
-                          Flexible(
-                          child: Text('Felipe Ribeiro Guerreiro Da Silva Cunha', overflow: TextOverflow.ellipsis,maxLines: 1,),
+                          Icon(
+                            Icons.pin,
+                            color: Color(0xff707070),
                           ),
-
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Text('000.***.***-55'),
+                          SizedBox(width: 10),
+                         Text(
+                            '420.180.868-80',
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Color(0xff707070)
+                            ),
+                          ),
                         ],
                       ),
                       simpleButton(127, 41, 'Editar', (){}, 10, 17, Color(0xff707070))
@@ -78,7 +97,7 @@ class _PerfilState extends State<Perfil> {
             ),
             Container(
               padding: EdgeInsets.all(20),
-              height: 303,
+              height: 305,
               decoration: BoxDecoration(
                 color: mainColor,
                 borderRadius: BorderRadius.only(
@@ -86,8 +105,9 @@ class _PerfilState extends State<Perfil> {
                     bottomLeft: Radius.circular(25),
                 ),
             ),
-              child: SafeArea(
+              /*child: SafeArea(
               top: true,
+              */
               child:Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -105,7 +125,7 @@ class _PerfilState extends State<Perfil> {
 
                     ],
                   ),
-                    Expanded(
+                    Flexible(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
@@ -113,8 +133,8 @@ class _PerfilState extends State<Perfil> {
                           alignment: Alignment.bottomRight,
                           children: [
                             Container(
-                              width: 130,
-                              height: 130,
+                              width: 156,
+                              height: 156,
                               decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   image: DecorationImage(
@@ -124,7 +144,6 @@ class _PerfilState extends State<Perfil> {
                               ),
                             ),
                             Container(
-
                                   width: 50, height: 50,
                                   decoration: BoxDecoration(
                                     color: textMainColor,
@@ -147,55 +166,30 @@ class _PerfilState extends State<Perfil> {
                 ],
 
               ),
-              ),
+             // ),
 
 
             )
           ],
         ),
       ),
-      body: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Métodos de Pagamento',),
-              Container(
-                padding: EdgeInsets.only(left: 20),
-                color: mainColor,
-                height: 120,
-                child: Row(
-                  children: [
-                    Card(
-                      elevation: 5,
-                      color: Color(0xff818181),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-                      child:
-                      InkWell(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        splashColor: textMainColorFade,
-                        onTap: (){},
-                        child: Container(
-                          height: 64, width: 64,
-                          child: Icon(Icons.add, color: textMainColor, size: 40,),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 5,
-                      itemBuilder: (context, index){
-                        return CardCard(2103, "visa");
-                      })
-
-                  )
-                    //CardCard("images/visa.png", '195'),
-                  ],
-                ),
+      body: Padding(
+        padding: EdgeInsets.only(left: 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Métodos de Pagamento',
+              style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                  color: textSecondaryColor
               ),
-
-              Text('Endereços'),
-              Row(
+            ),
+            Container(
+              height: 80,
+              child: Row(
                 children: [
                   Card(
                     elevation: 5,
@@ -212,12 +206,65 @@ class _PerfilState extends State<Perfil> {
                       ),
                     ),
                   ),
-                  CardCard(1223, 'master')
+                  Expanded(
+                      child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 5,
+                          itemBuilder: (context, index){
+                            return Align(
+                              alignment: Alignment.center,
+                              child: CardCard(2103, "visa"),
+                            );
+                          })
+                  )
                 ],
               ),
-            ],
-          ),
+            ),
 
+            Text(
+              'Endereços',
+              style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                  color: textSecondaryColor
+              ),
+            ),
+            Container(
+              height: 80,
+              child: Row(
+                children: [
+                  Card(
+                    elevation: 5,
+                    color: Color(0xff818181),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                    child:
+                    InkWell(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      splashColor: textMainColorFade,
+                      onTap: (){},
+                      child: Container(
+                        height: 64, width: 64,
+                        child: Icon(Icons.add, color: textMainColor, size: 40,),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                      child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 5,
+                          itemBuilder: (context, index){
+                            return Align(
+                              alignment: Alignment.center,
+                              child: CardCard(2103, "visa"),
+                            );
+                          })
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
 
       bottomNavigationBar: Container(
         height: size.height * 0.13,
@@ -233,7 +280,6 @@ class _PerfilState extends State<Perfil> {
           children: [
             simpleButtonIcon(177, 55, "Suporte", (){}, 25, 20, mainColor, Icon(Icons.headset), FontWeight.bold),
             simpleButtonIcon(177, 55, "Deletar", (){}, 25, 20, redButtonColor, Icon(Icons.delete), FontWeight.bold),
-            //simpleButton(175, 55, 'Limpar', (){}, 25, 20, redButtonColor),
           ],
         ),
       ),
@@ -241,9 +287,8 @@ class _PerfilState extends State<Perfil> {
   }
 }
 Widget CardCard (int digit, String issuer){
-  return /*SizedBox(
-    height: 64, width: 123,
-    child: */Card(
+  return
+    Card(
         elevation: 5,
         color: Color(0xffE6E6E6),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -267,12 +312,7 @@ Widget CardCard (int digit, String issuer){
 
                   ],
                 )
-
-
             )
         )
-    //)
   );
-
-
 }

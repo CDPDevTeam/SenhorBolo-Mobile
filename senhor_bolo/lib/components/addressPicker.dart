@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:senhor_bolo/components/widgets/profileIcon.dart';
 import 'package:senhor_bolo/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:senhor_bolo/components/homepage.dart';
@@ -19,9 +20,9 @@ class _AddressPickerState extends State<AddressPicker> {
     "Rua zap"
   ];
   static List _cep = [
-    "03080000",
-    "04050000",
-    "00000000"
+    "02317-060",
+    "02317-060",
+    "02317-060"
   ];
 
   @override
@@ -98,25 +99,17 @@ class _AddressPickerState extends State<AddressPicker> {
                       children: [
                         Builder(builder: (context){
                           return IconButton(
-                              onPressed: () {Scaffold.of(context).openDrawer();},
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
                               iconSize: 40,
                               color: Colors.white,
-                              icon: Icon(Icons.menu));
+                              icon: Icon(Icons.arrow_back_ios));
                         }),
 
                         GestureDetector(
                           onTap: () {},
-                          child: Container(
-                            width: 43,
-                            height: 43,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                    image: AssetImage('images/ricardinho_betoneira.jpeg'),
-                                    fit: BoxFit.cover
-                                )
-                            ),
-                          ),
+                          child: profileIcon('images/ricardinho_betoneira.jpeg'),
                         )
                       ],
                     ),
@@ -153,7 +146,7 @@ class _AddressPickerState extends State<AddressPicker> {
         ),
 
         bottomNavigationBar: Container(
-          padding: EdgeInsets.all(20),
+          padding: EdgeInsets.only(top: 20, bottom: 20),
           decoration: BoxDecoration(
             color: mainColor,
             borderRadius: BorderRadius.only(
@@ -166,7 +159,9 @@ class _AddressPickerState extends State<AddressPicker> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Seus endereços", style: TextStyle(color: textMainColor, fontSize: 20 ),),
+              Padding(
+                padding: EdgeInsets.only(left: 20),
+                child: Text("Seus endereços", style: TextStyle(color: textMainColor, fontSize: 20 ),),),
               SizedBox(height: 10,),
               Expanded(
                 child: ListView.builder(
@@ -205,10 +200,10 @@ Widget enderecoBlock (String endereco, String cep){
             Expanded(
                 child:
             Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("$endereco", overflow: TextOverflow.clip, style: TextStyle(color: Colors.black54),),
+                Text("$endereco", overflow: TextOverflow.clip, style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold),),
                 Text("$cep", style: TextStyle(color: Colors.black54),),
               ],
             )

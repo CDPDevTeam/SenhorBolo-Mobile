@@ -197,7 +197,7 @@ class _MeusPedidosState extends State<MeusPedidos> {
                     ),
                   ),
                 )])
-      ),*/
+      )*/,
       body:  ListView(
         physics: BouncingScrollPhysics(),
         scrollDirection: Axis.vertical,
