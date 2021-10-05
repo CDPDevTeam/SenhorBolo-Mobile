@@ -1,7 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cudepia.developers.com.senhor_bolo">
+   <uses-permission android:name="android.permission.INTERNET" />
+   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
    <application
-        android:label="senhor_bolo"
+        android:label="Senhor Bolo"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

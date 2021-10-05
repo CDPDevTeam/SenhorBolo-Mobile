@@ -1,22 +1,24 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:senhor_bolo/components/widgets/produtoHorizontal.dart';
 import 'package:senhor_bolo/components/widgets/simpleButton.dart';
+import 'package:senhor_bolo/components/widgets/testAppBar.dart';
 import 'package:senhor_bolo/constants.dart';
 
-class DetalheProduto extends StatefulWidget {
+class CakeDetail extends StatefulWidget {
 
   final String nomeProduto;
   final String categoriaProduto;
   final String imgProduto;
 
-  const DetalheProduto({Key? key, required this.nomeProduto,
+  const CakeDetail({Key? key, required this.nomeProduto,
     required this.categoriaProduto, required this.imgProduto}) : super(key: key);
 
   @override
-  _DetalheProdutoState createState() => _DetalheProdutoState();
+  _CakeDetailState createState() => _CakeDetailState();
 }
 
-class _DetalheProdutoState extends State<DetalheProduto> {
+class _CakeDetailState extends State<CakeDetail> {
 
   List<String> _tamanhos = ['250g', '500g', '1Kg'];
   int _defaultChoice = 0;
@@ -30,77 +32,43 @@ class _DetalheProdutoState extends State<DetalheProduto> {
     print('Adicionado ao carrinho!');
   }
 
+  static List<String> _bolosChocolate = [
+    'Brigadeiro',
+    'Raimunda',
+    'Francesa',
+    'Crocante'
+  ];
+
+  static List<String> _categoriaBolosChocolate = [
+    'Bolo doce',
+    'Bolo doce',
+    'Torta doce',
+    'Bolo doce'
+  ];
+
+  static List<double> _precoBoloChocolate = [
+    12.00,
+    12.00,
+    24.00,
+    12.00,
+  ];
+
+  static List<String> _imagensBoloChocolate = [
+    'brigadeiro.png',
+    'raimunda.png',
+    'francesa_chocolate.png',
+    'crocante.png'
+  ];
+
   @override
   Widget build(BuildContext context) {
+    print('Produto feito');
     return Scaffold(
-        appBar: AppBar(
-          toolbarHeight: 88,
-          centerTitle: true,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(25),
-                  bottomRight: Radius.circular(25))),
-          leading: InkWell(
-            onTap:  () => Navigator.of(context).pop(),
-            child: Icon(
-              Icons.keyboard_arrow_left,
-              color: Colors.white,
-              size: 50,
-            ),
-          ),
-          title: GestureDetector(
-            onTap: () {
-              print('Tocou no endereço');
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Column(
-                  children: <Text>[
-                    Text(
-                      'Entregar em',
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
-                    ),
-                    Text(
-                      'Rua Humaitá, 538',
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w100,
-                          color: Colors.white),
-                    ),
-                  ],
-                ),
-                Icon(
-                  Icons.location_on,
-                  color: Colors.white,
-                  size: 20,
-                )
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            GestureDetector(
-                onTap: () {
-                  print('Tocou na foto');
-                },
-                child: Padding(
-                  padding: EdgeInsets.only(right: 10),
-                  child: CircleAvatar(
-                    radius: 25,
-                    backgroundImage:
-                        AssetImage('images/ricardinho_betoneira.jpeg'),
-                  ),
-                ))
-          ],
-        ),
-
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
+        appBar: const TestAppBar(),
+        body: ListView(
+          physics: BouncingScrollPhysics(),
+          scrollDirection: Axis.vertical,
+          children: [
               Stack(
                 children: [
                   Container(
@@ -117,15 +85,18 @@ class _DetalheProdutoState extends State<DetalheProduto> {
                       children: [
                         Hero(
                           tag: widget.nomeProduto,
-                           child: Container(
-                              // Imagem do Bolo
-                              height: 291,
-                              decoration: BoxDecoration(
-                                  color: Color(0xff64CBC7),
-                                  borderRadius: BorderRadius.circular(25),
-                                  image: DecorationImage(image: NetworkImage('https://thespacefox.github.io/SenhorBolo-Imagens/images/' + widget.imgProduto),
-                                      fit: BoxFit.contain)),
-                            )
+                           child: CachedNetworkImage(
+                               imageUrl: 'https://thespacefox.github.io/SenhorBolo-Imagens/images/' + widget.imgProduto,
+                               imageBuilder: (context, imageProvider) => Container(
+                                   height: 291,
+                                   decoration: BoxDecoration(
+                                       color: Color(0xff64CBC7),
+                                       borderRadius: BorderRadius.circular(25),
+                                       image: DecorationImage(
+                                           image: imageProvider,
+                                           fit: BoxFit.contain))
+                               )
+                           )
                         ),
                         Container(
                           // Informações do produto
@@ -149,7 +120,7 @@ class _DetalheProdutoState extends State<DetalheProduto> {
                               ),
                               tamanhosBolo(),
                               Text(
-                                'Descrição simples do bolo, olha que bolo bonito esse, não quer comprar?',
+                                'Descrição do bolo, olha que bolo bonito esse, não quer comprar?',
                                 style: TextStyle(
                                     fontSize: 14,
                                     color: textSecondaryColor,
@@ -201,48 +172,38 @@ class _DetalheProdutoState extends State<DetalheProduto> {
               SizedBox(
                 height: 10,
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Outros produtos',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  ProdutoHorizontal(
-                    nomeProduto: 'Bolo de bolo',
-                    categoriaProduto: 'Bolo doce',
-                    precoProduto: '25,00 - 60,00',
-                    imgProduto: 'images/brigadeiro.png',
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  ProdutoHorizontal(
-                    nomeProduto: 'Bolo de bolo',
-                    categoriaProduto: 'Bolo doce',
-                    precoProduto: '25,00 - 60,00',
-                    imgProduto: 'images/brigadeiro.png',
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  ProdutoHorizontal(
-                    nomeProduto: 'Bolo de bolo',
-                    categoriaProduto: 'Bolo doce',
-                    precoProduto: '25,00 - 60,00',
-                    imgProduto: 'images/brigadeiro.png',
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                ],
-              )
+
+              Padding(padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                child: Text(
+                  'Outros produtos',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ),
+
+            Center(
+              child: SizedBox(
+                width: 328,
+                child: ListView.separated(
+                  itemCount: _bolosChocolate.length,
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return ProdutoHorizontal(
+                        nomeProduto: _bolosChocolate[index],
+                        categoriaProduto: _categoriaBolosChocolate[index],
+                        precoProduto: _precoBoloChocolate[index],
+                        imgProduto: _imagensBoloChocolate[index]
+                    );
+                  } ,
+                  separatorBuilder: (context, int index){
+                    return SizedBox(height: 20);
+                  },
+                ),
+              ),
+            )
+
             ],
-          ),
         ),
 
         bottomNavigationBar: Container(
@@ -282,6 +243,11 @@ class _DetalheProdutoState extends State<DetalheProduto> {
               ),
               ElevatedButton(
                 onPressed: () {
+                  setState(() {
+                    qtdeItem++;
+                  });
+                },
+                onLongPress: (){
                   setState(() {
                     qtdeItem++;
                   });

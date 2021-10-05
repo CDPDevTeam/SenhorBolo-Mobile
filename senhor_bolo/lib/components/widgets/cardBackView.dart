@@ -4,10 +4,10 @@ import '../../constants.dart';
 
 class CardBackView extends StatelessWidget {
 
-  Color corCartao;
-  Size size;
-  Color corTexto;
-  String cvvText, img;
+  final Color corCartao;
+  final Size size;
+  final Color corTexto;
+  final String cvvText, img;
 
 
   CardBackView({Key? key, required this.corCartao, required this.size, required this.corTexto, required this.cvvText, required this.img}) : super(key: key);

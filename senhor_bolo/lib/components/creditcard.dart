@@ -5,6 +5,7 @@ import 'dart:math' as math;
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:senhor_bolo/components/widgets/cardBackView.dart';
 import 'package:senhor_bolo/components/widgets/cardFrontView.dart';
+import 'package:senhor_bolo/components/widgets/iconAppBar.dart';
 import 'package:senhor_bolo/components/widgets/simpleButton.dart';
 import 'package:senhor_bolo/constants.dart';
 import 'package:credit_card_validator/credit_card_validator.dart';
@@ -177,96 +178,10 @@ class _FormCartaoState extends State<FormCartao>
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      /*
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(size.height * 0.19),
-        child: ,
-    */
+      appBar: IconAppBar(appBarIcon: Icons.credit_card, appBarText: 'Adicionar cartão',),
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Container(
-                height: size.height * 0.22,
-                decoration: BoxDecoration(
-                    color: mainColor,
-                    borderRadius: BorderRadius.only(
-                        bottomRight: Radius.circular(25),
-                        bottomLeft: Radius.circular(25)
-                    )
-                ),
-                child: SafeArea(
-                  top: true,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          InkWell(
-                            onTap:  () => Navigator.of(context).pop(),
-                            child: Icon(
-                              Icons.keyboard_arrow_left,
-                              color: Colors.white,
-                              size: 60,
-                            ),
-                          ),
-                          GestureDetector(
-                              child: Row(
-                                  children: [
-                                    Column(
-                                        children: <Widget>[
-                                          Text(
-                                            'Entregar em',
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white
-                                            ),
-                                          ),
-                                          Text(
-                                            'Rua Humaitá, 538',
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w100,
-                                                color: Colors.white
-                                            ),
-                                          ),
-                                        ]),
-                                    Icon(
-                                      Icons.location_on,
-                                      color: Colors.white,
-                                      size: 20,
-                                    )
-                                  ]
-                              )
-                          ),
-
-                          GestureDetector(
-                            onTap: (){},
-                            child: CircleAvatar(
-                              radius: 25,
-                              backgroundImage:
-                              AssetImage('images/ricardinho_betoneira.jpeg'),
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      Container(
-                        margin: EdgeInsets.only(bottom: 20),
-                        child: Text(
-                          'Cadastrar Cartão',
-                          style: TextStyle(
-                              fontSize: 35,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
               Container(
                   padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                   child: Column(
@@ -278,14 +193,13 @@ class _FormCartaoState extends State<FormCartao>
                           ..rotateY(math.pi * _flipAnimation.value),
                         origin: Offset(MediaQuery.of(context).size.width / 2, 0),
                         child: _flipAnimation.value < 0.5
-                            ? CardFrontView(
+                            ? cardFrontView(
                             corCartao, size, _cardNumber, corTextoCartao, _cardName,_cardExpiration, imgCard
                         )
                             : CardBackView(
                           corCartao: corCartao, size: size, corTexto: corTextoCartao, cvvText: _cardCVV, img: imgCard,
                         ),
                       ),
-
 
                       SizedBox(height: 20),
 
@@ -294,18 +208,18 @@ class _FormCartaoState extends State<FormCartao>
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              maskedTextBox(txtLabel: 'Número do cartão', txtController: _txtNumCard, inputType: TextInputType.number, mask: maskNumCard),
+                              maskedTextField(txtLabel: 'Número do cartão', txtController: _txtNumCard, inputType: TextInputType.number, mask: maskNumCard),
 
                               SizedBox(height: 15),
 
-                              maskedTextBox(txtLabel: 'Nome do titular', txtController: _txtCardName, inputType: TextInputType.text, mask: maskCardName),
+                              maskedTextField(txtLabel: 'Nome do titular', txtController: _txtCardName, inputType: TextInputType.text, mask: maskCardName),
 
                               SizedBox(height: 15),
 
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
-                                  maskedTextBox(txtLabel: 'Data de vencimento', txtController: _txtExpirationDate, inputType: TextInputType.number, mask: maskExpirationDate, widthButton: 180),
+                                  maskedTextField(txtLabel: 'Data de vencimento', txtController: _txtExpirationDate, inputType: TextInputType.number, mask: maskExpirationDate, widthButton: 180),
 
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,

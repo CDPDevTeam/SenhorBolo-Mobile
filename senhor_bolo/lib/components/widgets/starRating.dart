@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import 'package:senhor_bolo/constants.dart';
 
 class Rating extends StatefulWidget {
   final int maxRating;
@@ -17,7 +16,7 @@ class _RatingState extends State<Rating> {
   Widget _buildRatingStar(int index){
     final starIconFull = Icon(Icons.star, size: 50,color: Colors.amber,);
     final starIconNot = Icon(Icons.star_border_outlined, size: 50,);
-    final starText = Text("$_currentRating/5");
+    //final starText = Text("$_currentRating/5");
     if(index < _currentRating){
       return starIconFull;
     } else {

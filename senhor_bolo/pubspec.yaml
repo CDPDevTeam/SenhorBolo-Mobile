@@ -25,14 +25,11 @@ dependencies:
   flutter:
     sdk: flutter
 
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
   mask_text_input_formatter: ^2.0.0
   password_strength: ^0.2.0
   credit_card_validator: ^2.0.0
   animations: ^2.0.1
+  cached_network_image: ^3.1.0
 
 dev_dependencies:
   flutter_launcher_icons: ^0.9.2
@@ -50,7 +47,6 @@ flutter_icons:
 
 # The following section is specific to Flutter.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -60,26 +56,16 @@ flutter:
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
-
   assets:
     - images/logo_login.png
-    - images/ricardinho_betoneira.jpeg
     - images/bolo_login.png
     - images/mastercard.png
     - images/visa.png
     - images/contact_less.png
     - images/card.png
-    - images/misaka10032.png
     - images/banner_teste.png
-    - images/brigadeiro.png
-    - images/cocada.png
-    - images/crocante.png
-    - images/brigadeiro_crocante.png
-    - images/baba_portuguesa.png
     - images/logoMarrom.png
     - images/boloBoasVindas.png
-    - images/davi.png
-    - images/garma.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

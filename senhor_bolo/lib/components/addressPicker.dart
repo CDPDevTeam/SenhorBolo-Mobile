@@ -1,9 +1,6 @@
-import 'package:flutter/cupertino.dart';
-import 'package:senhor_bolo/components/widgets/profileIcon.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:senhor_bolo/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:senhor_bolo/components/homepage.dart';
-import 'package:senhor_bolo/main.dart';
 
 class AddressPicker extends StatefulWidget {
   const AddressPicker({Key? key}) : super(key: key);
@@ -13,179 +10,144 @@ class AddressPicker extends StatefulWidget {
 }
 
 class _AddressPickerState extends State<AddressPicker> {
-
   static List _enderecos = [
     "R. Tiro ao Pombo",
     "R. Borboletas Psicodélicas",
     "Rua zap"
   ];
-  static List _cep = [
-    "02317-060",
-    "02317-060",
-    "02317-060"
-  ];
+  static List _cep = ["02317-060", "02317-060", "02317-060"];
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      drawer: Drawer(
-        child: Material(
-          color: mainColor,
-          child: ListView(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            children: <Widget>[
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.only(top: 40),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    CircleAvatar(
-                      radius: 67,
-                      backgroundImage: AssetImage('images/ricardinho_betoneira.jpeg'),
-                    ),
-                    SizedBox(height: 10,),
-                    Text(
-                      'Lulz Ricardo',
-                      style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white
-                      ),
-                    ),
-                    Text(
-                      'lricardosp@gmail.com',
-                      style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 20),
-              buildMenuItem(texto: 'Minha conta', icone: Icons.account_circle),
-              buildMenuItem(texto: 'Meus pedidos', icone: Icons.cake),
-              buildMenuItem(texto: 'Cupons', icone: Icons.local_offer),
-              buildMenuItem(texto: 'Ajuda', icone: Icons.help),
-              buildMenuItem(texto: 'Sobre nós', icone: Icons.info),
-              Divider(color: Colors.white),
-              buildMenuItem(texto: 'Logout', icone: Icons.logout)
-            ],
-          ),
-        ),
-      ),
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(224),
-        child:
-            Container(
-              height: 224,
-              decoration: BoxDecoration(
-                  color: mainColor,
-                  borderRadius: BorderRadius.only(
-                      bottomRight: Radius.circular(25),
-                      bottomLeft: Radius.circular(25)
-                  )
-              ),
-              padding: EdgeInsets.only(left: 20 ,right: 20),
-              child: SafeArea(
-                top: true,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Row(
+        preferredSize: Size.fromHeight(160),
+        child: AppBar(
+          elevation: 0,
+          toolbarHeight: 88,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(25),
+                  bottomRight: Radius.circular(25))),
+          leading: InkWell(
+            onTap: () => Navigator.of(context).pop(),
+            child: Icon(
+              Icons.keyboard_arrow_left,
+              color: Colors.white,
+              size: 50,
+            ),
+          ),
+          actions: <Widget>[
+            InkWell(
+                onTap: () {
+                  Navigator.pushReplacementNamed(context, 'userProfile');
+                },
+                child: Padding(
+                    padding: EdgeInsets.only(right: 10),
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Builder(builder: (context){
-                          return IconButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              iconSize: 40,
-                              color: Colors.white,
-                              icon: Icon(Icons.arrow_back_ios));
-                        }),
-
-                        GestureDetector(
-                          onTap: () {},
-                          child: profileIcon('images/ricardinho_betoneira.jpeg'),
-                        )
+                        Text(
+                          'Luiz Ricardo',
+                          style: TextStyle(fontSize: 16, color: textMainColor),
+                        ),
+                        SizedBox(width: 10),
+                        CachedNetworkImage(
+                            imageUrl:
+                                'https://thespacefox.github.io/SenhorBolo-Imagens/images/usuario/ricardinho_betoneira.jpeg',
+                            imageBuilder: (context, imageProvider) => Container(
+                                  width: 50,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                          image: imageProvider,
+                                          fit: BoxFit.fitWidth)),
+                                ))
                       ],
-                    ),
-
-                    Container(
-                      margin: EdgeInsets.only(bottom: 20),
-                      child: Column(
+                    )))
+          ],
+          bottom: PreferredSize(
+              //Exigido por causa do null safety, mas aqui não faz diferença
+              preferredSize: Size.fromHeight(0),
+              child: Container(
+                  width: size.width * 0.9,
+                  margin: EdgeInsets.only(bottom: 10),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Icon(Icons.edit_location, color: textMainColor),
-                              Text("Entregar em",style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: textMainColor),)
-                            ],
-                          ),
-                          TextField(
-                            style: TextStyle(color: textMainColor),
-                            decoration: const InputDecoration(
-                                hintText: "Rua Humaítá, 638",
-                              hintStyle: TextStyle(color: textMainColorFade),
-                              labelStyle: TextStyle(color: textMainColor),
-
-                            ),
+                          Icon(Icons.edit_location, color: textMainColor),
+                          Text(
+                            "Entregar em",
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: textMainColor),
                           )
                         ],
+                      ),
+                      TextField(
+                        style: TextStyle(color: textMainColor),
+                        decoration: const InputDecoration(
+                          hintText: "Rua Humaítá, 638",
+                          hintStyle: TextStyle(color: textMainColorFade),
+                          labelStyle: TextStyle(color: textMainColor),
+                        ),
                       )
-                    )
-                  ],
-                ),
+                    ],
+                  ))),
+        ),
+      ),
+      bottomNavigationBar: Container(
+        padding: EdgeInsets.only(top: 20, bottom: 20),
+        decoration: BoxDecoration(
+          color: mainColor,
+          borderRadius: BorderRadius.only(
+              topRight: Radius.circular(25), topLeft: Radius.circular(25)),
+        ),
+        width: MediaQuery.of(context).size.width,
+        height: 160,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(left: 20),
+              child: Text(
+                "Seus endereços",
+                style: TextStyle(color: textMainColor, fontSize: 20),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Expanded(
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: _enderecos.length,
+                itemBuilder: (context, index) {
+                  return enderecoBlock(_enderecos[index], _cep[index]);
+                },
               ),
             )
-
-
+          ],
         ),
-
-        bottomNavigationBar: Container(
-          padding: EdgeInsets.only(top: 20, bottom: 20),
-          decoration: BoxDecoration(
-            color: mainColor,
-            borderRadius: BorderRadius.only(
-            topRight: Radius.circular(25),
-            topLeft: Radius.circular(25)
-          ),),
-          width: MediaQuery.of(context).size.width,
-          height: 160,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(left: 20),
-                child: Text("Seus endereços", style: TextStyle(color: textMainColor, fontSize: 20 ),),),
-              SizedBox(height: 10,),
-              Expanded(
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: _enderecos.length,
-                  itemBuilder:(context, index) {
-                    return enderecoBlock(_enderecos[index], _cep[index]);
-                  },
-                ),
-              )
-
-            ],
-          ) ,
-        ),
+      ),
     );
   }
 }
-Widget enderecoBlock (String endereco, String cep){
+
+Widget enderecoBlock(String endereco, String cep) {
   return Card(
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+    shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(10))),
     color: textMainColorFade,
     child: InkWell(
       splashColor: textMainColorFade.withAlpha(30),
-      onTap: (){},
+      onTap: () {},
       child: SizedBox(
         width: 148,
         child: Row(
@@ -194,61 +156,32 @@ Widget enderecoBlock (String endereco, String cep){
           children: [
             Container(
               padding: EdgeInsets.all(5),
-              child: Icon(Icons.home, size: 40, color: Colors.black54,),
+              child: Icon(
+                Icons.home,
+                size: 40,
+                color: Colors.black54,
+              ),
             ),
-            
             Expanded(
-                child:
-            Column(
+                child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("$endereco", overflow: TextOverflow.clip, style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold),),
-                Text("$cep", style: TextStyle(color: Colors.black54),),
+                Text(
+                  "$endereco",
+                  overflow: TextOverflow.clip,
+                  style: TextStyle(
+                      color: Colors.black54, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  "$cep",
+                  style: TextStyle(color: Colors.black54),
+                ),
               ],
-            )
-            )
-
+            ))
           ],
         ),
       ),
     ),
   );
-
-    /*Card(
-    margin: EdgeInsets.only(right: 10),
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.all(Radius.circular(10)),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.grey.withOpacity(0.5),
-          spreadRadius: 5,
-          blurRadius: 7,
-          offset: Offset(0, 3),
-        )
-      ],
-      color: Color(0xFFE6E6E6)
-    ),
-    height: 64,
-    width: 148,
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Icon(Icons.home),
-        Expanded(
-          child:
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text("$endereco", overflow: TextOverflow.ellipsis,),
-                Text("$cep")
-              ],
-            )
-        )
-
-      ],
-    ),
-  );*/
 }

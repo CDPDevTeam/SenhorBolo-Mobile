@@ -3,8 +3,8 @@ import 'package:senhor_bolo/constants.dart';
 
 // Caixa de texto da senha, para o Login e Cadastro
 
-class passwordTextField extends StatefulWidget {
-  const passwordTextField({
+class PasswordTextField extends StatefulWidget {
+  const PasswordTextField({
     Key? key,
     required this.passwordController,
     this.editingCompleteFunction,
@@ -14,10 +14,10 @@ class passwordTextField extends StatefulWidget {
   final VoidCallback? editingCompleteFunction;
 
   @override
-  _passwordTextFieldState createState() => _passwordTextFieldState();
+  _PasswordTextFieldState createState() => _PasswordTextFieldState();
 }
 
-class _passwordTextFieldState extends State<passwordTextField> {
+class _PasswordTextFieldState extends State<PasswordTextField> {
 
   bool hidePassword = true;
 

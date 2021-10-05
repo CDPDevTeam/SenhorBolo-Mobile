@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../constants.dart';
-
-Widget simpleButton (double width, double height, String btnText, VoidCallback onPressed, double Radius, double fontSize, Color cor){
+Widget simpleButton (double width, double height, String btnText, VoidCallback onPressed, double radius, double fontSize, Color cor){
   return SizedBox(
     width: width,
     height: height,
@@ -12,7 +10,7 @@ Widget simpleButton (double width, double height, String btnText, VoidCallback o
         style: ElevatedButton.styleFrom(
           primary: cor,
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(Radius)
+              borderRadius: BorderRadius.circular(radius)
           ),
           textStyle: TextStyle(
               fontFamily: 'Raleway',
@@ -25,7 +23,7 @@ Widget simpleButton (double width, double height, String btnText, VoidCallback o
   );
 }
 
-Widget simpleButtonIcon (double width, double height, String btnText, VoidCallback onPressed, double Radius, double fontSize, Color cor, Icon btnIcon, FontWeight fontPeso){
+Widget simpleButtonIcon (double width, double height, String btnText, VoidCallback onPressed, double radius, double fontSize, Color cor, Icon btnIcon, FontWeight fontPeso){
   return SizedBox(
     width: width,
     height: height,
@@ -36,7 +34,7 @@ Widget simpleButtonIcon (double width, double height, String btnText, VoidCallba
       style: ElevatedButton.styleFrom(
         primary: cor,
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(Radius)
+            borderRadius: BorderRadius.circular(radius)
         ),
         textStyle: TextStyle(
             fontFamily: 'Raleway',
@@ -49,7 +47,7 @@ Widget simpleButtonIcon (double width, double height, String btnText, VoidCallba
   );
 }
 
-Widget simpleButtonIconeOnly (double width, double height, VoidCallback onPressed, double Radius, double fontSize, Color cor, Icon btnIcon, FontWeight fontPeso){
+Widget simpleButtonIconeOnly (double width, double height, VoidCallback onPressed, double radius, double fontSize, Color cor, Icon btnIcon, FontWeight fontPeso){
   return SizedBox(
     width: width,
     height: height,
@@ -59,7 +57,7 @@ Widget simpleButtonIconeOnly (double width, double height, VoidCallback onPresse
       style: ElevatedButton.styleFrom(
         primary: cor,
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(Radius)
+            borderRadius: BorderRadius.circular(radius)
         ),
         textStyle: TextStyle(
           fontFamily: 'Raleway',

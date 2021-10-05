@@ -1,6 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import '../../constants.dart';
-import '../produto.dart';
+import '../cakeDetail.dart';
 
 class ProdutoVertical extends StatelessWidget {
 
@@ -18,7 +19,7 @@ class ProdutoVertical extends StatelessWidget {
     return GestureDetector(
         onTap: () {
           Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => DetalheProduto(
+              MaterialPageRoute(builder: (context) => CakeDetail(
                 nomeProduto: nomeProduto,
                 categoriaProduto: categoriaProduto,
                 imgProduto: imgProduto,))
@@ -81,8 +82,13 @@ class ProdutoVertical extends StatelessWidget {
                               topRight: Radius.circular(20),
                               bottomLeft: Radius.circular(20),
                             ),
+                            /*
                             image: DecorationImage(image: NetworkImage('https://thespacefox.github.io/SenhorBolo-Imagens/images/' + imgProduto),
-                                fit: BoxFit.contain)
+                                fit: BoxFit.contain) */
+                        ),
+                        child: CachedNetworkImage(
+                          imageUrl: 'https://thespacefox.github.io/SenhorBolo-Imagens/images/' + imgProduto,
+                          fit: BoxFit.contain,
                         ),
                       )
                   )

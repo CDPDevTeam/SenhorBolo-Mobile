@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:senhor_bolo/components/login.dart';
 import 'package:senhor_bolo/components/widgets/emailTextField.dart';
 import 'package:senhor_bolo/components/widgets/maskedTextField.dart';
+import 'package:senhor_bolo/components/widgets/passwordTextField.dart';
 import 'package:senhor_bolo/components/widgets/simpleButton.dart';
 import 'package:senhor_bolo/constants.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -75,7 +75,6 @@ class _FormSignInState extends State<FormSignIn> {
   TextEditingController txtPasswordConfirm = TextEditingController();
 
   var maskCPF = MaskTextInputFormatter(mask: '###.###.###-##', filter: {"#": RegExp(r'[0-9]')});
-  bool _hidePassword = true;
   bool? _termosUso = false;
   IconData _passwordIcon = Icons.lock;
   String _passwordStrength = 'Digite uma senha forte';
@@ -163,49 +162,7 @@ class _FormSignInState extends State<FormSignIn> {
 
         SizedBox(height: 18),
 
-        TextFormField(
-          textInputAction: TextInputAction.next,
-          onEditingComplete: () => verifyPasswordStrength(),
-          controller: txtPassword,
-          obscureText: _hidePassword,
-          validator: (password){
-            if (password != null){
-              if (password.length < 8){
-                return 'A senha precisa ter mais de 8 caracteres';
-              }
-            } else {
-              return 'Preencha o campo senha';
-            }
-          },
-          decoration: InputDecoration(
-            contentPadding: EdgeInsets.only(left: 15),
-            labelText: 'Senha',
-            filled: true,
-            fillColor: Colors.white,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(11),
-              borderSide: BorderSide(
-                width: 0,
-                style: BorderStyle.none,
-              ),
-            ),
-            suffixIcon: IconButton(
-              onPressed: (){
-                setState(() {
-                  _hidePassword = !_hidePassword;
-                });
-              },
-              padding: EdgeInsets.zero,
-              icon: _hidePassword ? Icon(Icons.visibility_off) : Icon(Icons.visibility),
-              color: textSecondaryColor,
-            ),
-            labelStyle: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.bold,
-                color: textSecondaryColor
-            ),
-          ),
-        ),
+        PasswordTextField(passwordController: txtPassword),
 
         SizedBox(height: 6.5),
 

@@ -1,10 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:senhor_bolo/components/addressPicker.dart';
-import 'package:senhor_bolo/components/boloPersonalizado.dart';
-import 'package:senhor_bolo/components/creditcardTeste.dart';
+import 'package:senhor_bolo/components/searchResult.dart';
 import 'package:senhor_bolo/components/widgets/produtoVertical.dart';
-import 'package:senhor_bolo/components/widgets/profileIcon.dart';
 import '../constants.dart';
 
 class Homepage extends StatefulWidget {
@@ -15,7 +13,6 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-
   static List<String> _bolosChocolate = [
     'Brigadeiro',
     'Raimunda',
@@ -72,11 +69,7 @@ class _HomepageState extends State<Homepage> {
     'formigueiro.png'
   ];
 
-  static List<String> _bolosNovidade = [
-    'Portuguesa',
-    'Mesclado',
-    'Cocada'
-  ];
+  static List<String> _bolosNovidade = ['Portuguesa', 'Mesclado', 'Cocada'];
 
   static List<String> _categoriaNovidades = [
     'Bolo gourmet',
@@ -108,37 +101,60 @@ class _HomepageState extends State<Homepage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    CircleAvatar(
-                      radius: 67,
-                      backgroundImage: AssetImage('images/ricardinho_betoneira.jpeg'),
+                    InkWell(
+                        onTap: () =>
+                            Navigator.pushReplacementNamed(context, 'userProfile'),
+                        child: Padding(
+                            padding: EdgeInsets.only(right: 10),
+                            child: CachedNetworkImage(
+                                imageUrl: 'https://thespacefox.github.io/SenhorBolo-Imagens/images/usuario/ricardinho_betoneira.jpeg',
+                                imageBuilder: (context, imageProvider) => Container(
+                                  width: 134,
+                                  height: 134,
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                          image: imageProvider,
+                                          fit: BoxFit.fitWidth)),
+                                )
+                            )
+                        )
                     ),
-                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 10,
+                    ),
                     Text(
                       'Lulz Ricardo',
                       style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white
-                      ),
+                          color: Colors.white),
                     ),
                     Text(
                       'lricardosp@gmail.com',
-                      style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white
-                      ),
+                      style: TextStyle(fontSize: 20, color: Colors.white),
                     ),
                   ],
                 ),
               ),
               SizedBox(height: 20),
-              buildMenuItem(texto: 'Minha conta', icone: Icons.account_circle),
-              buildMenuItem(texto: 'Meus pedidos', icone: Icons.cake),
-              buildMenuItem(texto: 'Cupons', icone: Icons.local_offer),
-              buildMenuItem(texto: 'Ajuda', icone: Icons.help),
-              buildMenuItem(texto: 'Sobre nós', icone: Icons.info),
+              buildMenuItem(
+                  texto: 'Minha conta',
+                  icone: Icons.account_circle,
+                  onTap: () => Navigator.pushNamed(context, 'userProfile')),
+              buildMenuItem(
+                  texto: 'Meus pedidos',
+                  icone: Icons.cake,
+                  onTap: () => Navigator.pushNamed(context, 'orders')),
+              buildMenuItem(
+                texto: 'Cupons',
+                icone: Icons.local_offer,
+                onTap: () {}
+              ),
+              buildMenuItem(texto: 'Ajuda', icone: Icons.help, onTap: () {}),
+              buildMenuItem(texto: 'Sobre nós', icone: Icons.info, onTap: () {}),
               Divider(color: Colors.white),
-              buildMenuItem(texto: 'Logout', icone: Icons.logout)
+              buildMenuItem(texto: 'Logout', icone: Icons.logout, onTap: () {})
             ],
           ),
         ),
@@ -162,12 +178,8 @@ class _HomepageState extends State<Homepage> {
                     size: 40,
                   ),
                 )),
-            title: GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const AddressPicker())
-                );
-              },
+            title: InkWell(
+              onTap: () => Navigator.pushNamed(context, 'addressPicker'),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -199,15 +211,25 @@ class _HomepageState extends State<Homepage> {
               ),
             ),
             actions: <Widget>[
-              GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => FormCartaoTeste()));
-                  },
+              InkWell(
+                  onTap: () =>
+                      Navigator.pushNamed(context, 'userProfile'),
                   child: Padding(
-                    padding: EdgeInsets.only(right: 18),
-                    child: profileIcon('images/ricardinho_betoneira.jpeg'),
-                  ))
+                      padding: EdgeInsets.only(right: 10),
+                      child: CachedNetworkImage(
+                          imageUrl: 'https://thespacefox.github.io/SenhorBolo-Imagens/images/usuario/ricardinho_betoneira.jpeg',
+                          imageBuilder: (context, imageProvider) => Container(
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.fitWidth)),
+                          )
+                      )
+                  )
+              )
             ],
             expandedHeight: 311,
             flexibleSpace: FlexibleSpaceBar(
@@ -224,8 +246,12 @@ class _HomepageState extends State<Homepage> {
                           color: Colors.white),
                     ),
                     TextField(
-                      //controller: controller,
-                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.go,
+                      onSubmitted: (searchText){
+                        Navigator.push(
+                            context, MaterialPageRoute(
+                            builder: (context) => SearchResult(searchText: searchText,)));
+                      },
                       decoration: InputDecoration(
                           contentPadding: EdgeInsets.only(left: 20),
                           hintText: 'Bolo de miiiiiiiiiiiiiiiiiiiiiiiilhooo',
@@ -253,49 +279,45 @@ class _HomepageState extends State<Homepage> {
             )),
         SliverList(
             delegate: SliverChildListDelegate(<Widget>[
-              SizedBox(height: 22),
-              GestureDetector(
-                  onTap: (){
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => BoloPersonalizado()));
-                  },
-                  child: Center(
-                    child: Image(
-                      image: AssetImage('images/banner_teste.png'),
-                    ),
-                  )
-              ),
-              ListBolos(
-                  nomeLista: 'Produtos com chocolate',
-                  nomes: _bolosChocolate,
-                  categorias: _categoriaBolosChocolate,
-                  precos: _precoProdutoChocolate,
-                  imagens: _imagensBoloChocolate),
-              ListBolos(
-                  nomeLista: 'Bolos simples',
-                  nomes: _bolosSimples,
-                  categorias: _categoriaBolosSimples,
-                  precos: _precoBoloSimples,
-                  imagens: _imagensBolosSimples),
-              ListBolos(
-                  nomeLista: 'Novidades',
-                  nomes: _bolosNovidade,
-                  categorias: _categoriaNovidades,
-                  precos: _precoBoloSimples,
-                  imagens: _imagensNovidade),
-              SizedBox(
-                height: 30,
-              ),
-              Text(
-                'Você chegou ao fim ^_^',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 15),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-            ])
-        )]),
+          SizedBox(height: 22),
+          GestureDetector(
+              onTap: () => Navigator.pushNamed(context, 'customCake'),
+              child: Center(
+                child: Image(
+                  image: AssetImage('images/banner_teste.png'),
+                ),
+              )),
+          ListBolos(
+              nomeLista: 'Produtos com chocolate',
+              nomes: _bolosChocolate,
+              categorias: _categoriaBolosChocolate,
+              precos: _precoProdutoChocolate,
+              imagens: _imagensBoloChocolate),
+          ListBolos(
+              nomeLista: 'Bolos simples',
+              nomes: _bolosSimples,
+              categorias: _categoriaBolosSimples,
+              precos: _precoBoloSimples,
+              imagens: _imagensBolosSimples),
+          ListBolos(
+              nomeLista: 'Novidades',
+              nomes: _bolosNovidade,
+              categorias: _categoriaNovidades,
+              precos: _precoBoloSimples,
+              imagens: _imagensNovidade),
+          SizedBox(
+            height: 30,
+          ),
+          Text(
+            'Você chegou ao fim ^_^',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 15),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+        ]))
+      ]),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           print('Carrinho pressionado!');
@@ -305,26 +327,28 @@ class _HomepageState extends State<Homepage> {
       ),
     );
   }
+
   Widget buildMenuItem({
     required String texto,
     IconData? icone,
-  }){
+    required final VoidCallback onTap,
+  }) {
     final hoverColor = Color(0xff14A8A2);
     return ListTile(
-      leading: Icon(icone, color: Colors.white, size: 30,),
+      leading: Icon(
+        icone,
+        color: Colors.white,
+        size: 30,
+      ),
       title: Text(
         texto,
-        style: TextStyle(
-            fontSize: 22,
-            color: Colors.white
-        ),
+        style: TextStyle(fontSize: 22, color: Colors.white),
       ),
       hoverColor: hoverColor,
-      onTap: (){},
+      onTap: onTap,
     );
   }
 }
-
 
 class ListBolos extends StatelessWidget {
   final String nomeLista;

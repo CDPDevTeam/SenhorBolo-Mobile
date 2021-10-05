@@ -3,7 +3,7 @@ import '../../constants.dart';
 
 // 
 
-Widget maskedTextBox ({
+Widget maskedTextField ({
   required String txtLabel,
   required TextEditingController txtController,
   required TextInputType inputType,

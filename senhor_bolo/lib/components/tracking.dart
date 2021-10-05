@@ -1,28 +1,26 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:senhor_bolo/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:senhor_bolo/components/homepage.dart';
 import 'package:senhor_bolo/components/addressPicker.dart';
-import 'package:senhor_bolo/main.dart';
 
-class Rastreio extends StatefulWidget {
-  const Rastreio({Key? key}) : super(key: key);
+/// TODO: Mudar para uma tela de Tracking estilo Amazon
+
+class Tracking extends StatefulWidget {
+  const Tracking({Key? key}) : super(key: key);
 
   @override
-  _RastreioState createState() => _RastreioState();
+  _TrackingState createState() => _TrackingState();
 }
 
-class _RastreioState extends State<Rastreio> {
+class _TrackingState extends State<Tracking> {
   static List _enderecos = [
     "R. Tiro ao Pombo",
     "R. Borboletas Psicodélicas",
     "Rua zap"
   ];
-  static List _cep = [
-    "03080000",
-    "04050000",
-    "00000000"
-  ];
+  static List _cep = ["03080000", "04050000", "00000000"];
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -37,10 +35,8 @@ class _RastreioState extends State<Rastreio> {
                   color: mainColor,
                   borderRadius: BorderRadius.only(
                       bottomRight: Radius.circular(25),
-                      bottomLeft: Radius.circular(25)
-                  )
-              ),
-              padding: EdgeInsets.only(left: 20 ,right: 20),
+                      bottomLeft: Radius.circular(25))),
+              padding: EdgeInsets.only(left: 20, right: 20),
               child: SafeArea(
                 top: true,
                 child: Column(
@@ -54,24 +50,20 @@ class _RastreioState extends State<Rastreio> {
                             iconSize: 40,
                             color: Colors.white,
                             icon: Icon(Icons.arrow_back_ios)),
-
-                        GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                            width: 43,
-                            height: 43,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                    image: AssetImage('images/ricardinho_betoneira.jpeg'),
-                                    fit: BoxFit.cover
-                                )
-                            ),
-                          ),
-                        )
+                        CachedNetworkImage(
+                            imageUrl:
+                                'https://thespacefox.github.io/SenhorBolo-Imagens/images/usuario/ricardinho_betoneira.jpeg',
+                            imageBuilder: (context, imageProvider) => Container(
+                                  width: 50,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                          image: imageProvider,
+                                          fit: BoxFit.fitWidth)),
+                                ))
                       ],
                     ),
-
                     Container(
                       margin: EdgeInsets.only(bottom: 20),
                       child: Text(
@@ -79,8 +71,7 @@ class _RastreioState extends State<Rastreio> {
                         style: TextStyle(
                             fontSize: 35,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white
-                        ),
+                            color: Colors.white),
                       ),
                     )
                   ],
@@ -88,39 +79,40 @@ class _RastreioState extends State<Rastreio> {
               ),
             )
           ],
-        )  ,
+        ),
       ),
-
       bottomNavigationBar: Container(
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: mainColor,
           borderRadius: BorderRadius.only(
-              topRight: Radius.circular(25),
-              topLeft: Radius.circular(25)
-          ),),
+              topRight: Radius.circular(25), topLeft: Radius.circular(25)),
+        ),
         width: MediaQuery.of(context).size.width,
         height: 160,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Seus endereços", style: TextStyle(color: textMainColor, fontSize: 20 ),),
-            SizedBox(height: 10,),
+            Text(
+              "Seus endereços",
+              style: TextStyle(color: textMainColor, fontSize: 20),
+            ),
+            SizedBox(
+              height: 10,
+            ),
             Expanded(
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: _enderecos.length,
-                itemBuilder:(context, index) {
+                itemBuilder: (context, index) {
                   return enderecoBlock(_enderecos[index], _cep[index]);
                 },
               ),
             )
-
           ],
-        ) ,
+        ),
       ),
-    );;
+    );
   }
 }
-

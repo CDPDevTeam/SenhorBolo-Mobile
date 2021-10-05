@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:senhor_bolo/constants.dart';
-import 'package:senhor_bolo/components/cadastro.dart';
+import 'package:senhor_bolo/components/signUp.dart';
 import 'package:senhor_bolo/components/homepage.dart';
 import 'package:senhor_bolo/components/widgets/emailTextField.dart';
 import 'package:senhor_bolo/components/widgets/passwordTextField.dart';
@@ -13,7 +13,7 @@ class LoginApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          toolbarHeight: 90,
+          toolbarHeight: 88,
           elevation: 0,
           centerTitle: true,
           title: Image.asset('images/logo_login.png'),
@@ -81,8 +81,7 @@ class _FormLoginState extends State<FormLogin> {
       if (_txtEmail.text == 'lricardosp@gmail.com' &&
           _txtPassword.text == 'edsonlindo') {
         print('Usuário aceito');
-        Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => Homepage()));
+        Navigator.pushReplacementNamed(context, 'homepage');
       } else {
         print('Usuário inexistente');
       }
@@ -97,7 +96,7 @@ class _FormLoginState extends State<FormLogin> {
         children: <Widget>[
           emailTextField(_txtEmail),
           SizedBox(height: 15),
-          passwordTextField(passwordController: _txtPassword),
+          PasswordTextField(passwordController: _txtPassword),
           SizedBox(height: 7),
           Align(
             alignment: Alignment.topLeft,
@@ -112,10 +111,9 @@ class _FormLoginState extends State<FormLogin> {
           simpleButton(double.infinity, 50, 'Entrar', validarForm,
               defaultRadius, 25, mainColor),
           SizedBox(height: 15),
-          GestureDetector(
+          InkWell(
             onTap: (){
-              Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => CadastroApp()));
+              Navigator.pushReplacementNamed(context, 'signUp');
             },
             child: Text(
               'Não tenho cadastro',

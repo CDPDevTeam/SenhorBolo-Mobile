@@ -1,21 +1,33 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import '../../constants.dart';
+import '../cakeDetail.dart';
 
 class ProdutoHorizontal extends StatelessWidget {
-
   final String nomeProduto;
   final String categoriaProduto;
-  final String precoProduto;
+  final double precoProduto;
   final String imgProduto;
 
-  const ProdutoHorizontal({Key? key, required this.nomeProduto,
-    required this.categoriaProduto, required this.precoProduto,
-    required this.imgProduto}) : super(key: key);
+  const ProdutoHorizontal(
+      {Key? key,
+      required this.nomeProduto,
+      required this.categoriaProduto,
+      required this.precoProduto,
+      required this.imgProduto})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){print('Testa');},
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => CakeDetail(
+                  nomeProduto: nomeProduto,
+                  categoriaProduto: categoriaProduto,
+                  imgProduto: imgProduto,
+                )));
+      },
       child: SizedBox(
         width: 328,
         height: 118,
@@ -26,16 +38,18 @@ class ProdutoHorizontal extends StatelessWidget {
               width: 138,
               height: 118,
               decoration: BoxDecoration(
-                  color: mainColor,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                    bottomLeft: Radius.circular(20),
-                  ),
-                  image: DecorationImage(
-                      image: AssetImage(imgProduto),
-                      fit: BoxFit.contain
-                  )
+                color: mainColor,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                  bottomLeft: Radius.circular(20),
+                ),
+              ),
+              child: CachedNetworkImage(
+                imageUrl:
+                    'https://thespacefox.github.io/SenhorBolo-Imagens/images/' +
+                        imgProduto,
+                fit: BoxFit.contain,
               ),
             ),
             Container(
@@ -54,26 +68,21 @@ class ProdutoHorizontal extends StatelessWidget {
                 children: [
                   Text(
                     nomeProduto,
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold
-                    ),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   Text(
                     categoriaProduto,
                     style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
-                        color: textSecondaryColor
-                    ),
+                        color: textSecondaryColor),
                   ),
                   Text(
-                    'R\$ $precoProduto',
+                    'R\$' + precoProduto.toString() + " - 30,00",
                     style: TextStyle(
                         fontFamily: 'Montserrat',
                         fontSize: 14,
-                        fontWeight: FontWeight.bold
-                    ),
+                        fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
