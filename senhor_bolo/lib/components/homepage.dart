@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -84,6 +85,8 @@ class _HomepageState extends State<Homepage> {
   ];
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  int cartItens = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -318,12 +321,24 @@ class _HomepageState extends State<Homepage> {
           ),
         ]))
       ]),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          print('Carrinho pressionado!');
+          setState(() {
+            cartItens++;
+          });
         },
         backgroundColor: mainColor,
-        child: const Icon(Icons.shopping_cart),
+        label: Text(' Carrinho'),
+        icon:  Badge(
+          toAnimate: true,
+          animationType: BadgeAnimationType.slide,
+          badgeContent: Text(cartItens.toString(), style: TextStyle(color: textMainColor, fontFamily: 'Roboto'),),
+          child: Icon(
+            Icons.shopping_cart,
+            color: Colors.white,
+            size: 30,
+          ),
+        ),
       ),
     );
   }

@@ -39,7 +39,7 @@ class _SearchPageState extends State<SearchPage> {
               child: TextField(
                 controller: searchText,
                 onSubmitted: (searchText){
-                  Navigator.push(
+                  Navigator.pushReplacement(
                       context, MaterialPageRoute(
                       builder: (context) => SearchResult(searchText: searchText,)));
                 },

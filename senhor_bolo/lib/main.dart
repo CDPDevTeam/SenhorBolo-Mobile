@@ -11,13 +11,11 @@ import 'package:senhor_bolo/components/searchPage.dart';
 import 'package:senhor_bolo/components/userProfile.dart';
 import 'package:senhor_bolo/components/ratingScreen.dart';
 import 'package:senhor_bolo/components/deliveryProblem.dart';
-import 'package:senhor_bolo/components/welcomePage.dart';
 import 'package:senhor_bolo/constants.dart';
 import 'components/tracking.dart';
 
 void main(){
   runApp(MaterialApp(
-    title: 'Senhor Bolo',
     theme: ThemeData(
         primaryColor: mainColor,
         fontFamily: 'Raleway',
@@ -43,7 +41,7 @@ void main(){
       'cardError' : (context) => CardDenied(),
       'orderConfirmed' : (context) => CardConfirmed()
     },
-    home: WelcomePage()
+    home: AddressPicker()
     ),
   );
 }

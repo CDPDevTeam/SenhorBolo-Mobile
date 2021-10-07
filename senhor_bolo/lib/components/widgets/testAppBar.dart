@@ -1,7 +1,9 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 
-class TestAppBar extends StatelessWidget implements PreferredSizeWidget {
+import '../../constants.dart';
 
+class TestAppBar extends StatelessWidget implements PreferredSizeWidget {
   const TestAppBar({
     Key? key,
   }) : super(key: key);
@@ -68,12 +70,19 @@ class TestAppBar extends StatelessWidget implements PreferredSizeWidget {
               size: 30,
             ),
           ),
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.shopping_cart,
-              color: Colors.white,
-              size: 30,
+          Badge(
+            position: BadgePosition.topEnd(top: 18, end: 6),
+            badgeContent: Text(
+              '1',
+              style: TextStyle(color: textMainColor, fontFamily: 'Roboto'),
+            ),
+            child: IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.shopping_cart,
+                color: Colors.white,
+                size: 30,
+              ),
             ),
           )
         ],

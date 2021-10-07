@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:senhor_bolo/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -10,17 +12,62 @@ class AddressPicker extends StatefulWidget {
 }
 
 class _AddressPickerState extends State<AddressPicker> {
+
+  Completer<GoogleMapController> _controller = Completer();
+  Set<Marker> _markers = {};
+
+  _onMapCreated(GoogleMapController googleMapController){
+    _controller.complete(googleMapController);
+  }
+
   static List _enderecos = [
     "R. Tiro ao Pombo",
     "R. Borboletas Psicodélicas",
     "Rua zap"
   ];
+
   static List _cep = ["02317-060", "02317-060", "02317-060"];
+
+  /*
+  _getMarkers(){
+
+    Set<Marker> deliveryLocation = {};
+
+    Marker userLocation = Marker(
+      markerId: MarkerId('userLocation'),
+      position: LatLng(latitude, longitude),
+    );
+
+    deliveryLocation.add(userLocation);
+
+    setState(() {
+      _markers = deliveryLocation;
+    });
+  }
+   */
+
+  /*
+  _getUserLocation() async{
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high
+    );
+
+    print('A localização atual é: ' + position.toString());
+  }
+
+   */
+
+  @override
+  void initState() {
+    super.initState();
+   // _getUserLocation();
+  }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(160),
         child: AppBar(
@@ -89,19 +136,46 @@ class _AddressPickerState extends State<AddressPicker> {
                           )
                         ],
                       ),
+                      SizedBox(height: 10),
                       TextField(
-                        style: TextStyle(color: textMainColor),
-                        decoration: const InputDecoration(
-                          hintText: "Rua Humaítá, 638",
-                          hintStyle: TextStyle(color: textMainColorFade),
-                          labelStyle: TextStyle(color: textMainColor),
+                        textInputAction: TextInputAction.go,
+                        autofocus: true,
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.only(left: 20),
+                          hintText: 'Digite o seu endereço',
+                          filled: true,
+                          fillColor: Color(0xffE6E6E6),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(25),
+                            borderSide: BorderSide(
+                              width: 0,
+                              style: BorderStyle.none,
+                            ),
+                          ),
+                          hintStyle: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xffB5B5B5)),
                         ),
-                      )
+                      ),
                     ],
                   ))),
         ),
       ),
-      bottomNavigationBar: Container(
+      body: Container(
+        child: GoogleMap(
+          mapType: MapType.normal,
+          myLocationEnabled: true,
+          initialCameraPosition: CameraPosition(
+            // Localização inicial do mapa
+            target: LatLng(-23.555774, -46.641849),
+            zoom: 25
+          ),
+          onMapCreated: _onMapCreated,
+          markers: _markers,
+        ),
+      ),
+     bottomNavigationBar: Container(
         padding: EdgeInsets.only(top: 20, bottom: 20),
         decoration: BoxDecoration(
           color: mainColor,
@@ -135,7 +209,7 @@ class _AddressPickerState extends State<AddressPicker> {
             )
           ],
         ),
-      ),
+      ), 
     );
   }
 }

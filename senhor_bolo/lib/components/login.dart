@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:senhor_bolo/constants.dart';
-import 'package:senhor_bolo/components/signUp.dart';
-import 'package:senhor_bolo/components/homepage.dart';
 import 'package:senhor_bolo/components/widgets/emailTextField.dart';
 import 'package:senhor_bolo/components/widgets/passwordTextField.dart';
 import 'package:senhor_bolo/components/widgets/simpleButton.dart';
@@ -108,7 +106,7 @@ class _FormLoginState extends State<FormLogin> {
           SizedBox(
             height: 15,
           ),
-          simpleButton(double.infinity, 50, 'Entrar', validarForm,
+          simpleButton(double.infinity, 50, 'Entrar', () => validarForm,
               defaultRadius, 25, mainColor),
           SizedBox(height: 15),
           InkWell(
