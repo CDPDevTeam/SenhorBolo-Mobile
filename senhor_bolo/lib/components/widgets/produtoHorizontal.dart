@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import '../../constants.dart';
@@ -37,7 +38,7 @@ class ProdutoHorizontal extends StatelessWidget {
             Container(
               width: 138,
               height: 118,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: mainColor,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20),
@@ -46,16 +47,14 @@ class ProdutoHorizontal extends StatelessWidget {
                 ),
               ),
               child: CachedNetworkImage(
-                imageUrl:
-                    'https://thespacefox.github.io/SenhorBolo-Imagens/images/' +
-                        imgProduto,
+                imageUrl: urlImagem + imgProduto,
                 fit: BoxFit.contain,
               ),
             ),
             Container(
               width: 190,
               height: 98,
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.only(left: 20, right: 20),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
@@ -64,22 +63,29 @@ class ProdutoHorizontal extends StatelessWidget {
                 ),
               ),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  AutoSizeText(
                     nomeProduto,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        height: 0.95
+                    ),
                   ),
                   Text(
                     categoriaProduto,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
                         color: textSecondaryColor),
                   ),
                   Text(
                     'R\$' + precoProduto.toString() + " - 30,00",
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontFamily: 'Montserrat',
                         fontSize: 14,
                         fontWeight: FontWeight.bold),

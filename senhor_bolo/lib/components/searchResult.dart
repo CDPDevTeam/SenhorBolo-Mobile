@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:senhor_bolo/components/widgets/produtoHorizontal.dart';
 import 'package:senhor_bolo/components/widgets/searchAppBar.dart';
 import 'package:senhor_bolo/constants.dart';
+import 'classes/api.dart';
+import 'model/cake.dart';
+
 
 class SearchResult extends StatefulWidget {
   final String searchText;
-
   const SearchResult({Key? key, required this.searchText}) : super(key: key);
 
   @override
@@ -13,61 +15,21 @@ class SearchResult extends StatefulWidget {
 }
 
 class _SearchResultState extends State<SearchResult> {
-
-  static List<String> _imagensBolosSimples = [
-    'formigueiro.png',
-    'bolo_nada.png',
-    'laranja.png',
-    'chocolate.png',
-    'formigueiro.png',
-    'bolo_nada.png',
-    'laranja.png',
-    'chocolate.png',
-  ];
-
-  static List<String> _bolosSimples = [
-    'Formigueiro',
-    'Bolo de nada',
-    'Laranja',
-    'Chocolate',
-    'Formigueiro',
-    'Bolo de nada',
-    'Laranja',
-    'Chocolate',
-  ];
-
-  static List<String> _categoriaBolosSimples = [
-    "Bolo simples",
-    "Bolo simples",
-    "Bolo simples",
-    "Bolo simples",
-    "Bolo simples",
-    "Bolo simples",
-    "Bolo simples",
-    "Bolo simples",
-  ];
-
-  static List<double> _precoBoloSimples = [
-    12.00,
-    12.00,
-    12.00,
-    12.00,
-    12.00,
-    12.00,
-    12.00,
-    12.00,
-  ];
+  API api = API();
+  Future<List<Cake>>? resultadoPesquisa;
 
   String searchResult(int queryResult) {
     if (queryResult > 0) {
-      if (queryResult == 1) {
-        return '$queryResult resultado encontrado para ' + widget.searchText;
-      } else {
-        return '$queryResult resultados encontrados para ' + widget.searchText;
-      }
+      return 'Resultado(s) encontrado(s) para ' + widget.searchText;
     } else {
       return 'Nenhum resultado encontrado para ' + widget.searchText;
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    resultadoPesquisa = api.searchCake(widget.searchText);
   }
 
   @override
@@ -83,38 +45,51 @@ class _SearchResultState extends State<SearchResult> {
           physics: BouncingScrollPhysics(),
           scrollDirection: Axis.vertical,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             Text(
               searchResult(3),
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 15, color: textSecondaryColor),
+              style: const TextStyle(fontSize: 15, color: textSecondaryColor),
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
-            Center(
-              child: SizedBox(
-                width: 328,
-                child: ListView.separated(
-                  itemCount: _bolosSimples.length,
-                  scrollDirection: Axis.vertical,
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return ProdutoHorizontal(
-                        nomeProduto: _bolosSimples[index],
-                        categoriaProduto: _categoriaBolosSimples[index],
-                        precoProduto: _precoBoloSimples[index],
-                        imgProduto: _imagensBolosSimples[index]);
-                  },
-                  separatorBuilder: (context, int index) {
-                    return SizedBox(height: 20);
-                  },
-                ),
-              ),
-            )
+            FutureBuilder<List<Cake>>(
+              future: resultadoPesquisa,
+              builder: (context, snapshot){
+                if(snapshot.hasData){
+                  return Center(
+                    child: SizedBox(
+                      width: 328,
+                      child: ListView.separated(
+                        itemCount: snapshot.data!.length,
+                        scrollDirection: Axis.vertical,
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return ProdutoHorizontal(
+                              nomeProduto: snapshot.data![index].name,
+                              categoriaProduto: snapshot.data![index].category,
+                              precoProduto: snapshot.data![index].price.toDouble(),
+                              imgProduto: snapshot.data![index].image);
+                        },
+                        separatorBuilder: (context, int index) {
+                          return SizedBox(height: 20);
+                        },
+                      ),
+                    )
+                  );
+                } else if (snapshot.hasError){
+                  return Text('${snapshot.error}');
+                }
+                return const Center(child: CircularProgressIndicator());
+              },
+            ),
+            const SizedBox(
+              height: 15,
+            ),
           ],
         )
     );

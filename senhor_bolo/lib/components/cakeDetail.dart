@@ -1,9 +1,14 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:senhor_bolo/components/widgets/produtoHorizontal.dart';
 import 'package:senhor_bolo/components/widgets/simpleButton.dart';
 import 'package:senhor_bolo/components/widgets/testAppBar.dart';
 import 'package:senhor_bolo/constants.dart';
+import 'classes/api.dart';
+import 'classes/shoppingCart.dart';
+import 'model/cake.dart';
 
 class CakeDetail extends StatefulWidget {
 
@@ -11,8 +16,10 @@ class CakeDetail extends StatefulWidget {
   final String categoriaProduto;
   final String imgProduto;
 
-  const CakeDetail({Key? key, required this.nomeProduto,
-    required this.categoriaProduto, required this.imgProduto}) : super(key: key);
+  const CakeDetail({Key? key,
+    required this.nomeProduto,
+    required this.categoriaProduto,
+    required this.imgProduto}) : super(key: key);
 
   @override
   _CakeDetailState createState() => _CakeDetailState();
@@ -20,195 +27,199 @@ class CakeDetail extends StatefulWidget {
 
 class _CakeDetailState extends State<CakeDetail> {
 
-  List<String> _tamanhos = ['250g', '500g', '1Kg'];
-  int _defaultChoice = 0;
-  String _precoItem = '12';
-  int qtdeItem = 1;
+  API api = API();
+  Future<List<Cake>>? _recommendedCakes;
+  int _qtdeItem = 1;
 
-  void adicionarCarrinho() {
-    // Parte do SQL?
-    print('Preço do item: $_precoItem');
-    print('Qtde do item: $qtdeItem');
-    print('Adicionado ao carrinho!');
+  void _adicionarCarrinho() {
+    Cake bolo = Cake(
+        name: widget.nomeProduto,
+        category: widget.categoriaProduto,
+        image: widget.imgProduto,
+        price: 15
+    );
+
+    setState(() {
+      ShoppingCart carrinho = ShoppingCart();
+      carrinho.addItem(bolo);
+    });
   }
 
-  static List<String> _bolosChocolate = [
-    'Brigadeiro',
-    'Raimunda',
-    'Francesa',
-    'Crocante'
-  ];
-
-  static List<String> _categoriaBolosChocolate = [
-    'Bolo doce',
-    'Bolo doce',
-    'Torta doce',
-    'Bolo doce'
-  ];
-
-  static List<double> _precoBoloChocolate = [
-    12.00,
-    12.00,
-    24.00,
-    12.00,
-  ];
-
-  static List<String> _imagensBoloChocolate = [
-    'brigadeiro.png',
-    'raimunda.png',
-    'francesa_chocolate.png',
-    'crocante.png'
-  ];
-
+  @override
+  void initState() {
+    super.initState();
+    _recommendedCakes = api.recommendedCake('');
+  }
   @override
   Widget build(BuildContext context) {
-    print('Produto feito');
+    final Size screenSize = MediaQuery.of(context).size;
+
     return Scaffold(
-        appBar: const TestAppBar(),
-        body: ListView(
-          physics: BouncingScrollPhysics(),
-          scrollDirection: Axis.vertical,
-          children: [
-              Stack(
-                children: [
-                  Container(
-                    // Caixa do produto
-                    height: 514,
-                    padding: EdgeInsets.all(15),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(25),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Hero(
-                          tag: widget.nomeProduto,
-                           child: CachedNetworkImage(
-                               imageUrl: 'https://thespacefox.github.io/SenhorBolo-Imagens/images/' + widget.imgProduto,
-                               imageBuilder: (context, imageProvider) => Container(
-                                   height: 291,
-                                   decoration: BoxDecoration(
-                                       color: Color(0xff64CBC7),
-                                       borderRadius: BorderRadius.circular(25),
-                                       image: DecorationImage(
-                                           image: imageProvider,
-                                           fit: BoxFit.contain))
-                               )
-                           )
-                        ),
-                        Container(
-                          // Informações do produto
-                          width: 237,
-                          height: 180,
-                          margin: const EdgeInsets.only(left: 20.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                widget.nomeProduto,
-                                style: TextStyle(
-                                    fontSize: 36, fontWeight: FontWeight.w900),
-                              ),
-                              Text(
-                                widget.categoriaProduto,
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: textSecondaryColor),
-                              ),
-                              tamanhosBolo(),
-                              Text(
-                                'Descrição do bolo, olha que bolo bonito esse, não quer comprar?',
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    color: textSecondaryColor,
-                                    fontWeight: FontWeight.normal),
-                              ),
-                              SizedBox(height: 10),
-                              Text(
-                                'Tabela nutricional >',
-                                style:
-                                    TextStyle(fontSize: 15, color: mainColor),
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
+      extendBodyBehindAppBar: true,
+      appBar: TestAppBar(),
+      body: ListView(
+        physics: BouncingScrollPhysics(),
+        scrollDirection: Axis.vertical,
+        children: [
+          Container(
+            width: screenSize.width,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(25),
+              color: Colors.white
+            ),
+            child: Column(
+              children: [
+                CachedNetworkImage(
+                  imageUrl: urlImagem + widget.imgProduto,
+                  imageBuilder: (context, imageProvider) => Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 30, 15, 15),
+                    child: Container(
+                      width: double.infinity,
+                      height: 300,
+                      decoration: BoxDecoration(
+                        color: const Color(0xff64CBC7),
+                        borderRadius: BorderRadius.circular(25),
+                        image: DecorationImage(
+                          image: imageProvider
+                        )
+                      ),
                     ),
                   ),
-                  Positioned(
-                    bottom: 108,
-                    right: 0,
-                    child: Container(
-                        width: 108,
-                        height: 81,
-                        decoration: BoxDecoration(
-                            color: Color(0xff00A59F),
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(25),
-                                bottomLeft: Radius.circular(25))),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 25, bottom: 30),
+                      child: SizedBox(
+                        width: 237,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            AutoSizeText(
+                              widget.nomeProduto,
+                              maxLines: 2,
+                              style: const TextStyle(
+                                  fontSize: 36,
+                                  fontWeight: FontWeight.bold,
+                                  height: 0.95
+                              ),
+                            ),
+                            Text(
+                              widget.categoriaProduto,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: textSecondaryColor
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            const Text(
+                              'Descrição simples do bolo, olha que bolo bonito esse, não quer comprar?',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: textSecondaryColor
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            const Text(
+                              'Tabela nutricional >',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: mainColor
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    ),
+                    Container(
+                      width: 108,
+                      height: 81,
+                      decoration: const BoxDecoration(
+                          color: Color(0xff00A59F),
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(25),
+                              bottomLeft: Radius.circular(25))),
                         child: Center(
                           child: RichText(
                             text: TextSpan(
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontFamily: 'Montserrat',
                                     color: Colors.white,
                                     fontWeight: FontWeight.w500),
                                 children: <TextSpan>[
-                                  TextSpan(
+                                  const TextSpan(
                                       text: 'R\$',
                                       style: TextStyle(fontSize: 25)),
                                   TextSpan(
-                                      text: _precoItem,
+                                      text: '15',
                                       style: TextStyle(fontSize: 35)),
                                 ]),
                           ),
-                        )),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-
-              Padding(padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                child: Text(
-                  'Outros produtos',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-              ),
-
-            Center(
-              child: SizedBox(
-                width: 328,
-                child: ListView.separated(
-                  itemCount: _bolosChocolate.length,
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    return ProdutoHorizontal(
-                        nomeProduto: _bolosChocolate[index],
-                        categoriaProduto: _categoriaBolosChocolate[index],
-                        precoProduto: _precoBoloChocolate[index],
-                        imgProduto: _imagensBoloChocolate[index]
-                    );
-                  } ,
-                  separatorBuilder: (context, int index){
-                    return SizedBox(height: 20);
-                  },
-                ),
-              ),
-            )
-
-            ],
-        ),
+                        )
+                    )
+                  ],
+                )
+              ],
+            ),
+          ),
+          const Padding(padding: EdgeInsets.fromLTRB(20, 10, 20, 15),
+            child: Text(
+              'Outros produtos',
+              textAlign: TextAlign.left,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+          ),
+          FutureBuilder<List<Cake>>(
+            future: _recommendedCakes,
+            builder: (context, snapshot){
+              if(snapshot.hasData){
+                return Center(
+                    child: SizedBox(
+                      width: 328,
+                      child: ListView.separated(
+                        itemCount: snapshot.data!.length,
+                        scrollDirection: Axis.vertical,
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return ProdutoHorizontal(
+                              nomeProduto: snapshot.data![index].name,
+                              categoriaProduto: snapshot.data![index].category,
+                              precoProduto: snapshot.data![index].price.toDouble(),
+                              imgProduto: snapshot.data![index].image);
+                        },
+                        separatorBuilder: (context, int index) {
+                          return SizedBox(height: 20);
+                        },
+                      ),
+                    )
+                );
+              } else if (snapshot.hasError){
+                return Text('${snapshot.error}');
+              }
+              return const Center(child: CircularProgressIndicator());
+            },
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          const Text(
+            'Você chegou ao fim ^_^',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 15),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+        ],
+      ),
 
         bottomNavigationBar: Container(
           height: 90,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(25), topRight: Radius.circular(25)),
@@ -218,25 +229,25 @@ class _CakeDetailState extends State<CakeDetail> {
             children: [
               ElevatedButton(
                 onPressed: () {
-                  if (qtdeItem > 1) {
+                  if (_qtdeItem > 1) {
                     setState(() {
-                      qtdeItem--;
+                      _qtdeItem--;
                     });
                   }
                 },
-                child: Icon(
+                child: const Icon(
                   Icons.remove,
                   size: 30,
                   color: Colors.black,
                 ),
                 style: ElevatedButton.styleFrom(
-                    primary: Color(0xffF5F5F5),
-                    shape: CircleBorder(),
-                    minimumSize: Size(48.0, 48.0)),
+                    primary: const Color(0xffF5F5F5),
+                    shape: const CircleBorder(),
+                    minimumSize: const Size(48.0, 48.0)),
               ),
               Text(
-                '$qtdeItem',
-                style: TextStyle(
+                '$_qtdeItem',
+                style: const TextStyle(
                     fontFamily: 'Montserrat',
                     fontSize: 25,
                     fontWeight: FontWeight.bold),
@@ -244,69 +255,29 @@ class _CakeDetailState extends State<CakeDetail> {
               ElevatedButton(
                 onPressed: () {
                   setState(() {
-                    qtdeItem++;
+                    _qtdeItem++;
                   });
                 },
                 onLongPress: (){
                   setState(() {
-                    qtdeItem++;
+                    _qtdeItem++;
                   });
                 },
-                child: Icon(
+                child: const Icon(
                   Icons.add,
                   size: 30,
                   color: Colors.black,
                 ),
                 style: ElevatedButton.styleFrom(
-                    primary: Color(0xffF5F5F5),
-                    shape: CircleBorder(),
-                    minimumSize: Size(48.0, 48.0)),
+                    primary: const Color(0xffF5F5F5),
+                    shape: const CircleBorder(),
+                    minimumSize: const Size(48.0, 48.0)),
               ),
-              simpleButton(199, 39, 'Adicionar ao carrinho', adicionarCarrinho,
+              simpleButton(199, 39, 'Adicionar ao carrinho', _adicionarCarrinho,
                   10, 16, mainColor)
             ],
           ),
-        ));
-  }
-
-  Widget tamanhosBolo() {
-    return Expanded(
-      child: ListView.separated(
-        separatorBuilder: (BuildContext context, int index){
-          return SizedBox(width: 10);
-        },
-        scrollDirection: Axis.horizontal,
-        itemCount: _tamanhos.length,
-        itemBuilder: (BuildContext context, int index) {
-          return ChoiceChip(
-            onSelected: (bool selected) {
-              setState(() {
-                _defaultChoice = selected ? index : 0;
-                if (_defaultChoice == 0){
-                  _precoItem = '12';
-                } else if (_defaultChoice == 1){
-                  _precoItem = '24';
-                } else {
-                  _precoItem = '30';
-                }
-              });
-            },
-            selected: _defaultChoice == index,
-            selectedColor: Color(0xffBABABA),
-            padding: const EdgeInsets.symmetric(
-                horizontal: 12),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8)),
-            label: Text(_tamanhos[index]),
-            labelStyle: TextStyle(
-                fontFamily: 'Montserrat',
-                fontSize: 12,
-                color: Colors.black),
-          );
-        },
-      ),
+        )
     );
   }
-
 }
-

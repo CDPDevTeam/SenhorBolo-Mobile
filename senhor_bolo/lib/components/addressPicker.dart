@@ -65,102 +65,56 @@ class _AddressPickerState extends State<AddressPicker> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+
+    Size screenSize = MediaQuery.of(context).size;
+
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(160),
-        child: AppBar(
-          elevation: 0,
-          toolbarHeight: 88,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(25),
-                  bottomRight: Radius.circular(25))),
-          leading: InkWell(
-            onTap: () => Navigator.of(context).pop(),
-            child: Icon(
-              Icons.keyboard_arrow_left,
-              color: Colors.white,
-              size: 50,
-            ),
+      appBar: AppBar(
+        elevation: 0,
+        toolbarHeight: 88,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(25),
+                bottomRight: Radius.circular(25))),
+        leading: InkWell(
+          onTap: () => Navigator.of(context).pop(),
+          child: Icon(
+            Icons.keyboard_arrow_left,
+            color: Colors.white,
+            size: 50,
           ),
-          actions: <Widget>[
-            InkWell(
-                onTap: () {
-                  Navigator.pushReplacementNamed(context, 'userProfile');
-                },
-                child: Padding(
-                    padding: EdgeInsets.only(right: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Luiz Ricardo',
-                          style: TextStyle(fontSize: 16, color: textMainColor),
-                        ),
-                        SizedBox(width: 10),
-                        CachedNetworkImage(
-                            imageUrl:
-                                'https://thespacefox.github.io/SenhorBolo-Imagens/images/usuario/ricardinho_betoneira.jpeg',
-                            imageBuilder: (context, imageProvider) => Container(
-                                  width: 50,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: DecorationImage(
-                                          image: imageProvider,
-                                          fit: BoxFit.fitWidth)),
-                                ))
-                      ],
-                    )))
-          ],
-          bottom: PreferredSize(
-              //Exigido por causa do null safety, mas aqui não faz diferença
-              preferredSize: Size.fromHeight(0),
-              child: Container(
-                  width: size.width * 0.9,
-                  margin: EdgeInsets.only(bottom: 10),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Icon(Icons.edit_location, color: textMainColor),
-                          Text(
-                            "Entregar em",
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: textMainColor),
-                          )
-                        ],
-                      ),
-                      SizedBox(height: 10),
-                      TextField(
-                        textInputAction: TextInputAction.go,
-                        autofocus: true,
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.only(left: 20),
-                          hintText: 'Digite o seu endereço',
-                          filled: true,
-                          fillColor: Color(0xffE6E6E6),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
-                            borderSide: BorderSide(
-                              width: 0,
-                              style: BorderStyle.none,
-                            ),
-                          ),
-                          hintStyle: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xffB5B5B5)),
-                        ),
-                      ),
-                    ],
-                  ))),
         ),
+        actions: <Widget>[
+          InkWell(
+              onTap: () {
+                Navigator.pushReplacementNamed(context, 'userProfile');
+              },
+              child: Padding(
+                  padding: EdgeInsets.only(right: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Luiz Ricardo',
+                        style: TextStyle(fontSize: 16, color: textMainColor),
+                      ),
+                      SizedBox(width: 10),
+                      CachedNetworkImage(
+                          imageUrl:
+                          'https://thespacefox.github.io/SenhorBolo-Imagens/images/usuario/ricardinho_betoneira.jpeg',
+                          imageBuilder: (context, imageProvider) => Container(
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.fitWidth)),
+                          ))
+                    ],
+                  )))
+        ],
       ),
       body: Container(
         child: GoogleMap(

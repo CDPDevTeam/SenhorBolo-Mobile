@@ -2,9 +2,12 @@ import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:senhor_bolo/components/classes/api.dart';
+import 'package:senhor_bolo/components/classes/shoppingCart.dart';
 import 'package:senhor_bolo/components/searchResult.dart';
 import 'package:senhor_bolo/components/widgets/produtoVertical.dart';
 import '../constants.dart';
+import 'model/cake.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({Key? key}) : super(key: key);
@@ -14,79 +17,20 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  static List<String> _bolosChocolate = [
-    'Brigadeiro',
-    'Raimunda',
-    'Francesa',
-    'Crocante'
-  ];
 
-  static List<String> _categoriaBolosChocolate = [
-    'Bolo doce',
-    'Bolo doce',
-    'Torta doce',
-    'Bolo doce'
-  ];
-
-  static List<double> _precoProdutoChocolate = [
-    12.00,
-    12.00,
-    24.00,
-    12.00,
-  ];
-
-  static List<String> _imagensBoloChocolate = [
-    'brigadeiro.png',
-    'raimunda.png',
-    'francesa_chocolate.png',
-    'crocante.png'
-  ];
-
-  static List<String> _bolosSimples = [
-    'Formigueiro',
-    'Bolo de nada',
-    'Laranja',
-    'Chocolate',
-  ];
-
-  static List<String> _categoriaBolosSimples = [
-    "Bolo simples",
-    "Bolo simples",
-    "Bolo simples",
-    "Bolo simples",
-  ];
-
-  static List<double> _precoBoloSimples = [
-    12.00,
-    12.00,
-    12.00,
-    12.00,
-  ];
-
-  static List<String> _imagensBolosSimples = [
-    'bolo_nada.png',
-    'laranja.png',
-    'chocolate.png',
-    'formigueiro.png'
-  ];
-
-  static List<String> _bolosNovidade = ['Portuguesa', 'Mesclado', 'Cocada'];
-
-  static List<String> _categoriaNovidades = [
-    'Bolo gourmet',
-    'Bolo doce',
-    'Bolo doce',
-  ];
-
-  static List<String> _imagensNovidade = [
-    'baba_portuguesa.png',
-    'bolo_mesclado.png',
-    'cocada.png',
-  ];
+  API api = API();
+  Future<List<Cake>>? recommendedCakes1;
+  Future<List<Cake>>? recommendedCakes2;
+  Future<List<Cake>>? recommendedCakes3;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
   int cartItens = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    recommendedCakes1 = api.searchCake('Chocolate');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -171,16 +115,14 @@ class _HomepageState extends State<Homepage> {
                 borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(25),
                     bottomRight: Radius.circular(25))),
-            leading: InkWell(
-                onTap: () => _scaffoldKey.currentState!.openDrawer(),
-                child: Padding(
-                  padding: EdgeInsets.only(left: 18),
-                  child: Icon(
-                    Icons.menu,
-                    color: Colors.white,
-                    size: 40,
-                  ),
-                )),
+            leading: IconButton(
+              onPressed: () => _scaffoldKey.currentState!.openDrawer(),
+              icon: Icon(
+                Icons.menu,
+                color: Colors.white,
+                size: 40,
+              ),
+            ),
             title: InkWell(
               onTap: () => Navigator.pushNamed(context, 'addressPicker'),
               child: Row(
@@ -228,7 +170,7 @@ class _HomepageState extends State<Homepage> {
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
                                     image: imageProvider,
-                                    fit: BoxFit.fitWidth)),
+                                    fit: BoxFit.contain)),
                           )
                       )
                   )
@@ -282,7 +224,7 @@ class _HomepageState extends State<Homepage> {
             )),
         SliverList(
             delegate: SliverChildListDelegate(<Widget>[
-          SizedBox(height: 22),
+          const SizedBox(height: 22),
           GestureDetector(
               onTap: () => Navigator.pushNamed(context, 'customCake'),
               child: Center(
@@ -290,49 +232,64 @@ class _HomepageState extends State<Homepage> {
                   image: AssetImage('images/banner_teste.png'),
                 ),
               )),
-          ListBolos(
-              nomeLista: 'Produtos com chocolate',
-              nomes: _bolosChocolate,
-              categorias: _categoriaBolosChocolate,
-              precos: _precoProdutoChocolate,
-              imagens: _imagensBoloChocolate),
-          ListBolos(
-              nomeLista: 'Bolos simples',
-              nomes: _bolosSimples,
-              categorias: _categoriaBolosSimples,
-              precos: _precoBoloSimples,
-              imagens: _imagensBolosSimples),
-          ListBolos(
-              nomeLista: 'Novidades',
-              nomes: _bolosNovidade,
-              categorias: _categoriaNovidades,
-              precos: _precoBoloSimples,
-              imagens: _imagensNovidade),
-          SizedBox(
-            height: 30,
-          ),
-          Text(
+              SizedBox(height: 15),
+              Padding(
+                padding: EdgeInsets.only(left: 34),
+                child: Text(
+                  'Bolos com chocolate',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ),
+              SizedBox(height: 10),
+              FutureBuilder<List<Cake>>(
+                future: recommendedCakes1,
+                builder: (context, snapshot){
+                  if(snapshot.hasData){
+                    return Center(
+                        child: SizedBox(
+                          height: 227,
+                          child: ListView.separated(
+                            itemCount: snapshot.data!.length,
+                            scrollDirection: Axis.horizontal,
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              return ProdutoVertical(
+                                nomeProduto: snapshot.data![index].name,
+                                categoriaProduto: snapshot.data![index].category,
+                                precoProduto: snapshot.data![index].price,
+                                imgProduto: snapshot.data![index].image,
+                              );
+                            },
+                            separatorBuilder: (context, int index) {
+                              return SizedBox(width: 20);
+                            },
+                          ),
+                        )
+                    );
+                  } else if (snapshot.hasError){
+                    return Text('${snapshot.error}');
+                  }
+                  return const Center(child: CircularProgressIndicator());
+                },
+              ),
+          const SizedBox(height: 30),
+          const Text(
             'Você chegou ao fim ^_^',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 15),
           ),
-          SizedBox(
-            height: 20,
-          ),
+          const SizedBox(height: 20),
         ]))
       ]),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          setState(() {
-            cartItens++;
-          });
-        },
+        onPressed: () {},
         backgroundColor: mainColor,
         label: Text(' Carrinho'),
         icon:  Badge(
           toAnimate: true,
           animationType: BadgeAnimationType.slide,
-          badgeContent: Text(cartItens.toString(), style: TextStyle(color: textMainColor, fontFamily: 'Roboto'),),
+          badgeContent: Text(ShoppingCart.cartItens.length.toString(),
+            style: TextStyle(color: textMainColor, fontFamily: 'Roboto'),),
           child: Icon(
             Icons.shopping_cart,
             color: Colors.white,
@@ -361,59 +318,6 @@ class _HomepageState extends State<Homepage> {
       ),
       hoverColor: hoverColor,
       onTap: onTap,
-    );
-  }
-}
-
-class ListBolos extends StatelessWidget {
-  final String nomeLista;
-  final List<String> nomes;
-  final List<String> categorias;
-  final List<double> precos;
-  final List<String> imagens;
-
-  const ListBolos(
-      {Key? key,
-      required this.nomeLista,
-      required this.nomes,
-      required this.categorias,
-      required this.precos,
-      required this.imagens})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(height: 15),
-        Padding(
-          padding: EdgeInsets.only(left: 34),
-          child: Text(
-            nomeLista,
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-        ),
-        SizedBox(height: 10),
-        SizedBox(
-          height: 227,
-          child: ListView.separated(
-            separatorBuilder: (BuildContext context, int index) {
-              return SizedBox(width: 20);
-            },
-            scrollDirection: Axis.horizontal,
-            itemCount: nomes.length,
-            itemBuilder: (context, index) {
-              return ProdutoVertical(
-                nomeProduto: nomes[index],
-                categoriaProduto: categorias[index],
-                precoProduto: precos[index],
-                imgProduto: imagens[index],
-              );
-            },
-          ),
-        )
-      ],
     );
   }
 }

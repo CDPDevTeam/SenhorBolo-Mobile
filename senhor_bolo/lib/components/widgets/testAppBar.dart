@@ -1,6 +1,6 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
-
+import 'package:senhor_bolo/components/classes/shoppingCart.dart';
 import '../../constants.dart';
 
 class TestAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -10,20 +10,19 @@ class TestAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('AppBar feita');
     return PreferredSize(
       preferredSize: Size.fromHeight(88),
       child: AppBar(
         elevation: 0,
         toolbarHeight: 88,
         centerTitle: true,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(25),
                 bottomRight: Radius.circular(25))),
-        leading: InkWell(
-          onTap: () => Navigator.of(context).pop(),
-          child: Icon(
+        leading: IconButton(
+          onPressed: () => Navigator.of(context).pop(),
+          icon: const Icon(
             Icons.keyboard_arrow_left,
             color: Colors.white,
             size: 50,
@@ -37,7 +36,7 @@ class TestAppBar extends StatelessWidget implements PreferredSizeWidget {
             children: [
               Column(
                 children: <Text>[
-                  Text(
+                  const Text(
                     'Entregar em',
                     style: TextStyle(
                         fontSize: 14,
@@ -53,7 +52,7 @@ class TestAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 ],
               ),
-              Icon(
+              const Icon(
                 Icons.location_on,
                 color: Colors.white,
                 size: 20,
@@ -64,7 +63,7 @@ class TestAppBar extends StatelessWidget implements PreferredSizeWidget {
         actions: <Widget>[
           IconButton(
             onPressed: () => Navigator.pushNamed(context, 'searchPage'),
-            icon: Icon(
+            icon: const Icon(
               Icons.search,
               color: Colors.white,
               size: 30,
@@ -73,7 +72,7 @@ class TestAppBar extends StatelessWidget implements PreferredSizeWidget {
           Badge(
             position: BadgePosition.topEnd(top: 18, end: 6),
             badgeContent: Text(
-              '1',
+              ShoppingCart.cartItens.length.toString(),
               style: TextStyle(color: textMainColor, fontFamily: 'Roboto'),
             ),
             child: IconButton(
@@ -89,7 +88,6 @@ class TestAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
     );
   }
-
   @override
   Size get preferredSize => new Size.fromHeight(88);
 }

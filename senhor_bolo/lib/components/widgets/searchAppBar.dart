@@ -12,7 +12,6 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('AppBar feita');
     return PreferredSize(
       preferredSize: Size.fromHeight(160),
       child: AppBar(

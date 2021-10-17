@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import '../../constants.dart';
@@ -7,7 +8,7 @@ class ProdutoVertical extends StatelessWidget {
 
   final String nomeProduto;
   final String categoriaProduto;
-  final double precoProduto;
+  final int precoProduto;
   final String imgProduto;
 
   const ProdutoVertical({Key? key, required this.nomeProduto,
@@ -16,7 +17,7 @@ class ProdutoVertical extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
         onTap: () {
           Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => CakeDetail(
@@ -41,9 +42,10 @@ class ProdutoVertical extends StatelessWidget {
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Text>[
-                    Text(
+                  children: <Widget>[
+                    AutoSizeText(
                       nomeProduto,
+                      maxLines: 1,
                       style: TextStyle(
                           fontSize: 19,
                           fontWeight: FontWeight.bold
@@ -82,12 +84,10 @@ class ProdutoVertical extends StatelessWidget {
                               topRight: Radius.circular(20),
                               bottomLeft: Radius.circular(20),
                             ),
-                            /*
-                            image: DecorationImage(image: NetworkImage('https://thespacefox.github.io/SenhorBolo-Imagens/images/' + imgProduto),
-                                fit: BoxFit.contain) */
+
                         ),
                         child: CachedNetworkImage(
-                          imageUrl: 'https://thespacefox.github.io/SenhorBolo-Imagens/images/' + imgProduto,
+                          imageUrl: urlImagem + imgProduto,
                           fit: BoxFit.contain,
                         ),
                       )

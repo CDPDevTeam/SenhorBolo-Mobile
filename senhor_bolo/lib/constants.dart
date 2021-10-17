@@ -7,6 +7,8 @@ const textMainColor = Color(0xffFFFFFF);
 const textSecondaryColor = Color(0xff707070);
 const textMainColorFade = Color(0xB3FFFFFF);
 const double defaultRadius = 10;
+const urlImagem = 'https://realsenhorbolo.000webhostapp.com/images/bolos/';
+const urlAPI = 'http://10.0.2.2:3000/';
 
 Widget buildMenuItem({
   required String texto,

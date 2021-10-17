@@ -8,6 +8,7 @@ import 'package:senhor_bolo/components/login.dart';
 import 'package:senhor_bolo/components/myOrders.dart';
 import 'package:senhor_bolo/components/orderConfirmation.dart';
 import 'package:senhor_bolo/components/searchPage.dart';
+import 'package:senhor_bolo/components/cakeDetail.dart';
 import 'package:senhor_bolo/components/userProfile.dart';
 import 'package:senhor_bolo/components/ratingScreen.dart';
 import 'package:senhor_bolo/components/deliveryProblem.dart';
@@ -20,9 +21,11 @@ void main(){
         primaryColor: mainColor,
         fontFamily: 'Raleway',
         scaffoldBackgroundColor: backgroundColor,
+        appBarTheme: AppBarTheme(
+          backgroundColor: mainColor,
+        ),
         pageTransitionsTheme: PageTransitionsTheme(builders: {
-          TargetPlatform.android: ZoomPageTransitionsBuilder()
-          //TargetPlatform.android: CupertinoPageTransitionsBuilder()
+          TargetPlatform.android: CupertinoPageTransitionsBuilder()
         })
     ),
     routes: {
@@ -41,7 +44,7 @@ void main(){
       'cardError' : (context) => CardDenied(),
       'orderConfirmed' : (context) => CardConfirmed()
     },
-    home: AddressPicker()
+    home: Homepage()
     ),
   );
 }
