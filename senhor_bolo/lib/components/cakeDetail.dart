@@ -69,19 +69,26 @@ class _CakeDetailState extends State<CakeDetail> {
             ),
             child: Column(
               children: [
-                CachedNetworkImage(
-                  imageUrl: urlImagem + widget.imgProduto,
-                  imageBuilder: (context, imageProvider) => Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 30, 15, 15),
-                    child: Container(
-                      width: double.infinity,
-                      height: 300,
-                      decoration: BoxDecoration(
+                Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Container(
+                    width: double.infinity,
+                    height: 300,
+                    decoration: BoxDecoration(
                         color: const Color(0xff64CBC7),
                         borderRadius: BorderRadius.circular(25),
-                        image: DecorationImage(
-                          image: imageProvider
-                        )
+                    ),
+                    child: CachedNetworkImage(
+                      imageUrl: urlImagem + widget.imgProduto,
+                      errorWidget: (context, url, error) => const Center(
+                        child: Text(
+                          'Erro ao carregar a imagem :(',
+                          style: TextStyle(
+                            color: textMainColor,
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold
+                          ),
+                        ),
                       ),
                     ),
                   ),

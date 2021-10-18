@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:senhor_bolo/components/addAddress.dart';
 import 'package:senhor_bolo/components/addressPicker.dart';
 import 'package:senhor_bolo/components/customCake.dart';
 import 'package:senhor_bolo/components/signUp.dart';
@@ -8,7 +9,6 @@ import 'package:senhor_bolo/components/login.dart';
 import 'package:senhor_bolo/components/myOrders.dart';
 import 'package:senhor_bolo/components/orderConfirmation.dart';
 import 'package:senhor_bolo/components/searchPage.dart';
-import 'package:senhor_bolo/components/cakeDetail.dart';
 import 'package:senhor_bolo/components/userProfile.dart';
 import 'package:senhor_bolo/components/ratingScreen.dart';
 import 'package:senhor_bolo/components/deliveryProblem.dart';
@@ -42,7 +42,8 @@ void main(){
       'tracking' : (context) => Tracking(),
       'searchPage' : (context) => SearchPage(),
       'cardError' : (context) => CardDenied(),
-      'orderConfirmed' : (context) => CardConfirmed()
+      'orderConfirmed' : (context) => CardConfirmed(),
+      'addAddress' : (context) => AddAddress()
     },
     home: Homepage()
     ),

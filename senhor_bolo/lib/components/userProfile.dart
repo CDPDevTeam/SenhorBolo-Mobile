@@ -22,14 +22,15 @@ class _UserProfileState extends State<UserProfile> {
       appBar: AppBar(
           elevation: 0,
           toolbarHeight: 88,
-          leading: InkWell(
-            onTap: () => Navigator.of(context).pop(),
-            child: Icon(
+          leading: IconButton(
+            onPressed: () {Navigator.pop(context);},
+            icon: Icon(
               Icons.keyboard_arrow_left,
               color: Colors.white,
               size: 50,
-            ),
-          )),
+            )
+          )
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -221,7 +222,7 @@ class _UserProfileState extends State<UserProfile> {
                           child: InkWell(
                             borderRadius: BorderRadius.all(Radius.circular(10)),
                             splashColor: textMainColorFade,
-                            onTap: () {},
+                            onTap: () => Navigator.pushNamed(context, 'addAddress'),
                             child: Container(
                               height: 64,
                               width: 64,

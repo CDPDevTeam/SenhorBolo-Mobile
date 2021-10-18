@@ -17,7 +17,6 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-
   API api = API();
   Future<List<Cake>>? recommendedCakes1;
   Future<List<Cake>>? recommendedCakes2;
@@ -30,6 +29,8 @@ class _HomepageState extends State<Homepage> {
   void initState() {
     super.initState();
     recommendedCakes1 = api.searchCake('Chocolate');
+    recommendedCakes2 = api.searchCakeByCategory('Bolo piscina');
+    recommendedCakes3 = api.searchCakeByCategory('Bolo recheado');
   }
 
   @override
@@ -49,24 +50,23 @@ class _HomepageState extends State<Homepage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     InkWell(
-                        onTap: () =>
-                            Navigator.pushReplacementNamed(context, 'userProfile'),
+                        onTap: () => Navigator.pushReplacementNamed(
+                            context, 'userProfile'),
                         child: Padding(
                             padding: EdgeInsets.only(right: 10),
                             child: CachedNetworkImage(
-                                imageUrl: 'https://thespacefox.github.io/SenhorBolo-Imagens/images/usuario/ricardinho_betoneira.jpeg',
-                                imageBuilder: (context, imageProvider) => Container(
-                                  width: 134,
-                                  height: 134,
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: DecorationImage(
-                                          image: imageProvider,
-                                          fit: BoxFit.fitWidth)),
-                                )
-                            )
-                        )
-                    ),
+                                imageUrl:
+                                    'https://thespacefox.github.io/SenhorBolo-Imagens/images/usuario/ricardinho_betoneira.jpeg',
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
+                                      width: 134,
+                                      height: 134,
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          image: DecorationImage(
+                                              image: imageProvider,
+                                              fit: BoxFit.fitWidth)),
+                                    )))),
                     SizedBox(
                       height: 10,
                     ),
@@ -94,12 +94,10 @@ class _HomepageState extends State<Homepage> {
                   icone: Icons.cake,
                   onTap: () => Navigator.pushNamed(context, 'orders')),
               buildMenuItem(
-                texto: 'Cupons',
-                icone: Icons.local_offer,
-                onTap: () {}
-              ),
+                  texto: 'Cupons', icone: Icons.local_offer, onTap: () {}),
               buildMenuItem(texto: 'Ajuda', icone: Icons.help, onTap: () {}),
-              buildMenuItem(texto: 'Sobre nós', icone: Icons.info, onTap: () {}),
+              buildMenuItem(
+                  texto: 'Sobre nós', icone: Icons.info, onTap: () {}),
               Divider(color: Colors.white),
               buildMenuItem(texto: 'Logout', icone: Icons.logout, onTap: () {})
             ],
@@ -157,24 +155,21 @@ class _HomepageState extends State<Homepage> {
             ),
             actions: <Widget>[
               InkWell(
-                  onTap: () =>
-                      Navigator.pushNamed(context, 'userProfile'),
+                  onTap: () => Navigator.pushNamed(context, 'userProfile'),
                   child: Padding(
                       padding: EdgeInsets.only(right: 10),
                       child: CachedNetworkImage(
-                          imageUrl: 'https://thespacefox.github.io/SenhorBolo-Imagens/images/usuario/ricardinho_betoneira.jpeg',
+                          imageUrl:
+                              'https://thespacefox.github.io/SenhorBolo-Imagens/images/usuario/ricardinho_betoneira.jpeg',
                           imageBuilder: (context, imageProvider) => Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                    image: imageProvider,
-                                    fit: BoxFit.contain)),
-                          )
-                      )
-                  )
-              )
+                                width: 50,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                        image: imageProvider,
+                                        fit: BoxFit.contain)),
+                              ))))
             ],
             expandedHeight: 311,
             flexibleSpace: FlexibleSpaceBar(
@@ -192,10 +187,13 @@ class _HomepageState extends State<Homepage> {
                     ),
                     TextField(
                       textInputAction: TextInputAction.go,
-                      onSubmitted: (searchText){
+                      onSubmitted: (searchText) {
                         Navigator.push(
-                            context, MaterialPageRoute(
-                            builder: (context) => SearchResult(searchText: searchText,)));
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SearchResult(
+                                      searchText: searchText,
+                                    )));
                       },
                       decoration: InputDecoration(
                           contentPadding: EdgeInsets.only(left: 20),
@@ -232,46 +230,12 @@ class _HomepageState extends State<Homepage> {
                   image: AssetImage('images/banner_teste.png'),
                 ),
               )),
-              SizedBox(height: 15),
-              Padding(
-                padding: EdgeInsets.only(left: 34),
-                child: Text(
-                  'Bolos com chocolate',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-              ),
-              SizedBox(height: 10),
-              FutureBuilder<List<Cake>>(
-                future: recommendedCakes1,
-                builder: (context, snapshot){
-                  if(snapshot.hasData){
-                    return Center(
-                        child: SizedBox(
-                          height: 227,
-                          child: ListView.separated(
-                            itemCount: snapshot.data!.length,
-                            scrollDirection: Axis.horizontal,
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              return ProdutoVertical(
-                                nomeProduto: snapshot.data![index].name,
-                                categoriaProduto: snapshot.data![index].category,
-                                precoProduto: snapshot.data![index].price,
-                                imgProduto: snapshot.data![index].image,
-                              );
-                            },
-                            separatorBuilder: (context, int index) {
-                              return SizedBox(width: 20);
-                            },
-                          ),
-                        )
-                    );
-                  } else if (snapshot.hasError){
-                    return Text('${snapshot.error}');
-                  }
-                  return const Center(child: CircularProgressIndicator());
-                },
-              ),
+          const SizedBox(height: 15),
+          buildHomeSection(recommendedCakes1, 'Bolos de chocolate'),
+          const SizedBox(height: 15),
+          buildHomeSection(recommendedCakes2, 'Bolos Piscina'),
+          const SizedBox(height: 15),
+          buildHomeSection(recommendedCakes3, 'Bolo recheado'),
           const SizedBox(height: 30),
           const Text(
             'Você chegou ao fim ^_^',
@@ -285,11 +249,13 @@ class _HomepageState extends State<Homepage> {
         onPressed: () {},
         backgroundColor: mainColor,
         label: Text(' Carrinho'),
-        icon:  Badge(
+        icon: Badge(
           toAnimate: true,
           animationType: BadgeAnimationType.slide,
-          badgeContent: Text(ShoppingCart.cartItens.length.toString(),
-            style: TextStyle(color: textMainColor, fontFamily: 'Roboto'),),
+          badgeContent: Text(
+            ShoppingCart.cartItens.length.toString(),
+            style: TextStyle(color: textMainColor, fontFamily: 'Roboto'),
+          ),
           child: Icon(
             Icons.shopping_cart,
             color: Colors.white,
@@ -318,6 +284,52 @@ class _HomepageState extends State<Homepage> {
       ),
       hoverColor: hoverColor,
       onTap: onTap,
+    );
+  }
+
+  Widget buildHomeSection(Future<List<Cake>>? cakes, String sectionName){
+    print('Seção build');
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(left: 34),
+          child: Text(
+            sectionName,
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),),
+        SizedBox(height: 10),
+        FutureBuilder<List<Cake>>(
+          future: cakes,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Center(
+                  child: SizedBox(
+                    height: 227,
+                    child: ListView.separated(
+                      itemCount: snapshot.data!.length,
+                      scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return ProdutoVertical(
+                          nomeProduto: snapshot.data![index].name,
+                          categoriaProduto: snapshot.data![index].category,
+                          precoProduto: snapshot.data![index].price,
+                          imgProduto: snapshot.data![index].image,
+                        );
+                      },
+                      separatorBuilder: (context, int index) {
+                        return SizedBox(width: 20);
+                      },
+                    ),
+                  ));
+            } else if (snapshot.hasError) {
+              return Text('${snapshot.error}');
+            }
+            return const Center(child: CircularProgressIndicator());
+          },
+        ),
+      ],
     );
   }
 }

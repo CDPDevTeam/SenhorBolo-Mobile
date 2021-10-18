@@ -34,7 +34,7 @@ class ProdutoVertical extends StatelessWidget {
             children: [
               Container(
                 width: 176,
-                height: 222,
+                height: 220,
                 padding: EdgeInsets.only(top: 160, left: 22),
                 decoration: BoxDecoration(
                     color: Colors.white,
@@ -79,16 +79,10 @@ class ProdutoVertical extends StatelessWidget {
                         height: 161,
                         decoration: BoxDecoration(
                             color: Color(0xff64CBC7),
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(20),
-                              topRight: Radius.circular(20),
-                              bottomLeft: Radius.circular(20),
-                            ),
-
+                            borderRadius: BorderRadius.circular(20),
                         ),
                         child: CachedNetworkImage(
                           imageUrl: urlImagem + imgProduto,
-                          fit: BoxFit.contain,
                         ),
                       )
                   )
