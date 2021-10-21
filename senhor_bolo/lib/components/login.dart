@@ -107,7 +107,7 @@ class _FormLoginState extends State<FormLogin> {
             height: 15,
           ),
           simpleButton(double.infinity, 50, 'Entrar', () => validarForm,
-              defaultRadius, 25, mainColor),
+              defaultButtonRadius, 25, mainColor),
           SizedBox(height: 15),
           InkWell(
             onTap: (){

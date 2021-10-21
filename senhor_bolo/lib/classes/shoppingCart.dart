@@ -1,4 +1,4 @@
-import 'package:senhor_bolo/components/model/cake.dart';
+import 'package:senhor_bolo/model/cake.dart';
 
 class ShoppingCart{
   static List<Cake> cartItens = [];

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'dart:math' as math;
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:senhor_bolo/components/widgets/cardBackView.dart';
@@ -9,7 +8,6 @@ import 'package:senhor_bolo/components/widgets/iconAppBar.dart';
 import 'package:senhor_bolo/components/widgets/simpleButton.dart';
 import 'package:senhor_bolo/constants.dart';
 import 'package:credit_card_validator/credit_card_validator.dart';
-
 import 'widgets/maskedTextBox.dart';
 
 class FormCartao extends StatefulWidget {

@@ -53,7 +53,7 @@ class _AddAddressState extends State<AddAddress> {
       final response = await http
           .get(Uri.parse('https://viacep.com.br/ws/' + cepAPI + '/json/'));
       Map<String, dynamic> addressData = json.decode(response.body);
-      if(addressData['localidade'] != 'São Paulo'){
+      if(addressData['localidade'] != 'São Paulo' || response.body.isEmpty){
         _showErrorDialog();
       } else {
         street = addressData['logradouro'];
@@ -99,14 +99,13 @@ class _AddAddressState extends State<AddAddress> {
             onPressed: () => Navigator.of(context).pop(),
             icon: const Icon(
               Icons.keyboard_arrow_left,
-              color: Colors.white,
               size: 50,
             ),
           ),
           title: const Text(
             'Adicionar endereço',
             style: TextStyle(
-                color: textMainColor,
+                color: mainTextColor,
                 fontSize: 25,
                 fontWeight: FontWeight.bold),
           ),
@@ -141,7 +140,7 @@ class _AddAddressState extends State<AddAddress> {
                 style: ElevatedButton.styleFrom(
                   primary: mainColor,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
+                      borderRadius: BorderRadius.circular(defaultButtonRadius)),
                   textStyle: const TextStyle(
                       fontFamily: 'Raleway',
                       color: Colors.white,
@@ -181,7 +180,7 @@ class _AddAddressState extends State<AddAddress> {
                   filled: true,
                   fillColor: Colors.white,
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(11),
+                    borderRadius: BorderRadius.circular(defaultButtonRadius),
                     borderSide: const BorderSide(
                       width: 0,
                       style: BorderStyle.none,
@@ -199,160 +198,158 @@ class _AddAddressState extends State<AddAddress> {
   }
 
   Widget completeAddress(){
-    return SingleChildScrollView(
-      child: Container(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Complete o endereço',
+    return  Container(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Complete o endereço',
+            style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold
+            ),
+          ),
+          const SizedBox(height: 20),
+          TextField(
+              enabled: false,
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.only(left: 15),
+                labelText: street,
+                filled: true,
+                fillColor: Colors.white,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(defaultButtonRadius),
+                  borderSide: const BorderSide(
+                    width: 0,
+                    style: BorderStyle.none,
+                  ),
+                ),
+                labelStyle: const TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                    color: textSecondaryColor),
+              )
+          ),
+          const SizedBox(height: 15),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(
+                width: 214,
+                child: TextField(
+                    enabled: false,
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.only(left: 15),
+                      labelText: district,
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(defaultButtonRadius),
+                        borderSide: const BorderSide(
+                          width: 0,
+                          style: BorderStyle.none,
+                        ),
+                      ),
+                      labelStyle: const TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                          color: textSecondaryColor),
+                    )
+                ),
+              ),
+              SizedBox(
+                width: 115,
+                child: TextFormField(
+                    autofocus: true,
+                    controller: _txtNumber,
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.number,
+                    validator: (houseNumber) {
+                      return houseNumber == null || houseNumber.isEmpty ? 'Preencha o numero' : null;
+                    },
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.only(left: 15),
+                      labelText: 'Número',
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(defaultButtonRadius),
+                        borderSide: const BorderSide(
+                          width: 0,
+                          style: BorderStyle.none,
+                        ),
+                      ),
+                      labelStyle: const TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                          color: textSecondaryColor),
+                    )
+                ),
+              )
+            ],
+          ),
+          const SizedBox(height: 15),
+          TextField(
+              controller: _txtRemark,
+              decoration: InputDecoration(
+                contentPadding: EdgeInsets.only(left: 15),
+                labelText: 'Complemento',
+                helperText: 'Apto / Bloco / Casa',
+                filled: true,
+                fillColor: Colors.white,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(defaultButtonRadius),
+                  borderSide: const BorderSide(
+                    width: 0,
+                    style: BorderStyle.none,
+                  ),
+                ),
+                labelStyle: const TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                    color: textSecondaryColor),
+              )
+          ),
+          const SizedBox(height: 15),
+          TextField(
+              controller: _txtAdicionalInfo,
+              onSubmitted: (value) => _putAddress(),
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.only(left: 15),
+                labelText: 'Informações adicionais',
+                filled: true,
+                fillColor: Colors.white,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(defaultButtonRadius),
+                  borderSide: const BorderSide(
+                    width: 0,
+                    style: BorderStyle.none,
+                  ),
+                ),
+                labelStyle: const TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                    color: textSecondaryColor),
+              )
+          ),
+          const SizedBox(height: 10),
+          GestureDetector(
+            onTap: (){
+              setState(() {
+                cepInserido = false;
+              });
+            },
+            child: const Text(
+              ' Alterar CEP',
               style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  color: Color(0xffB2B2B2)
               ),
             ),
-            const SizedBox(height: 20),
-            TextField(
-                enabled: false,
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.only(left: 15),
-                  labelText: street,
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(11),
-                    borderSide: const BorderSide(
-                      width: 0,
-                      style: BorderStyle.none,
-                    ),
-                  ),
-                  labelStyle: const TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold,
-                      color: textSecondaryColor),
-                )
-            ),
-            const SizedBox(height: 15),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: 214,
-                  child: TextField(
-                      enabled: false,
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.only(left: 15),
-                        labelText: district,
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(11),
-                          borderSide: const BorderSide(
-                            width: 0,
-                            style: BorderStyle.none,
-                          ),
-                        ),
-                        labelStyle: const TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
-                            color: textSecondaryColor),
-                      )
-                  ),
-                ),
-                SizedBox(
-                  width: 115,
-                  child: TextFormField(
-                      autofocus: true,
-                      controller: _txtNumber,
-                      textInputAction: TextInputAction.next,
-                      keyboardType: TextInputType.number,
-                      validator: (houseNumber) {
-                        return houseNumber == null || cep.isEmpty ? 'Preencha o numero' : null;
-                      },
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.only(left: 15),
-                        labelText: 'Número',
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(11),
-                          borderSide: const BorderSide(
-                            width: 0,
-                            style: BorderStyle.none,
-                          ),
-                        ),
-                        labelStyle: const TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
-                            color: textSecondaryColor),
-                      )
-                  ),
-                )
-              ],
-            ),
-            const SizedBox(height: 15),
-            TextField(
-                controller: _txtRemark,
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.only(left: 15),
-                  labelText: 'Complemento',
-                  helperText: 'Apto / Bloco / Casa',
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(11),
-                    borderSide: const BorderSide(
-                      width: 0,
-                      style: BorderStyle.none,
-                    ),
-                  ),
-                  labelStyle: const TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold,
-                      color: textSecondaryColor),
-                )
-            ),
-            const SizedBox(height: 15),
-            TextField(
-                controller: _txtAdicionalInfo,
-                onSubmitted: (value) => _putAddress(),
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.only(left: 15),
-                  labelText: 'Informações adicionais',
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(11),
-                    borderSide: const BorderSide(
-                      width: 0,
-                      style: BorderStyle.none,
-                    ),
-                  ),
-                  labelStyle: const TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold,
-                      color: textSecondaryColor),
-                )
-            ),
-            const SizedBox(height: 10),
-            GestureDetector(
-              onTap: (){
-                setState(() {
-                  cepInserido = false;
-                });
-              },
-              child: const Text(
-                ' Alterar CEP',
-                style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xffB2B2B2)
-                ),
-              ),
-            )
-          ],
-        ),
+          )
+        ],
       ),
     );
   }

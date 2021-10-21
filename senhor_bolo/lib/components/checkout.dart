@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -44,7 +43,6 @@ class _CheckoutState extends State<Checkout> {
       // Substituir pelo Endereço do pedido
       mapLocation = LatLng(-23.529118, -46.6352917);
     }
-
     googleMapController
         .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
       target: mapLocation,
@@ -70,6 +68,46 @@ class _CheckoutState extends State<Checkout> {
     color: Colors.black,
     size: 40,
   );
+
+  void _processarPagamento(){
+    showDialog(
+        context: context,
+        builder: (context)
+    {
+      return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(defaultButtonRadius),
+        ),
+        child: Container(
+          width: 175,
+          height: 133,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.white
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(
+                'Processando \n pagamento',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold
+                ),
+              ),
+              CircularProgressIndicator(color: mainColor)
+            ],
+          ),
+        ),
+      );
+    }
+    );
+    Future.delayed(Duration(seconds: 2), (){
+      Navigator.pop(context);
+      Navigator.pushReplacementNamed(context, 'orderConfirmed');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +140,7 @@ class _CheckoutState extends State<Checkout> {
               const Text(
                 'Checkout',
                 style: TextStyle(
-                    color: textMainColor,
+                    color: mainTextColor,
                     fontSize: 35,
                     fontWeight: FontWeight.bold),
               )
@@ -111,20 +149,22 @@ class _CheckoutState extends State<Checkout> {
         ),
       ),
       bottomNavigationBar: Container(
-        height: 80,
+        height: 90,
         decoration: const BoxDecoration(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
-          color: Color(0xffF2F2F2)
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(25), topRight: Radius.circular(25)),
         ),
         child: Center(
-          child: simpleButton(350, 48, 'Confirmar pedido', (){}, 10, 20, mainColor),
+            child: simpleButton(350, 48, 'Confirmar pedido', _processarPagamento, 10, 20, mainColor),
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 30),
         child: ListView(
           physics: BouncingScrollPhysics(),
           children: [
+            const SizedBox(height: 20),
             const Text(
               'Método de entrega',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
@@ -144,9 +184,13 @@ class _CheckoutState extends State<Checkout> {
                         onMapCreated: _onMapCreated,
                         markers: _markers,
                         mapType: MapType.normal,
+                        mapToolbarEnabled: false,
+                        rotateGesturesEnabled: false,
                         scrollGesturesEnabled: false,
+                        tiltGesturesEnabled: false,
                         zoomGesturesEnabled: false,
                         zoomControlsEnabled: false,
+                        myLocationButtonEnabled: false,
                         initialCameraPosition: CameraPosition(
                             target: LatLng(-23.529118, -46.6352917),
                             zoom: 16,
@@ -417,6 +461,32 @@ class _CheckoutState extends State<Checkout> {
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
             const SizedBox(height: 10),
+            Container(
+              decoration: BoxDecoration(
+                color: Color(0xffE9E9E9),
+                borderRadius: BorderRadius.circular(defaultButtonRadius)
+              ),
+              child: ListView.separated(
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: 4,
+                  itemBuilder: (context, index){
+                    return ListTile(
+                      title: Text('Cenoura com chocolate'),
+                      subtitle: Text('Qdte 2'),
+                      trailing: Text(
+                        'R\$ 30,00',
+                        style: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontSize: 16
+                        ),
+                      ),
+                    );
+                  },
+                  separatorBuilder: (context, index) => const Divider(height: 1)
+              ),
+            ),
+            const SizedBox(height: 20),
           ],
         ),
       )

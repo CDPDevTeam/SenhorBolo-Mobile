@@ -5,7 +5,7 @@ import 'package:senhor_bolo/constants.dart';
 class CardDenied extends StatelessWidget {
   CardDenied({Key? key}) : super(key: key);
   final String _resultConfirmacao = "Compra falhou";
-  final Icon _resultIcon = Icon(Icons.error, size: 70, color: textMainColor);
+  final Icon _resultIcon = Icon(Icons.error, size: 70, color: mainTextColor);
   final Color _resultCor = Color(0xff88002A);
   final String numPedido = "#000000";
 
@@ -33,7 +33,7 @@ class CardDenied extends StatelessWidget {
                   children: [
                     _resultIcon,
                     Text(_resultConfirmacao, style: TextStyle(
-                        color: textMainColor,
+                        color: mainTextColor,
                         fontWeight: FontWeight.bold,
                         fontSize: 40)),
                   ],
@@ -89,7 +89,7 @@ class CardConfirmed extends StatelessWidget {
   CardConfirmed({Key? key}) : super(key: key);
   final String _resultConfirmacao = "Compra concluída";
   final Icon _resultIcon = Icon(
-      Icons.check_circle, size: 70, color: textMainColor);
+      Icons.check_circle, size: 70, color: mainTextColor);
   final Color _resultCor = Color(0xff008824);
   final String numPedido = "#000000";
 
@@ -116,7 +116,7 @@ class CardConfirmed extends StatelessWidget {
                   children: [
                     _resultIcon,
                     Text(_resultConfirmacao, style: TextStyle(
-                        color: textMainColor,
+                        color: mainTextColor,
                         fontWeight: FontWeight.bold,
                         fontSize: 40)),
                   ],

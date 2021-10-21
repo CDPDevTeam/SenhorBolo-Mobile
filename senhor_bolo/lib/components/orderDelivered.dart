@@ -24,8 +24,8 @@ class OrderDelivered extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.local_shipping, size: 70, color: textMainColor),
-                    Text("Seu pedido foi entregue!", textAlign: TextAlign.center ,style: TextStyle(color: textMainColor, fontWeight: FontWeight.bold, fontSize: 30 )),
+                    Icon(Icons.local_shipping, size: 70, color: mainTextColor),
+                    Text("Seu pedido foi entregue!", textAlign: TextAlign.center ,style: TextStyle(color: mainTextColor, fontWeight: FontWeight.bold, fontSize: 30 )),
                   ],
                 )
             ),

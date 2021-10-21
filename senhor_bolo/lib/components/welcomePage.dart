@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:senhor_bolo/components/addAddress.dart';
 import 'package:senhor_bolo/components/widgets/simpleButton.dart';
 import 'package:senhor_bolo/constants.dart';
 
@@ -13,10 +12,9 @@ class WelcomePage extends StatelessWidget {
 
     return Scaffold(
       extendBody: true,
-      // Extende o body por de trás da bottomNavigationBar (e da AppBar tbm)
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(0),
-        // Essa appBar vazia é umn truque indiano para a barra de status ficar na cor do App
+        // Essa appBar vazia é para a barra de status ficar na cor do App
         child: AppBar(),
       ),
 
@@ -30,7 +28,7 @@ class WelcomePage extends StatelessWidget {
         child: Align(
           alignment: Alignment.topLeft,
           child: Padding(
-            padding: EdgeInsets.only(left: 31, top: 12),
+            padding: EdgeInsets.only(left: 26, top: 12),
             child: Image(
               image: AssetImage("images/logoMarrom.png"),
             ),
@@ -58,7 +56,7 @@ class WelcomePage extends StatelessWidget {
                 51,
                 'Realizar Login',
                 () => Navigator.pushReplacementNamed(context, 'login'),
-                defaultRadius,
+                defaultButtonRadius,
                 25,
                 mainColor
             ),

@@ -21,7 +21,7 @@ class CardBackView extends StatelessWidget {
         origin: Offset(MediaQuery.of(context).size.width / 2, 0),
         child :Card(
           color: corCartao,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(defaultRadius)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(defaultButtonRadius)),
           child: Container(
             width: size.width * 0.89,
             height: size.height * 0.25,

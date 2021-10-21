@@ -235,7 +235,7 @@ class _FormSignInState extends State<FormSignIn> {
 
         SizedBox(height: 22),
 
-        simpleButton(double.infinity, 50, 'Cadastrar', verificarForm, defaultRadius, 25, mainColor),
+        simpleButton(double.infinity, 50, 'Cadastrar', verificarForm, defaultButtonRadius, 25, mainColor),
       ],
     )
    );

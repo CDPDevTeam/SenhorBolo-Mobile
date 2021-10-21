@@ -1,14 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:senhor_bolo/classes/shoppingCart.dart';
 import 'package:senhor_bolo/components/widgets/produtoHorizontal.dart';
 import 'package:senhor_bolo/components/widgets/simpleButton.dart';
-import 'package:senhor_bolo/components/widgets/testAppBar.dart';
 import 'package:senhor_bolo/constants.dart';
-import 'classes/api.dart';
-import 'classes/shoppingCart.dart';
-import 'model/cake.dart';
+import 'package:senhor_bolo/model/cake.dart';
+import '../services/cakeService.dart';
 
 class CakeDetail extends StatefulWidget {
 
@@ -27,7 +26,7 @@ class CakeDetail extends StatefulWidget {
 
 class _CakeDetailState extends State<CakeDetail> {
 
-  API api = API();
+  CakeService api = CakeService();
   Future<List<Cake>>? _recommendedCakes;
   int _qtdeItem = 1;
 
@@ -56,7 +55,80 @@ class _CakeDetailState extends State<CakeDetail> {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: TestAppBar(),
+      appBar: AppBar(
+        elevation: 0,
+        toolbarHeight: 88,
+        centerTitle: true,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(25),
+                bottomRight: Radius.circular(25))),
+        leading: IconButton(
+          onPressed: () => Navigator.of(context).pop(),
+          icon: const Icon(
+            Icons.keyboard_arrow_left,
+            color: Colors.white,
+            size: 50,
+          ),
+        ),
+        title: GestureDetector(
+          onTap: () => Navigator.pushNamed(context, 'addressPicker'),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Column(
+                children: <Text>[
+                  const Text(
+                    'Entregar em',
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  ),
+                  Text(
+                    'Rua Humaitá, 538',
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w100,
+                        color: Colors.white),
+                  ),
+                ],
+              ),
+              const Icon(
+                Icons.location_on,
+                color: Colors.white,
+                size: 20,
+              )
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          IconButton(
+            onPressed: () => Navigator.pushNamed(context, 'searchPage'),
+            icon: const Icon(
+              Icons.search,
+              color: Colors.white,
+              size: 30,
+            ),
+          ),
+          Badge(
+            position: BadgePosition.topEnd(top: 18, end: 6),
+            badgeContent: Text(
+              ShoppingCart.cartItens.length.toString(),
+              style: TextStyle(color: mainTextColor, fontFamily: 'Roboto'),
+            ),
+            child: IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.shopping_cart,
+                color: Colors.white,
+                size: 30,
+              ),
+            ),
+          )
+        ],
+      ),
       body: ListView(
         physics: BouncingScrollPhysics(),
         scrollDirection: Axis.vertical,
@@ -84,7 +156,7 @@ class _CakeDetailState extends State<CakeDetail> {
                         child: Text(
                           'Erro ao carregar a imagem :(',
                           style: TextStyle(
-                            color: textMainColor,
+                            color: mainTextColor,
                             fontSize: 25,
                             fontWeight: FontWeight.bold
                           ),

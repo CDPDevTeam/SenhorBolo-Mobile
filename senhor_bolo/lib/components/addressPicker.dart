@@ -1,8 +1,7 @@
-import 'dart:async';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:senhor_bolo/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:senhor_bolo/components/widgets/simpleButton.dart';
+
+import '../constants.dart';
 
 class AddressPicker extends StatefulWidget {
   const AddressPicker({Key? key}) : super(key: key);
@@ -13,203 +12,139 @@ class AddressPicker extends StatefulWidget {
 
 class _AddressPickerState extends State<AddressPicker> {
 
-  Completer<GoogleMapController> _controller = Completer();
-  Set<Marker> _markers = {};
+  late int addressIndex = 0;
 
-  _onMapCreated(GoogleMapController googleMapController){
-    _controller.complete(googleMapController);
-  }
-
-  static List _enderecos = [
-    "R. Tiro ao Pombo",
-    "R. Borboletas Psicodélicas",
-    "Rua zap"
-  ];
-
-  static List _cep = ["02317-060", "02317-060", "02317-060"];
-
-  /*
-  _getMarkers(){
-
-    Set<Marker> deliveryLocation = {};
-
-    Marker userLocation = Marker(
-      markerId: MarkerId('userLocation'),
-      position: LatLng(latitude, longitude),
-    );
-
-    deliveryLocation.add(userLocation);
-
-    setState(() {
-      _markers = deliveryLocation;
-    });
-  }
-   */
-
-  /*
-  _getUserLocation() async{
-    Position position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high
-    );
-
-    print('A localização atual é: ' + position.toString());
-  }
-
-   */
-
-  @override
-  void initState() {
-    super.initState();
-   // _getUserLocation();
+  _addAddress(){
+    Navigator.pushNamed(context, 'addAddress');
   }
 
   @override
   Widget build(BuildContext context) {
-
-    Size screenSize = MediaQuery.of(context).size;
-
     return Scaffold(
-      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        elevation: 0,
+        centerTitle: true,
         toolbarHeight: 88,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(25),
                 bottomRight: Radius.circular(25))),
-        leading: InkWell(
-          onTap: () => Navigator.of(context).pop(),
-          child: Icon(
+        leading: IconButton(
+          onPressed: () => Navigator.of(context).pop(),
+          icon: const Icon(
             Icons.keyboard_arrow_left,
-            color: Colors.white,
             size: 50,
           ),
         ),
-        actions: <Widget>[
-          InkWell(
-              onTap: () {
-                Navigator.pushReplacementNamed(context, 'userProfile');
-              },
-              child: Padding(
-                  padding: EdgeInsets.only(right: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Luiz Ricardo',
-                        style: TextStyle(fontSize: 16, color: textMainColor),
-                      ),
-                      SizedBox(width: 10),
-                      CachedNetworkImage(
-                          imageUrl:
-                          'https://thespacefox.github.io/SenhorBolo-Imagens/images/usuario/ricardinho_betoneira.jpeg',
-                          imageBuilder: (context, imageProvider) => Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                    image: imageProvider,
-                                    fit: BoxFit.fitWidth)),
-                          ))
-                    ],
-                  )))
-        ],
-      ),
-      body: Container(
-        child: GoogleMap(
-          mapType: MapType.normal,
-          myLocationEnabled: true,
-          initialCameraPosition: CameraPosition(
-            // Localização inicial do mapa
-            target: LatLng(-23.555774, -46.641849),
-            zoom: 25
-          ),
-          onMapCreated: _onMapCreated,
-          markers: _markers,
+        title: const Text(
+          'Selecionar endereço',
+          style: TextStyle(
+              color: mainTextColor,
+              fontSize: 25,
+              fontWeight: FontWeight.bold),
         ),
       ),
-     bottomNavigationBar: Container(
-        padding: EdgeInsets.only(top: 20, bottom: 20),
-        decoration: BoxDecoration(
-          color: mainColor,
-          borderRadius: BorderRadius.only(
-              topRight: Radius.circular(25), topLeft: Radius.circular(25)),
-        ),
-        width: MediaQuery.of(context).size.width,
-        height: 160,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.only(left: 20),
-              child: Text(
-                "Seus endereços",
-                style: TextStyle(color: textMainColor, fontSize: 20),
-              ),
+      body: ListView(
+        padding: const EdgeInsets.all(20),
+        children: [
+          Container(
+            width: double.infinity,
+            height: 55,
+            padding: EdgeInsets.symmetric(vertical: 4, horizontal: 14),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(defaultButtonRadius),
             ),
-            SizedBox(
-              height: 10,
-            ),
-            Expanded(
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: _enderecos.length,
-                itemBuilder: (context, index) {
-                  return enderecoBlock(_enderecos[index], _cep[index]);
-                },
-              ),
-            )
-          ],
-        ),
-      ), 
-    );
-  }
-}
-
-Widget enderecoBlock(String endereco, String cep) {
-  return Card(
-    shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(10))),
-    color: textMainColorFade,
-    child: InkWell(
-      splashColor: textMainColorFade.withAlpha(30),
-      onTap: () {},
-      child: SizedBox(
-        width: 148,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              padding: EdgeInsets.all(5),
-              child: Icon(
-                Icons.home,
-                size: 40,
-                color: Colors.black54,
-              ),
-            ),
-            Expanded(
-                child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "$endereco",
-                  overflow: TextOverflow.clip,
-                  style: TextStyle(
-                      color: Colors.black54, fontWeight: FontWeight.bold),
+                  'Usar a localização atual',
+                  style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold
+                  ),
                 ),
-                Text(
-                  "$cep",
-                  style: TextStyle(color: Colors.black54),
-                ),
+                const Icon(
+                    Icons.location_searching
+                )
               ],
-            ))
-          ],
-        ),
+            ),
+          ),
+          const SizedBox(height: 15),
+          ListView.separated(
+              shrinkWrap: true,
+              itemCount: 2,
+              physics: NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index){
+                return GestureDetector(
+                  onTap: () => setState(() {
+                    addressIndex = index;
+                  }),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    width: double.infinity,
+                    height: 80,
+                    padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 14),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(defaultButtonRadius),
+                        border: addressIndex == index ? Border.all(color: mainColor, width: 2) : null
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text (
+                              'Rua Valê do Cariri, 276',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            Text(
+                              'Vila Nova Mazzei',
+                              style: const TextStyle(
+                                fontSize: 15
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              'Tomar cuidado com os mendigos',
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: textSecondaryColor
+                              ),
+                            )
+                          ],
+                        ),
+                        AnimatedContainer(
+                          width: 33,
+                          height: 33,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: addressIndex == index ? mainColor : textSecondaryColor,
+                            borderRadius: BorderRadius.circular(defaultButtonRadius),
+                          ),
+                          duration: const Duration(milliseconds: 300),
+                          child: const Icon(
+                            Icons.check,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+              separatorBuilder: (context, index) => SizedBox(height: 10)
+          ),
+          const SizedBox(height: 15),
+          simpleButton(242, 50, 'Adicionar endereço', _addAddress, defaultButtonRadius, 18, Color(0xff00A59F))
+        ],
       ),
-    ),
-  );
+    );
+  }
 }

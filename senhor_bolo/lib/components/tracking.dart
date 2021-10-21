@@ -1,8 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:senhor_bolo/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:senhor_bolo/components/addressPicker.dart';
 
 /// TODO: Mudar para uma tela de Tracking estilo Amazon
 
@@ -96,11 +94,12 @@ class _TrackingState extends State<Tracking> {
           children: [
             Text(
               "Seus endereços",
-              style: TextStyle(color: textMainColor, fontSize: 20),
+              style: TextStyle(color: mainTextColor, fontSize: 20),
             ),
             SizedBox(
               height: 10,
             ),
+            /*
             Expanded(
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
@@ -110,6 +109,7 @@ class _TrackingState extends State<Tracking> {
                 },
               ),
             )
+             */
           ],
         ),
       ),

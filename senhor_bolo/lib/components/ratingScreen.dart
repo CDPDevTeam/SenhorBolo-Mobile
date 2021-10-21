@@ -1,6 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import "package:flutter/material.dart";
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:senhor_bolo/components/imageViewer.dart';
 import 'package:senhor_bolo/components/widgets/produtoHorizontal.dart';
 import 'package:senhor_bolo/components/widgets/simpleButton.dart';

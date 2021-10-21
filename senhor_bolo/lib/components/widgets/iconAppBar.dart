@@ -9,6 +9,9 @@ class IconAppBar extends StatelessWidget implements PreferredSizeWidget{
   const IconAppBar({Key? key, required this.appBarText, required this.appBarIcon}) : super(key: key);
 
   @override
+  Size get preferredSize => new Size.fromHeight(160);
+
+  @override
   Widget build(BuildContext context) {
     return PreferredSize(
       preferredSize: Size.fromHeight(160),
@@ -99,14 +102,14 @@ class IconAppBar extends StatelessWidget implements PreferredSizeWidget{
                       color: Colors.white,
                       size: 35,
                     ),
-                    SizedBox(width: 20),
+                    SizedBox(width: 5),
                     Text(
                       appBarText,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
-                          color: textMainColor
+                          color: mainTextColor
                       ),
                     )
                   ],
@@ -117,8 +120,4 @@ class IconAppBar extends StatelessWidget implements PreferredSizeWidget{
       ),
     );
   }
-
-  @override
-  Size get preferredSize => new Size.fromHeight(160);
-
 }

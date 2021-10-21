@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:senhor_bolo/components/widgets/produtoHorizontal.dart';
 import 'package:senhor_bolo/components/widgets/searchAppBar.dart';
 import 'package:senhor_bolo/constants.dart';
-import 'classes/api.dart';
-import 'model/cake.dart';
-
+import 'package:senhor_bolo/model/cake.dart';
+import '../services/cakeService.dart';
 
 class SearchResult extends StatefulWidget {
   final String searchText;
@@ -15,7 +14,7 @@ class SearchResult extends StatefulWidget {
 }
 
 class _SearchResultState extends State<SearchResult> {
-  API api = API();
+  CakeService api = CakeService();
   Future<List<Cake>>? resultadoPesquisa;
 
   String searchResult(int queryResult) {

@@ -45,7 +45,7 @@ class _DeliveryProblemState extends State<DeliveryProblem> {
                           Text(
                             'Lulz Ricardo',
                             style:
-                                TextStyle(fontSize: 16, color: textMainColor),
+                                TextStyle(fontSize: 16, color: mainTextColor),
                           ),
                           SizedBox(width: 10),
                           CachedNetworkImage(
@@ -75,7 +75,7 @@ class _DeliveryProblemState extends State<DeliveryProblem> {
                     style: TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
-                        color: textMainColor),
+                        color: mainTextColor),
                   )),
             ),
           ),

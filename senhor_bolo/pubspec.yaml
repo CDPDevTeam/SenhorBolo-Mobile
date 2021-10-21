@@ -21,19 +21,28 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  font_awesome_flutter: '>= 9.1.0'
   flutter:
     sdk: flutter
 
+  # UI
+  font_awesome_flutter: ^9.1.0
   badges: ^2.0.1
+  animations: ^2.0.1
+  auto_size_text: ^3.0.0-nullsafety.0
+
+  # Localização do usuário
+  #geolocator: ^7.7.0
+  geocoding: ^2.0.1
+  google_maps_flutter: ^2.0.11
+
+  # API
+  http: ^0.13.3
+
+  # Outros
   mask_text_input_formatter: ^2.0.0
   password_strength: ^0.2.0
   credit_card_validator: ^2.0.0
-  animations: ^2.0.1
   cached_network_image: ^3.1.0
-  google_maps_flutter: ^2.0.11
-  http: ^0.13.3
-  auto_size_text: ^3.0.0-nullsafety.0
 
 dev_dependencies:
   flutter_test:

@@ -1,10 +1,10 @@
-import 'package:senhor_bolo/components/model/cake.dart';
 import 'package:senhor_bolo/constants.dart';
+import 'package:senhor_bolo/model/cake.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 // Classe usada para pegar os bolos na pesquisa e na parte de recomendação
-class API{
+class CakeService{
   Future<List<Cake>> searchCake(String query) async {
     final response = await http.get(
         Uri.parse(urlAPI + 'bolos?nome_like=$query'));

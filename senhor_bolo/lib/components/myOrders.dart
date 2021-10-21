@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:senhor_bolo/components/widgets/iconAppBar.dart';
 import '../../constants.dart';
 
@@ -203,7 +202,7 @@ Widget openOrder(String nome, String preco, String img, BuildContext context) {
               customBorder: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(25),
               ),
-              splashColor: textMainColorFade,
+              splashColor: cardTextColor,
               onTap: () {},
               child: Container(
                 //decoration: BoxDecoration(color: mainColor,borderRadius: BorderRadius.all(Radius.circular(25))),
@@ -216,12 +215,12 @@ Widget openOrder(String nome, String preco, String img, BuildContext context) {
                   children: [
                     Text(
                       "Rastrear",
-                      style: TextStyle(color: textMainColor, fontSize: 25),
+                      style: TextStyle(color: mainTextColor, fontSize: 25),
                     ),
                     Icon(
                       Icons.near_me,
                       size: 25,
-                      color: textMainColor,
+                      color: mainTextColor,
                     )
                   ],
                 ),

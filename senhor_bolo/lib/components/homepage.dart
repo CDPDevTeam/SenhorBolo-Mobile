@@ -1,13 +1,13 @@
+import 'package:flutter/material.dart';
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:senhor_bolo/components/classes/api.dart';
-import 'package:senhor_bolo/components/classes/shoppingCart.dart';
+import 'package:senhor_bolo/classes/shoppingCart.dart';
+import 'package:senhor_bolo/model/cake.dart';
+import 'package:senhor_bolo/services/cakeService.dart';
 import 'package:senhor_bolo/components/searchResult.dart';
 import 'package:senhor_bolo/components/widgets/produtoVertical.dart';
 import '../constants.dart';
-import 'model/cake.dart';
+
 
 class Homepage extends StatefulWidget {
   const Homepage({Key? key}) : super(key: key);
@@ -17,7 +17,7 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  API api = API();
+  CakeService api = CakeService();
   Future<List<Cake>>? recommendedCakes1;
   Future<List<Cake>>? recommendedCakes2;
   Future<List<Cake>>? recommendedCakes3;
@@ -117,7 +117,6 @@ class _HomepageState extends State<Homepage> {
               onPressed: () => _scaffoldKey.currentState!.openDrawer(),
               icon: Icon(
                 Icons.menu,
-                color: Colors.white,
                 size: 40,
               ),
             ),
@@ -254,7 +253,7 @@ class _HomepageState extends State<Homepage> {
           animationType: BadgeAnimationType.slide,
           badgeContent: Text(
             ShoppingCart.cartItens.length.toString(),
-            style: TextStyle(color: textMainColor, fontFamily: 'Roboto'),
+            style: TextStyle(color: mainTextColor, fontFamily: 'Roboto'),
           ),
           child: Icon(
             Icons.shopping_cart,

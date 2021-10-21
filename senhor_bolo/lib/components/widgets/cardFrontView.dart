@@ -4,7 +4,7 @@ import '../../constants.dart';
 Widget cardFrontView(Color corCartao, Size size, String cardNumber, Color corTextoCartao, String cardName, String _cardExpiration, String img){
   return Card(
     color: corCartao,
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(defaultRadius)),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(defaultButtonRadius)),
     child: Container(
       width: size.width * 0.89,
       height: size.height * 0.25,
