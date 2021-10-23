@@ -20,18 +20,18 @@ Widget emailTextField(TextEditingController emailController){
       return null;
     },
     decoration: InputDecoration(
-      contentPadding: EdgeInsets.only(left: 15),
+      contentPadding: const EdgeInsets.only(left: 15),
       labelText: 'E-mail',
       filled: true,
       fillColor: Colors.white,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(11),
-        borderSide: BorderSide(
+        borderSide: const BorderSide(
           width: 0,
           style: BorderStyle.none,
         ),
       ),
-      labelStyle: TextStyle(
+      labelStyle: const TextStyle(
           fontSize: 17,
           fontWeight: FontWeight.bold,
           color: textSecondaryColor),

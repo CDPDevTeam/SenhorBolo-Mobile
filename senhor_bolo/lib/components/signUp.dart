@@ -16,9 +16,9 @@ class CadastroApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(125),
+        preferredSize: const Size.fromHeight(125),
         child: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: mainColor,
             borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(25),
@@ -28,7 +28,7 @@ class CadastroApp extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
+              const Text(
                 'Cadastre-se',
                 style: TextStyle(
                     fontSize: 50,
@@ -36,7 +36,7 @@ class CadastroApp extends StatelessWidget {
                     color: Colors.white
                 ),
               ),
-              Text(
+              const Text(
                 'na facção Senhor Bolo',
                 style: TextStyle(
                     fontSize: 25,
@@ -48,7 +48,7 @@ class CadastroApp extends StatelessWidget {
         )
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           vertical: 15.0,
           horizontal: 25.0
         ),
@@ -129,7 +129,7 @@ class _FormSignInState extends State<FormSignIn> {
       if (_keyCadastro.currentState!.validate()) {
         if (_termosUso == true) {
           Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => LoginApp())
+              MaterialPageRoute(builder: (context) => Login())
           );
         } else {
           _confirmarTermosUso();
@@ -145,35 +145,33 @@ class _FormSignInState extends State<FormSignIn> {
       child :Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        Text(
+        const Text(
           'Preencha os seguintes campos',
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w500
           ),
         ),
-        SizedBox(height: 18),
+        const SizedBox(height: 18),
 
         emailTextField(txtEmail),
 
-        SizedBox(height: 18),
+        const SizedBox(height: 18),
 
         maskedTextField('CPF', txtCPF, maskCPF),
 
-        SizedBox(height: 18),
+        const SizedBox(height: 18),
 
         PasswordTextField(passwordController: txtPassword),
 
-        SizedBox(height: 6.5),
+        const SizedBox(height: 6.5),
 
         Container(
-          margin: EdgeInsets.only(left: 15),
+          margin: const EdgeInsets.only(left: 15),
           child: Row(
             children: [
-              Text(
-                  _passwordStrength
-              ),
-              SizedBox(width: 5),
+              Text(_passwordStrength),
+              const SizedBox(width: 5),
               Icon(
                 _passwordIcon,
                 color: textSecondaryColor,
@@ -183,7 +181,7 @@ class _FormSignInState extends State<FormSignIn> {
           ),
         ),
 
-        SizedBox(height: 22),
+        const SizedBox(height: 22),
 
         TextFormField(
           controller: txtPasswordConfirm,
@@ -196,18 +194,18 @@ class _FormSignInState extends State<FormSignIn> {
             }
           },
           decoration: InputDecoration(
-            contentPadding: EdgeInsets.only(left: 15),
+            contentPadding: const EdgeInsets.only(left: 15),
             labelText: 'Confirme a senha',
             filled: true,
             fillColor: Colors.white,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(11),
-              borderSide: BorderSide(
+              borderSide: const BorderSide(
                 width: 0,
                 style: BorderStyle.none,
               ),
             ),
-            labelStyle: TextStyle(
+            labelStyle: const TextStyle(
                 fontSize: 17,
                 fontWeight: FontWeight.bold,
                 color: textSecondaryColor
@@ -215,11 +213,11 @@ class _FormSignInState extends State<FormSignIn> {
           ),
         ),
 
-        SizedBox(height: 18),
+        const SizedBox(height: 18),
 
         CheckboxListTile(
             contentPadding: EdgeInsets.zero,
-            title: Text('Eu concordo com a venda dos meus dados para o Partido Comunista Chinês',
+            title: const Text('Eu concordo com a venda dos meus dados para o Partido Comunista Chinês',
               textAlign: TextAlign.right,
               style: TextStyle(
                   fontSize: 13
@@ -233,7 +231,7 @@ class _FormSignInState extends State<FormSignIn> {
             }
         ),
 
-        SizedBox(height: 22),
+        const SizedBox(height: 22),
 
         simpleButton(double.infinity, 50, 'Cadastrar', verificarForm, defaultButtonRadius, 25, mainColor),
       ],

@@ -312,6 +312,7 @@ Widget enderecoBlock(String endereco, String cep) {
                   children: [
                     Text(
                       "$endereco",
+                      maxLines: 2,
                       overflow: TextOverflow.clip,
                       style: const TextStyle(
                           color: Colors.black54, fontWeight: FontWeight.bold),

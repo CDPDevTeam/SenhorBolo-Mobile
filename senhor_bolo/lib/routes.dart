@@ -21,7 +21,7 @@ import 'components/userProfile.dart';
 final Map<String, WidgetBuilder> routes = {
   'homepage': (context) => Homepage(),
   'welcomePage' : (context) => WelcomePage(),
-  'login' : (context) => LoginApp(),
+  'login' : (context) => Login(),
   'signUp': (context) => CadastroApp(),
   'addressPicker' : (context) => AddressPicker(),
   'userProfile' : (context) => UserProfile(),

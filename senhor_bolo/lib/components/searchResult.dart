@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:senhor_bolo/components/widgets/produtoHorizontal.dart';
 import 'package:senhor_bolo/components/widgets/searchAppBar.dart';
+import 'package:senhor_bolo/components/widgets/shimmerProdutoHorizontal.dart';
 import 'package:senhor_bolo/constants.dart';
 import 'package:senhor_bolo/model/cake.dart';
 import '../services/cakeService.dart';
@@ -83,7 +84,23 @@ class _SearchResultState extends State<SearchResult> {
                 } else if (snapshot.hasError){
                   return Text('${snapshot.error}');
                 }
-                return const Center(child: CircularProgressIndicator());
+                return Center(
+                    child: SizedBox(
+                      width: 328,
+                      child: ListView.separated(
+                        itemCount: 4,
+                        scrollDirection: Axis.vertical,
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return const ShimmerProdutoHorizontal();
+                        },
+                        separatorBuilder: (context, int index) {
+                          return SizedBox(height: 20);
+                        },
+                      ),
+                    )
+                );
               },
             ),
             const SizedBox(

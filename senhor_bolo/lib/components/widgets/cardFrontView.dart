@@ -31,7 +31,7 @@ Widget cardFrontView(Color corCartao, Size size, String cardNumber, Color corTex
                 width: 49,
                 height: 30,
               ),
-              SizedBox(height: 5),
+              const SizedBox(height: 5),
               Text(
                 cardNumber,
                 style: TextStyle(

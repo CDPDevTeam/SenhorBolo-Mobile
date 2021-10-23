@@ -25,10 +25,11 @@ dependencies:
     sdk: flutter
 
   # UI
-  font_awesome_flutter: ^9.1.0
+  font_awesome_flutter: ^9.2.0
   badges: ^2.0.1
   animations: ^2.0.1
   auto_size_text: ^3.0.0-nullsafety.0
+  shimmer_animation: ^2.1.0
 
   # Localização do usuário
   #geolocator: ^7.7.0

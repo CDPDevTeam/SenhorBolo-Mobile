@@ -9,7 +9,6 @@ class CardBackView extends StatelessWidget {
   final Color corTexto;
   final String cvvText, img;
 
-
   CardBackView({Key? key, required this.corCartao, required this.size, required this.corTexto, required this.cvvText, required this.img}) : super(key: key);
 
   @override
@@ -47,7 +46,7 @@ class CardBackView extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           'Assinatura autorizada',
                           style: TextStyle(
                             fontFamily: 'Arial',
@@ -55,7 +54,7 @@ class CardBackView extends StatelessWidget {
                             color: Colors.white,
                           ),
                         ),
-                        SizedBox(height: 2),
+                        const SizedBox(height: 2),
                         Stack(
                           alignment: AlignmentDirectional.centerEnd,
                           children: [
@@ -66,7 +65,7 @@ class CardBackView extends StatelessWidget {
                             ),
                             Text(
                               '$cvvText ',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontFamily: 'Arial',
                                 fontSize: 20,
                               ),

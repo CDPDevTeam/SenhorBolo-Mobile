@@ -38,7 +38,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
         }
       },
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.only(left: 15),
+        contentPadding: const EdgeInsets.only(left: 15),
         labelText: 'Senha',
         filled: true,
         fillColor: Colors.white,
@@ -61,7 +61,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
               : Icon(Icons.visibility),
           color: textSecondaryColor,
         ),
-        labelStyle: TextStyle(
+        labelStyle: const TextStyle(
             fontSize: 17,
             fontWeight: FontWeight.bold,
             color: textSecondaryColor),

@@ -19,13 +19,13 @@ class IconAppBar extends StatelessWidget implements PreferredSizeWidget{
         elevation: 0,
         toolbarHeight: 88,
         centerTitle: true,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(25),
                 bottomRight: Radius.circular(25))),
         leading: InkWell(
           onTap: () => Navigator.of(context).pop(),
-          child: Icon(
+          child: const Icon(
             Icons.keyboard_arrow_left,
             color: Colors.white,
             size: 50,
@@ -39,7 +39,7 @@ class IconAppBar extends StatelessWidget implements PreferredSizeWidget{
             children: [
               Column(
                 children: <Text>[
-                  Text(
+                  const Text(
                     'Entregar em',
                     style: TextStyle(
                         fontSize: 14,
@@ -56,7 +56,7 @@ class IconAppBar extends StatelessWidget implements PreferredSizeWidget{
                   ),
                 ],
               ),
-              Icon(
+              const Icon(
                 Icons.location_on,
                 color: Colors.white,
                 size: 20,
@@ -102,11 +102,11 @@ class IconAppBar extends StatelessWidget implements PreferredSizeWidget{
                       color: Colors.white,
                       size: 35,
                     ),
-                    SizedBox(width: 5),
+                    const SizedBox(width: 5),
                     Text(
                       appBarText,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
                           color: mainTextColor

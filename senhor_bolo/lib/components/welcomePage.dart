@@ -21,15 +21,17 @@ class WelcomePage extends StatelessWidget {
       body: Container(
         width: screenSize.width,
         height: screenSize.height * 0.77,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
             image: DecorationImage(
                 image: AssetImage("images/boloBoasVindas.png"),
                 fit: BoxFit.cover)),
-        child: Align(
+        child: const Align(
           alignment: Alignment.topLeft,
           child: Padding(
             padding: EdgeInsets.only(left: 26, top: 12),
             child: Image(
+              width: 110,
+              height: 110,
               image: AssetImage("images/logoMarrom.png"),
             ),
           ),
@@ -39,15 +41,15 @@ class WelcomePage extends StatelessWidget {
       bottomNavigationBar: Container(
         width: double.infinity,
         height: screenSize.height * 0.29,
-        padding: EdgeInsets.only(left: 26, top: 33, right: 26, bottom: 48),
-        decoration: BoxDecoration(
+        padding: const EdgeInsets.only(left: 26, top: 33, right: 26, bottom: 48),
+        decoration: const BoxDecoration(
             color: Color(0xffF5F5F5),
             borderRadius: BorderRadius.only(
                 topRight: Radius.circular(20), topLeft: Radius.circular(20))),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text(
+            const Text(
               "Selecione uma opção para continuar",
               style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
             ),
@@ -62,7 +64,7 @@ class WelcomePage extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () => Navigator.pushReplacementNamed(context, 'homepage'),
-              child: Text(
+              child: const Text(
                 "Continuar como convidado",
                 style: TextStyle(
                     color: Color(0xffB2B2B2),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:senhor_bolo/classes/shoppingCart.dart';
+import 'package:senhor_bolo/components/widgets/shimmerProdutoVertical.dart';
 import 'package:senhor_bolo/model/cake.dart';
 import 'package:senhor_bolo/services/cakeService.dart';
 import 'package:senhor_bolo/components/searchResult.dart';
@@ -94,10 +95,17 @@ class _HomepageState extends State<Homepage> {
                   icone: Icons.cake,
                   onTap: () => Navigator.pushNamed(context, 'orders')),
               buildMenuItem(
-                  texto: 'Cupons', icone: Icons.local_offer, onTap: () {}),
-              buildMenuItem(texto: 'Ajuda', icone: Icons.help, onTap: () {}),
+                  texto: 'Cupons',
+                  icone: Icons.local_offer,
+                  onTap: () {}),
               buildMenuItem(
-                  texto: 'Sobre nós', icone: Icons.info, onTap: () {}),
+                  texto: 'Ajuda',
+                  icone: Icons.help,
+                  onTap: () => Navigator.pushNamed(context, 'help')),
+              buildMenuItem(
+                  texto: 'Sobre nós',
+                  icone: Icons.info,
+                  onTap: () => Navigator.pushNamed(context, 'aboutUs')),
               Divider(color: Colors.white),
               buildMenuItem(texto: 'Logout', icone: Icons.logout, onTap: () {})
             ],
@@ -287,7 +295,6 @@ class _HomepageState extends State<Homepage> {
   }
 
   Widget buildHomeSection(Future<List<Cake>>? cakes, String sectionName){
-    print('Seção build');
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -325,7 +332,22 @@ class _HomepageState extends State<Homepage> {
             } else if (snapshot.hasError) {
               return Text('${snapshot.error}');
             }
-            return const Center(child: CircularProgressIndicator());
+            return Center(
+                child: SizedBox(
+                  height: 227,
+                  child: ListView.separated(
+                    itemCount: 4,
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return shimmerProdutoVertical();
+                    },
+                    separatorBuilder: (context, int index) {
+                      return SizedBox(width: 20);
+                    },
+                  ),
+                )
+            );
           },
         ),
       ],

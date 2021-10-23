@@ -2,8 +2,10 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:senhor_bolo/classes/shoppingCart.dart';
 import 'package:senhor_bolo/components/widgets/produtoHorizontal.dart';
+import 'package:senhor_bolo/components/widgets/shimmerProdutoHorizontal.dart';
 import 'package:senhor_bolo/components/widgets/simpleButton.dart';
 import 'package:senhor_bolo/constants.dart';
 import 'package:senhor_bolo/model/cake.dart';
@@ -49,6 +51,7 @@ class _CakeDetailState extends State<CakeDetail> {
     super.initState();
     _recommendedCakes = api.recommendedCake('');
   }
+
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
@@ -279,20 +282,32 @@ class _CakeDetailState extends State<CakeDetail> {
               } else if (snapshot.hasError){
                 return Text('${snapshot.error}');
               }
-              return const Center(child: CircularProgressIndicator());
+              return Center(
+                  child: SizedBox(
+                    width: 328,
+                    child: ListView.separated(
+                      itemCount: 4,
+                      scrollDirection: Axis.vertical,
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return const ShimmerProdutoHorizontal();
+                      },
+                      separatorBuilder: (context, int index) {
+                        return SizedBox(height: 20);
+                      },
+                    ),
+                  )
+              );
             },
           ),
-          const SizedBox(
-            height: 20,
-          ),
+          const SizedBox(height: 20),
           const Text(
             'Você chegou ao fim ^_^',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 15),
           ),
-          const SizedBox(
-            height: 20,
-          ),
+          const SizedBox(height: 20),
         ],
       ),
 
@@ -309,6 +324,7 @@ class _CakeDetailState extends State<CakeDetail> {
               ElevatedButton(
                 onPressed: () {
                   if (_qtdeItem > 1) {
+                    HapticFeedback.selectionClick();
                     setState(() {
                       _qtdeItem--;
                     });
@@ -333,11 +349,7 @@ class _CakeDetailState extends State<CakeDetail> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  setState(() {
-                    _qtdeItem++;
-                  });
-                },
-                onLongPress: (){
+                  HapticFeedback.selectionClick();
                   setState(() {
                     _qtdeItem++;
                   });
