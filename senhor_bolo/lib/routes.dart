@@ -2,6 +2,9 @@ import 'package:flutter/widgets.dart';
 import 'package:senhor_bolo/components/aboutUs.dart';
 import 'package:senhor_bolo/components/checkout.dart';
 import 'package:senhor_bolo/components/help.dart';
+import 'package:senhor_bolo/components/shoppingCart.dart';
+import 'package:senhor_bolo/components/userCheck.dart';
+import 'package:senhor_bolo/components/cupom.dart';
 import 'components/welcomePage.dart';
 import 'components/homepage.dart';
 import 'components/addAddress.dart';
@@ -19,6 +22,7 @@ import 'components/tracking.dart';
 import 'components/userProfile.dart';
 
 final Map<String, WidgetBuilder> routes = {
+  'userCheck': (context) => UserCheck(),
   'homepage': (context) => Homepage(),
   'welcomePage' : (context) => WelcomePage(),
   'login' : (context) => Login(),
@@ -30,12 +34,14 @@ final Map<String, WidgetBuilder> routes = {
   'customCake' : (context) => CustomCake(),
   'orderRating' : (context) => RatingScreen(),
   'orderFeedback' : (context) => DeliveryProblem(),
-  'tracking' : (context) => Tracking(),
+  'tracking' : (context) => Tracking(currentStep: 1),
   'searchPage' : (context) => SearchPage(),
   'cardError' : (context) => CardDenied(),
   'orderConfirmed' : (context) => CardConfirmed(),
   'addAddress' : (context) => AddAddress(),
+  'shoppingCart' : (context) => Cart(),
   'checkout' : (context) => Checkout(),
   'help' : (context) => HelpPage(),
-  'aboutUs' : (context) => AboutUs()
+  'aboutUs' : (context) => AboutUs(),
+  'cupons': (context) => Cupom()
 };

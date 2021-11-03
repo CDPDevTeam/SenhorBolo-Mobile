@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:senhor_bolo/constants.dart';
 import 'package:senhor_bolo/components/widgets/emailTextField.dart';
-import 'package:senhor_bolo/components/widgets/passwordTextField.dart';
 import 'package:senhor_bolo/components/widgets/simpleButton.dart';
+import 'package:senhor_bolo/services/authenticationService.dart';
 
 class Login extends StatelessWidget {
   const Login({Key? key}) : super(key: key);
@@ -73,16 +73,18 @@ class FormLogin extends StatefulWidget {
 
 class _FormLoginState extends State<FormLogin> {
 
-  final _formKey = GlobalKey<FormState>(); // Chave que define o formulário
+  bool _hidePassword = true;
+
+  AuthenticationService authService = AuthenticationService();
+  final _formKey = GlobalKey<FormState>();
 
   TextEditingController _txtEmail = TextEditingController();
   TextEditingController _txtPassword = TextEditingController();
 
-  /// TODO: Mudar para validação com a API
-  void validarForm() {
+  void validarForm() async {
     if (_formKey.currentState!.validate()) {
-      if (_txtEmail.text == 'lricardosp@gmail.com' &&
-          _txtPassword.text == 'teste123') {
+      bool login = await authService.authLogin(_txtEmail.text, _txtPassword.text);
+      if (login) {
         Navigator.pushReplacementNamed(context, 'homepage');
       } else {
         HapticFeedback.lightImpact();
@@ -90,11 +92,12 @@ class _FormLoginState extends State<FormLogin> {
         _txtPassword.clear();
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-                duration: Duration(seconds: 1),
+              backgroundColor: Color(0xff88002A),
+                duration: Duration(seconds: 2),
                 behavior: SnackBarBehavior.floating,
                 content: Row(
                   children: [
-                    Icon(Icons.warning, color: Colors.white,),
+                    Icon(Icons.warning, color: Colors.white),
                     SizedBox(width: 15),
                     Expanded(child: Text('E-mail ou senha inválidos!'))
                   ],
@@ -113,8 +116,49 @@ class _FormLoginState extends State<FormLogin> {
         children: <Widget>[
           emailTextField(_txtEmail),
           const SizedBox(height: 15),
-          PasswordTextField(passwordController: _txtPassword),
-          SizedBox(height: 7),
+          TextFormField(
+            controller: _txtPassword,
+            obscureText: _hidePassword,
+            validator: (password) {
+              if (password != null){
+                if (password.length < 8){
+                  return 'Digite uma senha válida';
+                }
+              } else {
+                return 'Preencha o campo senha';
+              }
+            },
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.only(left: 15),
+              labelText: 'Senha',
+              filled: true,
+              fillColor: Colors.white,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(11),
+                borderSide: BorderSide(
+                  width: 0,
+                  style: BorderStyle.none,
+                ),
+              ),
+              suffixIcon: IconButton(
+                onPressed: () {
+                  setState(() {
+                    _hidePassword = !_hidePassword;
+                  });
+                },
+                padding: EdgeInsets.zero,
+                icon: _hidePassword
+                    ? Icon(Icons.visibility_off)
+                    : Icon(Icons.visibility),
+                color: textSecondaryColor,
+              ),
+              labelStyle: const TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                  color: textSecondaryColor),
+            ),
+          ),
+          const SizedBox(height: 7),
           const Align(
             alignment: Alignment.topLeft,
             child: Text(

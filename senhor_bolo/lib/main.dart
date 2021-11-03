@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:senhor_bolo/routes.dart';
 import 'package:senhor_bolo/theme/style.dart';
 
-void main(){
+void main()  {
   runApp(const BaseWidget());
 }
 
@@ -15,8 +15,7 @@ class BaseWidget extends StatelessWidget {
       title: 'Senhor Bolo',
       theme: appTheme(),
       routes: routes,
-      initialRoute: 'welcomePage',
+      initialRoute: 'userCheck',
     );
   }
 }
-

@@ -1,118 +1,113 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:senhor_bolo/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:senhor_bolo/constants.dart';
 
-/// TODO: Mudar para uma tela de Tracking estilo Amazon
+class Tracking extends StatelessWidget {
 
-class Tracking extends StatefulWidget {
-  const Tracking({Key? key}) : super(key: key);
-
-  @override
-  _TrackingState createState() => _TrackingState();
-}
-
-class _TrackingState extends State<Tracking> {
-  static List _enderecos = [
-    "R. Tiro ao Pombo",
-    "R. Borboletas Psicodélicas",
-    "Rua zap"
-  ];
-  static List _cep = ["03080000", "04050000", "00000000"];
+  final int currentStep;
+  const Tracking({Key? key, required this.currentStep}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(size.height * 0.20),
-        child: Column(
-          children: [
-            Container(
-              height: size.height * 0.22,
-              decoration: BoxDecoration(
-                  color: mainColor,
-                  borderRadius: BorderRadius.only(
-                      bottomRight: Radius.circular(25),
-                      bottomLeft: Radius.circular(25))),
-              padding: EdgeInsets.only(left: 20, right: 20),
-              child: SafeArea(
-                top: true,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconButton(
-                            onPressed: () {},
-                            iconSize: 40,
-                            color: Colors.white,
-                            icon: Icon(Icons.arrow_back_ios)),
-                        CachedNetworkImage(
-                            imageUrl:
-                                'https://thespacefox.github.io/SenhorBolo-Imagens/images/usuario/ricardinho_betoneira.jpeg',
-                            imageBuilder: (context, imageProvider) => Container(
-                                  width: 50,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: DecorationImage(
-                                          image: imageProvider,
-                                          fit: BoxFit.fitWidth)),
-                                ))
-                      ],
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(bottom: 20),
-                      child: Text(
-                        'Seu pedido',
-                        style: TextStyle(
-                            fontSize: 35,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: mainColor,
-          borderRadius: BorderRadius.only(
-              topRight: Radius.circular(25), topLeft: Radius.circular(25)),
-        ),
-        width: MediaQuery.of(context).size.width,
-        height: 160,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Seus endereços",
-              style: TextStyle(color: mainTextColor, fontSize: 20),
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+            'Pedido #0000',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+                color: mainTextColor
             ),
-            SizedBox(
-              height: 10,
+          ),
+          leading: InkWell(
+            onTap: () => Navigator.of(context).pop(),
+            child: Icon(
+              Icons.keyboard_arrow_left,
+              color: Colors.white,
+              size: 50,
             ),
-            /*
-            Expanded(
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: _enderecos.length,
-                itemBuilder: (context, index) {
-                  return enderecoBlock(_enderecos[index], _cep[index]);
-                },
+          ),
+          toolbarHeight: 88,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(25),
+                  bottomRight: Radius.circular(25))),
+        ) ,
+        body: Theme(
+          data: ThemeData(
+              colorScheme: ColorScheme.light(
+                  primary: mainColor
+              )
+          ),
+          child: Stepper(
+            controlsBuilder: (context, {onStepContinue, onStepCancel}) {
+              return SizedBox();
+            },
+            type: StepperType.vertical,
+            currentStep: currentStep,
+            steps: [
+              Step(
+                  state: currentStep >= 0 ? StepState.complete : StepState.disabled,
+                  isActive: currentStep >= 0,
+                  title: Text("Pedido Recebido",style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Raleway')),
+                  content: DeliveryStep(
+                      stepText: 'O pedido foi recebido pela nossa central e em breve seu bolo estará sendo feito com todo o carinho',
+                      image: 'banner_teste.png')
               ),
-            )
-             */
-          ],
-        ),
+              Step(
+                  state: currentStep >= 1 ? StepState.complete : StepState.disabled,
+                  isActive: currentStep >= 1,
+                  title: Text("Pedido em preparação", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Raleway')),
+                  content: DeliveryStep(
+                      stepText: 'Seu bolo delicioso está agora saindo do forno e logo mais será enviado para sua casa!',
+                      image: 'banner_teste.png')
+              ),
+              Step(
+                  state: currentStep >= 2 ? StepState.complete : StepState.disabled,
+                  isActive: currentStep >= 2,
+                  title: Text("Pedido a caminho",style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Raleway')),
+                  content: DeliveryStep(
+                      stepText: 'Seu pedido já está com o nosso cuidadoso motoboy, que com certeza não irá fazer grau com a moto a caminho de sua residência!',
+                      image: 'banner_teste.png')
+              ),
+              Step(
+                  state: currentStep >= 2 ? StepState.complete : StepState.disabled,
+                  isActive: currentStep >= 3,
+                  title: Text("Pedido entregue",style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Raleway')),
+                  content: DeliveryStep(
+                      stepText: 'Nosso pedido já foi entregue, esperamos que você tenha gostado desse bolo que fizemos com tanto carinho <3',
+                      image: 'banner_teste.png')
+              ),
+            ],
+          ),
+        )
+    );
+  }
+}
+
+class DeliveryStep extends StatelessWidget {
+
+  final String image, stepText;
+  const DeliveryStep({Key? key, required this.image, required this.stepText}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: [
+          Container(
+            width: 300, height: 200,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                image: DecorationImage(image: AssetImage('images/' + image), fit: BoxFit.fill)
+            ),
+          ),
+          SizedBox(height: 10,),
+          Text(stepText, style: TextStyle(fontSize: 15),)
+        ],
       ),
     );
   }
 }
+

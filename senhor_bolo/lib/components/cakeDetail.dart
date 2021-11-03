@@ -122,7 +122,7 @@ class _CakeDetailState extends State<CakeDetail> {
               style: TextStyle(color: mainTextColor, fontFamily: 'Roboto'),
             ),
             child: IconButton(
-              onPressed: () {},
+              onPressed: () => Navigator.pushNamed(context, 'shoppingCart'),
               icon: const Icon(
                 Icons.shopping_cart,
                 color: Colors.white,

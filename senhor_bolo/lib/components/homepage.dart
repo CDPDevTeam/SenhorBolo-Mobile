@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:senhor_bolo/classes/shoppingCart.dart';
 import 'package:senhor_bolo/components/widgets/shimmerProdutoVertical.dart';
 import 'package:senhor_bolo/model/cake.dart';
@@ -97,7 +98,7 @@ class _HomepageState extends State<Homepage> {
               buildMenuItem(
                   texto: 'Cupons',
                   icone: Icons.local_offer,
-                  onTap: () {}),
+                  onTap: () => Navigator.pushNamed(context, 'cupons')),
               buildMenuItem(
                   texto: 'Ajuda',
                   icone: Icons.help,
@@ -107,7 +108,13 @@ class _HomepageState extends State<Homepage> {
                   icone: Icons.info,
                   onTap: () => Navigator.pushNamed(context, 'aboutUs')),
               Divider(color: Colors.white),
-              buildMenuItem(texto: 'Logout', icone: Icons.logout, onTap: () {})
+              buildMenuItem(texto: 'Logout', icone: Icons.logout, onTap: () {
+                final storage = FlutterSecureStorage();
+                storage.delete(key: 'email');
+                storage.delete(key: 'password');
+                storage.delete(key: 'key');
+                Navigator.pushReplacementNamed(context, 'welcomePage');
+              })
             ],
           ),
         ),
@@ -253,7 +260,7 @@ class _HomepageState extends State<Homepage> {
         ]))
       ]),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
+        onPressed: () => Navigator.pushNamed(context, 'shoppingCart'),
         backgroundColor: mainColor,
         label: Text(' Carrinho'),
         icon: Badge(

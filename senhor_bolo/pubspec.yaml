@@ -39,6 +39,9 @@ dependencies:
   # API
   http: ^0.13.3
 
+  #Armazenamento
+  flutter_secure_storage: ^4.2.1
+
   # Outros
   mask_text_input_formatter: ^2.0.0
   password_strength: ^0.2.0
@@ -73,6 +76,7 @@ flutter:
     - images/banner_teste.png
     - images/logoMarrom.png
     - images/boloBoasVindas.png
+    - images/splash_image.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

@@ -7,7 +7,11 @@ class ShoppingCart{
     cartItens.add(bolo);
   }
 
-  void removeItem(int indexBolo){
+  static void removeItem(int indexBolo){
     cartItens.removeAt(indexBolo);
+  }
+
+  void getCartPrice(){
+
   }
 }
