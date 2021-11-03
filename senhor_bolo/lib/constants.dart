@@ -8,5 +8,5 @@ const cardTextColor = Color(0xB3FFFFFF);
 const double defaultButtonRadius = 10;
 const urlImagem = 'https://realsenhorbolo.000webhostapp.com/images/bolos/';
 const urlAPI = 'https://my-json-server.typicode.com/TheSpaceFox/jsonsenhorbolo/';
-const urlAPIBD = 'https://538f-2804-14c-96-90aa-f15e-35dd-98ac-b5a7.sa.ngrok.io/senhorbolo/public_html/api';
+const urlAPIBD = 'https://3f6b-2804-14c-96-90aa-f15e-35dd-98ac-b5a7.sa.ngrok.io/senhorbolo/public_html/api';
 //const urlAPI = 'http://10.0.2.2:3000/';

@@ -16,7 +16,7 @@ class AuthenticationService{
             'senha': password,
             'nome': name,
             'cpf': cpf,
-            'foto': 'fotodeteste.png'
+            'foto': 'defaultpicture.png'
           }
       );
       http.Response response = await http.post(
@@ -27,36 +27,32 @@ class AuthenticationService{
           body: body
       );
       final parsed = jsonDecode(response.body);
-      return parsed['status'] == 'success';
+      return parsed['success'];
   }
 
   Future<bool> authLoggedUser() async {
     String? email = await storage.read(key: 'email');
     String? pass = await storage.read(key: 'password');
     final parsed = await getLoginJSON(email!, pass!);
-    if (parsed['status'] == 'success'){
-      User(
-          parsed['data']['email_cli'],
-          parsed['data']['nome_cli'],
-          parsed['data']['cpf_cli'],
-          parsed['data']['foto_cli']
-      );
+    if (parsed['success']){
+      User.email = email;
+      User.username = parsed['data']['usuario'][0]['nome_cli'];
+      User.cpf = parsed['data']['usuario'][0]['cpf_cli'];
+      User.image = parsed['data']['usuario'][0]['foto_cli'];
     }
-    return parsed['status'] == 'success';
+    return parsed['success'];
   }
 
   Future<bool> authLogin(String email, String password) async {
-    final parsed = await getLoginJSON(email, password);
-    if (parsed['status'] == true){
+    var parsed = await getLoginJSON(email, password);
+    if (parsed['success']){
       storage.write(key: 'email', value: email);
       storage.write(key: 'password', value: password);
       storage.write(key: 'key', value: parsed['data']['key']);
-      User(
-        email,
-        parsed['data']['usuario']['nome_cli'],
-        parsed['data']['usuario']['cpf_cli'],
-        parsed['data']['usuario']['foto_cli']
-      );
+      User.email = email;
+      User.username = parsed['data']['usuario'][0]['nome_cli'];
+      User.cpf = parsed['data']['usuario'][0]['cpf_cli'];
+      User.image = parsed['data']['usuario'][0]['foto_cli'];
     }
     return parsed['success'];
   }

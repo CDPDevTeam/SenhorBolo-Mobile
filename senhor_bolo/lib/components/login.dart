@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:senhor_bolo/classes/user.dart';
 import 'package:senhor_bolo/constants.dart';
 import 'package:senhor_bolo/components/widgets/emailTextField.dart';
 import 'package:senhor_bolo/components/widgets/simpleButton.dart';
@@ -11,29 +12,31 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          toolbarHeight: 88,
-          elevation: 0,
-          centerTitle: true,
-          title: const Image(
-            image: AssetImage('images/logo_login.png'),
-            width: 200,
-          )
-        ),
-        body: ListView(
-          children: [
-            Container(
-              width: double.infinity,
-              height: MediaQuery.of(context).size.height * 0.42,
+        body: CustomScrollView(
+          physics: NeverScrollableScrollPhysics(),
+          slivers: <Widget>[
+            SliverAppBar(
+              pinned: true,
+              toolbarHeight: 88,
+              centerTitle: true,
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(25),
+                      bottomRight: Radius.circular(25))),
+                title: const Image(
+                  image: AssetImage('images/logo_login.png'),
+                  width: 200,
+                ),
+                expandedHeight: 438,
+          flexibleSpace: FlexibleSpaceBar(
+            background: Container(
               decoration: const BoxDecoration(
-                color: mainColor,
                 image: DecorationImage(
-                    image: AssetImage('images/bolo_login.png'),
-                    fit: BoxFit.fill),
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(25),
-                    bottomRight: Radius.circular(25)),
+                    alignment: Alignment.bottomCenter,
+                    image: AssetImage('images/bolo_login.png',),
+                    fit: BoxFit.fitWidth),
               ),
+              padding: const EdgeInsets.fromLTRB(34, 110, 34, 32),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Text>[
@@ -51,12 +54,19 @@ class Login extends StatelessWidget {
                 ],
               ),
             ),
-            Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 30,
-                  horizontal: 40,
-                ),
-                child: FormLogin()
+            )),
+            SliverList(
+              delegate: SliverChildListDelegate(
+                [
+                  Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 30,
+                        horizontal: 40,
+                      ),
+                      child: FormLogin()
+                  )
+                ]
+              ),
             )
           ],
         )
@@ -93,7 +103,7 @@ class _FormLoginState extends State<FormLogin> {
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               backgroundColor: Color(0xff88002A),
-                duration: Duration(seconds: 2),
+                duration: Duration(milliseconds: 1500),
                 behavior: SnackBarBehavior.floating,
                 content: Row(
                   children: [
@@ -135,7 +145,7 @@ class _FormLoginState extends State<FormLogin> {
               fillColor: Colors.white,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(11),
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   width: 0,
                   style: BorderStyle.none,
                 ),

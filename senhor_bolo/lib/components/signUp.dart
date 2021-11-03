@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:senhor_bolo/components/login.dart';
+import 'package:senhor_bolo/constants.dart';
 import 'package:senhor_bolo/components/widgets/emailTextField.dart';
 import 'package:senhor_bolo/components/widgets/maskedTextField.dart';
-import 'package:senhor_bolo/components/widgets/passwordTextField.dart';
 import 'package:senhor_bolo/components/widgets/simpleButton.dart';
-import 'package:senhor_bolo/constants.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:password_strength/password_strength.dart';
 import 'package:senhor_bolo/services/authenticationService.dart';
@@ -80,25 +78,24 @@ class _FormSignInState extends State<FormSignIn> {
   IconData _passwordIcon = Icons.lock;
   String _passwordStrength = 'Digite uma senha forte';
 
-  void verifyPasswordStrength(){
-    double strength = estimatePasswordStrength(txtPassword.text);
-    setState(() {
-      if (strength != 0){
-        if (strength < 0.7){
-          _passwordStrength = 'Senha parruda';
-          _passwordIcon = Icons.done_all;
-        } else if (strength < 0.5){
-          _passwordStrength = 'Senha ok';
-          _passwordIcon = Icons.check;
-        } else {
-          _passwordStrength = 'Senha fraca';
-          _passwordIcon = Icons.thumb_down;
-        }
+  void verifyPasswordStrength(String password){
+    if (password.isNotEmpty){
+      double strength = estimatePasswordStrength(password);
+      if (strength > 0.7){
+        _passwordStrength = 'Senha parruda';
+        _passwordIcon = Icons.done_all;
+      } else if (strength > 0.5){
+        _passwordStrength = 'Senha ok';
+        _passwordIcon = Icons.check;
       } else {
-        _passwordIcon = Icons.lock;
-        _passwordStrength = 'Digite uma senha forte';
+        _passwordStrength = 'Senha fraca';
+        _passwordIcon = Icons.thumb_down;
       }
-    });
+    } else {
+      _passwordIcon = Icons.lock;
+      _passwordStrength = 'Digite uma senha forte';
+    }
+    setState(() {});
   }
 
   void _confirmarTermosUso() {
@@ -129,10 +126,10 @@ class _FormSignInState extends State<FormSignIn> {
   Future<void> verificarForm() async {
       if (_keyCadastro.currentState!.validate()) {
         if (_termosUso == true) {
+          FocusScope.of(context).unfocus();
           bool success = await authService.signUp(txtEmail.text, _txtName.text, txtCPF.text, txtPassword.text);
           if(success){
-            Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => Login()));
+            Navigator.pushReplacementNamed(context, 'login');
           } else {
             HapticFeedback.lightImpact();
             txtEmail.clear();
@@ -159,6 +156,8 @@ class _FormSignInState extends State<FormSignIn> {
         }
       }
   }
+
+  bool _hidePassword = true;
 
   @override
   Widget build(BuildContext context) {
@@ -216,7 +215,52 @@ class _FormSignInState extends State<FormSignIn> {
 
         const SizedBox(height: 15),
 
-        PasswordTextField(passwordController: txtPassword),
+        TextFormField(
+          textInputAction: TextInputAction.next,
+          onChanged: (password){
+            verifyPasswordStrength(password);
+          },
+          controller: txtPassword,
+          obscureText: _hidePassword,
+          validator: (password) {
+            if (password != null){
+              if (password.length < 8){
+                return 'A senha precisa ter mais de 8 caracteres';
+              }
+            } else {
+              return 'Preencha o campo senha';
+            }
+          },
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.only(left: 15),
+            labelText: 'Senha',
+            filled: true,
+            fillColor: Colors.white,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(11),
+              borderSide: const BorderSide(
+                width: 0,
+                style: BorderStyle.none,
+              ),
+            ),
+            suffixIcon: IconButton(
+              onPressed: () {
+                setState(() {
+                  _hidePassword = !_hidePassword;
+                });
+              },
+              padding: EdgeInsets.zero,
+              icon: _hidePassword
+                  ? Icon(Icons.visibility_off)
+                  : Icon(Icons.visibility),
+              color: textSecondaryColor,
+            ),
+            labelStyle: const TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.bold,
+                color: textSecondaryColor),
+          ),
+        ),
 
         const SizedBox(height: 6.5),
 
@@ -238,6 +282,7 @@ class _FormSignInState extends State<FormSignIn> {
         const SizedBox(height: 22),
 
         TextFormField(
+          textInputAction: TextInputAction.done,
           controller: txtPasswordConfirm,
           obscureText: true,
           validator: (passwordConfirm){

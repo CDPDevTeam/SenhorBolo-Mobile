@@ -1,8 +1,10 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:senhor_bolo/classes/shoppingCart.dart';
+import 'package:senhor_bolo/classes/user.dart';
 import 'package:senhor_bolo/components/widgets/shimmerProdutoVertical.dart';
 import 'package:senhor_bolo/model/cake.dart';
 import 'package:senhor_bolo/services/cakeService.dart';
@@ -19,6 +21,8 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
+
+  User user = User();
   CakeService api = CakeService();
   Future<List<Cake>>? recommendedCakes1;
   Future<List<Cake>>? recommendedCakes2;
@@ -58,7 +62,7 @@ class _HomepageState extends State<Homepage> {
                             padding: EdgeInsets.only(right: 10),
                             child: CachedNetworkImage(
                                 imageUrl:
-                                    'https://thespacefox.github.io/SenhorBolo-Imagens/images/usuario/ricardinho_betoneira.jpeg',
+                                'https://thespacefox.github.io/SenhorBolo-Imagens/images/usuario/${User.image}',
                                 imageBuilder: (context, imageProvider) =>
                                     Container(
                                       width: 134,
@@ -73,14 +77,15 @@ class _HomepageState extends State<Homepage> {
                       height: 10,
                     ),
                     Text(
-                      'Lulz Ricardo',
+                      User.username,
                       style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
                           color: Colors.white),
                     ),
-                    Text(
-                      'lricardosp@gmail.com',
+                    AutoSizeText(
+                      User.email,
+                      maxLines: 1,
                       style: TextStyle(fontSize: 20, color: Colors.white),
                     ),
                   ],
@@ -174,7 +179,7 @@ class _HomepageState extends State<Homepage> {
                       padding: EdgeInsets.only(right: 10),
                       child: CachedNetworkImage(
                           imageUrl:
-                              'https://thespacefox.github.io/SenhorBolo-Imagens/images/usuario/ricardinho_betoneira.jpeg',
+                              'https://thespacefox.github.io/SenhorBolo-Imagens/images/usuario/${User.image}',
                           imageBuilder: (context, imageProvider) => Container(
                                 width: 50,
                                 height: 50,
