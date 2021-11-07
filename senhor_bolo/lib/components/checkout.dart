@@ -2,8 +2,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:senhor_bolo/classes/shoppingCart.dart';
 import 'package:senhor_bolo/components/widgets/simpleButton.dart';
 import 'package:senhor_bolo/constants.dart';
+import 'package:senhor_bolo/model/cake.dart';
 
 class Checkout extends StatefulWidget {
   const Checkout({Key? key}) : super(key: key);
@@ -469,13 +471,16 @@ class _CheckoutState extends State<Checkout> {
               child: ListView.separated(
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: 4,
+                  itemCount: ShoppingCart.cartItens.length,
                   itemBuilder: (context, index){
+
+                    Cake bolo = ShoppingCart.cartItens[index];
+
                     return ListTile(
-                      title: Text('Cenoura com chocolate'),
-                      subtitle: Text('Qdte 2'),
+                      title: Text(bolo.name),
+                      subtitle: Text('Qtde ' + bolo.qtde.toString()),
                       trailing: Text(
-                        'R\$ 30,00',
+                        'R\$ '+ bolo.price.toStringAsPrecision(4),
                         style: TextStyle(
                           fontFamily: 'Montserrat',
                           fontSize: 16
@@ -515,7 +520,7 @@ class _SelectAddressState extends State<SelectAddress> {
       'Tomar cuidado com os mendigos'
     ];
 
-    List<String> addressInfo = [];
+    late List<String> addressInfo = [];
 
     return Container(
         height: 379,
@@ -557,7 +562,7 @@ class _SelectAddressState extends State<SelectAddress> {
                             children: [
                               Wrap(
                                 children: [
-                                  Icon(
+                                  const Icon(
                                     Icons.home,
                                     color: Colors.black,
                                     size: 29,
@@ -588,7 +593,7 @@ class _SelectAddressState extends State<SelectAddress> {
                                   print(_enderecos[index] +
                                       ' foi selecionado para edição!');
                                 },
-                                icon: Icon(
+                                icon: const Icon(
                                   Icons.edit,
                                   color: Colors.black,
                                   size: 22,

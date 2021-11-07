@@ -38,6 +38,7 @@ dependencies:
 
   # API
   http: ^0.13.3
+  connectivity: ^3.0.6
 
   #Armazenamento
   flutter_secure_storage: ^4.2.1
@@ -71,12 +72,12 @@ flutter:
     - images/bolo_login.png
     - images/mastercard.png
     - images/visa.png
-    - images/contact_less.png
     - images/card.png
     - images/banner_teste.png
     - images/logoMarrom.png
     - images/boloBoasVindas.png
     - images/splash_image.png
+    - images/erroConexao.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -93,8 +94,6 @@ flutter:
     - family: Raleway
       fonts:
         - asset: fonts/Raleway-Regular.ttf
-        - asset: fonts/Raleway-Italic.ttf
-          style: italic
         - asset: fonts/Raleway-Bold.ttf
           weight: 700
         - asset: fonts/Raleway-SemiBold.ttf

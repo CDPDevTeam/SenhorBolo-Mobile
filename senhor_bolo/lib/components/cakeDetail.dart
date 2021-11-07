@@ -13,14 +13,18 @@ import '../services/cakeService.dart';
 
 class CakeDetail extends StatefulWidget {
 
+  final int idProduto;
   final String nomeProduto;
   final String categoriaProduto;
   final String imgProduto;
+  final double precoProduto;
 
   const CakeDetail({Key? key,
     required this.nomeProduto,
     required this.categoriaProduto,
-    required this.imgProduto}) : super(key: key);
+    required this.imgProduto,
+    required this.precoProduto,
+    required this.idProduto}) : super(key: key);
 
   @override
   _CakeDetailState createState() => _CakeDetailState();
@@ -34,15 +38,16 @@ class _CakeDetailState extends State<CakeDetail> {
 
   void _adicionarCarrinho() {
     Cake bolo = Cake(
+        id: widget.idProduto,
         name: widget.nomeProduto,
         category: widget.categoriaProduto,
         image: widget.imgProduto,
-        price: 15
+        price: widget.precoProduto,
+        qtde: _qtdeItem
     );
 
     setState(() {
-      ShoppingCart carrinho = ShoppingCart();
-      carrinho.addItem(bolo);
+      ShoppingCart.addItem(bolo);
     });
   }
 
@@ -91,7 +96,7 @@ class _CakeDetailState extends State<CakeDetail> {
                   ),
                   Text(
                     'Rua Humaitá, 538',
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w100,
                         color: Colors.white),
@@ -154,7 +159,7 @@ class _CakeDetailState extends State<CakeDetail> {
                         borderRadius: BorderRadius.circular(25),
                     ),
                     child: CachedNetworkImage(
-                      imageUrl: urlImagem + widget.imgProduto,
+                      imageUrl: urlImagem + '/bolos/' + widget.imgProduto,
                       errorWidget: (context, url, error) => const Center(
                         child: Text(
                           'Erro ao carregar a imagem :(',
@@ -236,7 +241,7 @@ class _CakeDetailState extends State<CakeDetail> {
                                       text: 'R\$',
                                       style: TextStyle(fontSize: 25)),
                                   TextSpan(
-                                      text: '15',
+                                      text: (widget.precoProduto.toInt()).toString(),
                                       style: TextStyle(fontSize: 35)),
                                 ]),
                           ),
@@ -271,10 +276,11 @@ class _CakeDetailState extends State<CakeDetail> {
                               nomeProduto: snapshot.data![index].name,
                               categoriaProduto: snapshot.data![index].category,
                               precoProduto: snapshot.data![index].price.toDouble(),
-                              imgProduto: snapshot.data![index].image);
+                              imgProduto: snapshot.data![index].image,
+                              idProduto: snapshot.data![index].id);
                         },
                         separatorBuilder: (context, int index) {
-                          return SizedBox(height: 20);
+                          return const SizedBox(height: 20);
                         },
                       ),
                     )
@@ -294,7 +300,7 @@ class _CakeDetailState extends State<CakeDetail> {
                         return const ShimmerProdutoHorizontal();
                       },
                       separatorBuilder: (context, int index) {
-                        return SizedBox(height: 20);
+                        return const SizedBox(height: 20);
                       },
                     ),
                   )

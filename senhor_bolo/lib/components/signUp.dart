@@ -211,7 +211,7 @@ class _FormSignInState extends State<FormSignIn> {
 
         const SizedBox(height: 15),
 
-        maskedTextField('CPF', txtCPF, maskCPF),
+        maskedTextField(textFieldName: 'CPF', txtController: txtCPF, textInputType: TextInputType.number, inputFormatter: maskCPF),
 
         const SizedBox(height: 15),
 

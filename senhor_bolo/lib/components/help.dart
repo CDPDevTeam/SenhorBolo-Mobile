@@ -1,8 +1,4 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:senhor_bolo/components/widgets/produtoVertical.dart';
-import 'package:senhor_bolo/components/widgets/shimmerProdutoHorizontal.dart';
-import 'package:shimmer_animation/shimmer_animation.dart';
 import '../constants.dart';
 
 class HelpPage extends StatelessWidget {
@@ -44,11 +40,6 @@ class HelpPage extends StatelessWidget {
             )
           ],
         ),
-      ),
-      body: ListView(
-        children: [
-          const ShimmerProdutoHorizontal()
-      ],
       ),
     );
   }

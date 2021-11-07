@@ -35,7 +35,7 @@ class _MeusPedidosState extends State<MeusPedidos> {
         appBarIcon: Icons.local_shipping,
       ),
       body: Padding(
-        padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+        padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
         child: ListView(
           physics: BouncingScrollPhysics(),
           scrollDirection: Axis.vertical,

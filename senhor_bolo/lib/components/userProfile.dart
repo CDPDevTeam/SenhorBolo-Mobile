@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:senhor_bolo/constants.dart';
 import 'package:senhor_bolo/components/widgets/simpleButton.dart';
+import 'package:senhor_bolo/classes/user.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 
 class UserProfile extends StatefulWidget {
   const UserProfile({Key? key}) : super(key: key);
@@ -21,8 +23,8 @@ class _UserProfileState extends State<UserProfile> {
           elevation: 0,
           toolbarHeight: 88,
           leading: IconButton(
-            onPressed: () {Navigator.pop(context);},
-            icon: Icon(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(
               Icons.keyboard_arrow_left,
               color: Colors.white,
               size: 50,
@@ -66,7 +68,7 @@ class _UserProfileState extends State<UserProfile> {
                           alignment: Alignment.bottomRight,
                           children: [
                             CachedNetworkImage(
-                                imageUrl: 'https://thespacefox.github.io/SenhorBolo-Imagens/images/usuario/ricardinho_betoneira.jpeg',
+                                imageUrl: 'https://thespacefox.github.io/SenhorBolo-Imagens/images/usuario/${User.image}',
                                 imageBuilder: (context, imageProvider) => Container(
                                   width: 156,
                                   height: 156,
@@ -95,7 +97,7 @@ class _UserProfileState extends State<UserProfile> {
                         ),
                         const SizedBox(height: 15),
                         Text(
-                          'Lulz Ricardo',
+                          User.username,
                           style: const TextStyle(
                               fontSize: 25,
                               fontWeight: FontWeight.bold,
@@ -113,7 +115,7 @@ class _UserProfileState extends State<UserProfile> {
                       ),
                       const SizedBox(width: 10),
                       Text(
-                        'thespacefox@protonmail.com',
+                        User.email,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         style: const TextStyle(fontSize: 15, color: Color(0xff707070)),
@@ -129,7 +131,7 @@ class _UserProfileState extends State<UserProfile> {
                       ),
                       const SizedBox(width: 10),
                       Text(
-                        '420.180.868-80',
+                        User.cpf,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         style: const TextStyle(fontSize: 15, color: Color(0xff707070)),
@@ -180,11 +182,13 @@ class _UserProfileState extends State<UserProfile> {
                         ),
                         Expanded(
                             child: ListView.builder(
+                                physics: BouncingScrollPhysics(),
                                 scrollDirection: Axis.horizontal,
                                 itemCount: 5,
                                 itemBuilder: (context, index) {
                                   return cardCard(2103, "visa");
-                                }))
+                                })
+                        )
                       ],
                     ),
                   ),
@@ -221,11 +225,13 @@ class _UserProfileState extends State<UserProfile> {
                         ),
                         Expanded(
                             child: ListView.builder(
+                                physics: BouncingScrollPhysics(),
                                 scrollDirection: Axis.horizontal,
                                 itemCount: 5,
                                 itemBuilder: (context, index) {
                                   return enderecoBlock('Rua valê do Cariri', '02317-060');
-                                }))
+                                })
+                        )
                       ],
                     ),
                   ),

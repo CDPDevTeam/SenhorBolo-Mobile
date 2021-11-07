@@ -34,7 +34,7 @@ class OrderDelivered extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Text("Seu pedido $numPedido foi entregue",style: TextStyle(fontSize: 20),),
-                  ProdutoHorizontal(nomeProduto: 'Brigadeiro', categoriaProduto: 'Bolo simples', precoProduto: 12.0, imgProduto: 'brigadeiro.png')
+                  ProdutoHorizontal(nomeProduto: 'Brigadeiro', categoriaProduto: 'Bolo simples', precoProduto: 12.0, imgProduto: 'brigadeiro.png', idProduto: 1,)
                 ],
 
               ),
@@ -45,7 +45,6 @@ class OrderDelivered extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  simpleButtonIcon(368, 51, "Deixar uma avaliação", (){}, 10, 20, Color(0xffDFA41B), Icon(Icons.star_rate), FontWeight.bold),
                   simpleButtonIcon(368, 51, "Reportar um problema", (){}, 10, 20, Color(0xff88002A), Icon(Icons.chat_bubble), FontWeight.normal),
                   simpleButtonIcon(368, 51, "Voltar", (){}, 10, 20, mainColor, Icon(Icons.arrow_back), FontWeight.bold)
                 ],

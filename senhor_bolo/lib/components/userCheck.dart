@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:senhor_bolo/constants.dart';
 import 'package:senhor_bolo/services/authenticationService.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:connectivity/connectivity.dart';
+import 'package:http/http.dart' as http;
 
 class UserCheck extends StatefulWidget {
   const UserCheck({Key? key}) : super(key: key);
@@ -12,6 +14,21 @@ class UserCheck extends StatefulWidget {
 
 class _UserCheckState extends State<UserCheck> {
 
+  Future<bool> _isAPIActive() async{
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile ||
+        connectivityResult == ConnectivityResult.wifi) {
+      http.Response response = await http.get(Uri.parse(urlAPIBD + '/bolos'));
+      if(response.statusCode == 404){
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      return false;
+    }
+  }
+
   Future<bool> _authUser() async {
     AuthenticationService authService = AuthenticationService();
     final storage = FlutterSecureStorage();
@@ -19,7 +36,7 @@ class _UserCheckState extends State<UserCheck> {
     if (alreadyLogged == null){
       return false;
     } else {
-      authService.authLoggedUser();
+      await authService.authLoggedUser();
       return true;
     }
   }
@@ -27,11 +44,17 @@ class _UserCheckState extends State<UserCheck> {
   @override
   void initState() {
     super.initState();
-    _authUser().then((value) {
-      if (value){
-        Navigator.pushReplacementNamed(context, 'homepage');
+    _isAPIActive().then((value) {
+      if (value) {
+        _authUser().then((value) {
+          if (value){
+            Navigator.pushReplacementNamed(context, 'homepage');
+          } else {
+            Navigator.pushReplacementNamed(context, 'login');
+          }
+        });
       } else {
-        Navigator.pushReplacementNamed(context, 'login');
+        Navigator.pushNamed(context, 'connectionError');
       }
     });
   }
@@ -40,8 +63,8 @@ class _UserCheckState extends State<UserCheck> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: mainColor,
-      body: Center(
-        child: Image.asset('images/splash_image.png')
+      body: const Center(
+        child: CircularProgressIndicator(color: Colors.white)
       ),
     );
   }

@@ -5,6 +5,7 @@ import '../../constants.dart';
 import '../cakeDetail.dart';
 
 class ProdutoHorizontal extends StatelessWidget {
+  final int idProduto;
   final String nomeProduto;
   final String categoriaProduto;
   final double precoProduto;
@@ -15,7 +16,8 @@ class ProdutoHorizontal extends StatelessWidget {
       required this.nomeProduto,
       required this.categoriaProduto,
       required this.precoProduto,
-      required this.imgProduto})
+      required this.imgProduto,
+        required this.idProduto})
       : super(key: key);
 
   @override
@@ -27,6 +29,8 @@ class ProdutoHorizontal extends StatelessWidget {
                   nomeProduto: nomeProduto,
                   categoriaProduto: categoriaProduto,
                   imgProduto: imgProduto,
+                  precoProduto: precoProduto,
+                  idProduto: idProduto,
                 )));
       },
       child: SizedBox(
@@ -47,7 +51,7 @@ class ProdutoHorizontal extends StatelessWidget {
                 ),
               ),
               child: CachedNetworkImage(
-                imageUrl: urlImagem + imgProduto,
+                imageUrl: urlImagem + '/bolos/' + imgProduto,
                 fit: BoxFit.contain,
               ),
             ),
@@ -55,7 +59,7 @@ class ProdutoHorizontal extends StatelessWidget {
               width: 190,
               height: 98,
               padding: const EdgeInsets.only(left: 20, right: 20),
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
                   topRight: Radius.circular(20),
@@ -84,7 +88,7 @@ class ProdutoHorizontal extends StatelessWidget {
                         color: textSecondaryColor),
                   ),
                   Text(
-                    'R\$' + precoProduto.toString() + " - 30,00",
+                    'R\$' + precoProduto.toStringAsPrecision(4),
                     style: const TextStyle(
                         fontFamily: 'Montserrat',
                         fontSize: 14,

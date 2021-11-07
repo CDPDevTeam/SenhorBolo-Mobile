@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:senhor_bolo/classes/user.dart';
 import 'package:senhor_bolo/constants.dart';
 import 'package:senhor_bolo/components/widgets/emailTextField.dart';
 import 'package:senhor_bolo/components/widgets/simpleButton.dart';

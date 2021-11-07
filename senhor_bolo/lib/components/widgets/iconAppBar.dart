@@ -1,6 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import '../../constants.dart';
+import 'package:senhor_bolo/classes/user.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class IconAppBar extends StatelessWidget implements PreferredSizeWidget{
   final String appBarText;
@@ -71,7 +72,7 @@ class IconAppBar extends StatelessWidget implements PreferredSizeWidget{
               child: Padding(
                   padding: EdgeInsets.only(right: 10),
                   child: CachedNetworkImage(
-                      imageUrl: 'https://thespacefox.github.io/SenhorBolo-Imagens/images/usuario/ricardinho_betoneira.jpeg',
+                      imageUrl: 'https://thespacefox.github.io/SenhorBolo-Imagens/images/usuario/${User.image}',
                       imageBuilder: (context, imageProvider) => Container(
                         width: 50,
                         height: 50,

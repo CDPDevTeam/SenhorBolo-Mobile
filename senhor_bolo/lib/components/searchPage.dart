@@ -21,7 +21,7 @@ class _SearchPageState extends State<SearchPage> {
         appBar: AppBar(
           toolbarHeight: 88,
           centerTitle: true,
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(25),
                   bottomRight: Radius.circular(25))),
@@ -46,18 +46,18 @@ class _SearchPageState extends State<SearchPage> {
                 textInputAction: TextInputAction.go,
                 autofocus: true,
                 decoration: InputDecoration(
-                  contentPadding: EdgeInsets.only(left: 20),
+                  contentPadding: const EdgeInsets.only(left: 20),
                   hintText: 'Pesquisa',
                   filled: true,
                   fillColor: Color(0xffE6E6E6),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(25),
-                    borderSide: BorderSide(
+                    borderSide: const BorderSide(
                       width: 0,
                       style: BorderStyle.none,
                     ),
                   ),
-                  hintStyle: TextStyle(
+                  hintStyle: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: Color(0xffB5B5B5)),

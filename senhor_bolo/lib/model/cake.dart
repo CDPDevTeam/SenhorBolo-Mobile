@@ -1,21 +1,29 @@
 class Cake {
+  final int id;
   final String name;
   final String category;
   final String image;
-  final int price;
+  final double price;
+  int qtde;
 
   Cake({
+    required this.id,
     required this.name,
-    required this.category,
     required this.image,
-    required this.price});
+    required this.category,
+    required this.price,
+    required this.qtde
+  });
 
   factory Cake.fromJson(Map<String, dynamic> json){
+    var preco = json['preco_catprod'].split('\$');
     return Cake(
-        name: json['nome'] as String,
-        category: json['categoria'] as String,
-        image: json['imagem'] as String,
-        price: json['preco'] as int
+        id: json['id_prod'] as int,
+        name: json['nome_prod'] as String,
+        image: json['foto_prod'] as String,
+        category: json['categoria_prod_fk'] as String,
+        price: double.parse(preco[1]),
+        qtde: 0,
     );
   }
 }

@@ -23,7 +23,7 @@ Widget simpleButton (double width, double height, String btnText, VoidCallback o
   );
 }
 
-Widget simpleButtonIcon (double width, double height, String btnText, VoidCallback onPressed, double radius, double fontSize, Color cor, Icon btnIcon, FontWeight fontPeso){
+Widget simpleButtonIcon(double width, double height, String btnText, VoidCallback onPressed, double radius, double fontSize, Color cor, Icon btnIcon, FontWeight fontPeso){
   return SizedBox(
     width: width,
     height: height,
@@ -47,7 +47,7 @@ Widget simpleButtonIcon (double width, double height, String btnText, VoidCallba
   );
 }
 
-Widget simpleButtonIconeOnly (double width, double height, VoidCallback onPressed, double radius, double fontSize, Color cor, Icon btnIcon, FontWeight fontPeso){
+Widget simpleButtonIconeOnly(double width, double height, VoidCallback onPressed, double radius, double fontSize, Color cor, Icon btnIcon, FontWeight fontPeso){
   return SizedBox(
     width: width,
     height: height,

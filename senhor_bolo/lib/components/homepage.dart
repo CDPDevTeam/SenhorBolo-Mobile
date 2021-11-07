@@ -323,7 +323,7 @@ class _HomepageState extends State<Homepage> {
             if (snapshot.hasData) {
               return Center(
                   child: SizedBox(
-                    height: 227,
+                    height: 242,
                     child: ListView.separated(
                       itemCount: snapshot.data!.length,
                       scrollDirection: Axis.horizontal,
@@ -334,6 +334,7 @@ class _HomepageState extends State<Homepage> {
                           categoriaProduto: snapshot.data![index].category,
                           precoProduto: snapshot.data![index].price,
                           imgProduto: snapshot.data![index].image,
+                          idProduto: snapshot.data![index].id,
                         );
                       },
                       separatorBuilder: (context, int index) {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:senhor_bolo/components/widgets/simpleButton.dart';
-
 import '../constants.dart';
 
 class AddressPicker extends StatefulWidget {
@@ -139,7 +138,7 @@ class _AddressPickerState extends State<AddressPicker> {
                   ),
                 );
               },
-              separatorBuilder: (context, index) => SizedBox(height: 10)
+              separatorBuilder: (context, index) => const SizedBox(height: 10)
           ),
           const SizedBox(height: 15),
           simpleButton(242, 50, 'Adicionar endereço', _addAddress, defaultButtonRadius, 18, Color(0xff00A59F))

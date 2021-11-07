@@ -11,7 +11,7 @@ class Tracking extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text(
+          title: const Text(
             'Pedido #0000',
             textAlign: TextAlign.center,
             style: TextStyle(
@@ -22,14 +22,14 @@ class Tracking extends StatelessWidget {
           ),
           leading: InkWell(
             onTap: () => Navigator.of(context).pop(),
-            child: Icon(
+            child: const Icon(
               Icons.keyboard_arrow_left,
               color: Colors.white,
               size: 50,
             ),
           ),
           toolbarHeight: 88,
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(25),
                   bottomRight: Radius.circular(25))),
@@ -50,32 +50,32 @@ class Tracking extends StatelessWidget {
               Step(
                   state: currentStep >= 0 ? StepState.complete : StepState.disabled,
                   isActive: currentStep >= 0,
-                  title: Text("Pedido Recebido",style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Raleway')),
-                  content: DeliveryStep(
+                  title: const Text("Pedido Recebido",style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Raleway')),
+                  content: const DeliveryStep(
                       stepText: 'O pedido foi recebido pela nossa central e em breve seu bolo estará sendo feito com todo o carinho',
                       image: 'banner_teste.png')
               ),
               Step(
                   state: currentStep >= 1 ? StepState.complete : StepState.disabled,
                   isActive: currentStep >= 1,
-                  title: Text("Pedido em preparação", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Raleway')),
-                  content: DeliveryStep(
+                  title: const Text("Pedido em preparação", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Raleway')),
+                  content: const DeliveryStep(
                       stepText: 'Seu bolo delicioso está agora saindo do forno e logo mais será enviado para sua casa!',
                       image: 'banner_teste.png')
               ),
               Step(
                   state: currentStep >= 2 ? StepState.complete : StepState.disabled,
                   isActive: currentStep >= 2,
-                  title: Text("Pedido a caminho",style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Raleway')),
-                  content: DeliveryStep(
+                  title: const Text("Pedido a caminho",style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Raleway')),
+                  content: const DeliveryStep(
                       stepText: 'Seu pedido já está com o nosso cuidadoso motoboy, que com certeza não irá fazer grau com a moto a caminho de sua residência!',
                       image: 'banner_teste.png')
               ),
               Step(
                   state: currentStep >= 2 ? StepState.complete : StepState.disabled,
                   isActive: currentStep >= 3,
-                  title: Text("Pedido entregue",style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Raleway')),
-                  content: DeliveryStep(
+                  title: const Text("Pedido entregue",style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Raleway')),
+                  content: const DeliveryStep(
                       stepText: 'Nosso pedido já foi entregue, esperamos que você tenha gostado desse bolo que fizemos com tanto carinho <3',
                       image: 'banner_teste.png')
               ),
