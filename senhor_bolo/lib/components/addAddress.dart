@@ -5,6 +5,8 @@ import 'package:senhor_bolo/constants.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:senhor_bolo/services/addressService.dart';
+
 class AddAddress extends StatefulWidget {
   const AddAddress({Key? key}) : super(key: key);
 
@@ -65,11 +67,10 @@ class _AddAddressState extends State<AddAddress> {
     }
   }
 
-  void _putAddress(){
-    /// TODO: Trocar para a conexão com o BD dps
-    print('Rua: $street \nBairro: $district \nCEP: ${_txtCEP.text}'
-    '\nNúmero: ${_txtNumber.text} \nComplemento: ${_txtRemark.text} \n'
-        'Informações adicionais: ${_txtAdicionalInfo.text}');
+  void _postAddress() async{
+    AddressService endereco = AddressService();
+    await endereco.postAddress(street, district, _txtCEP.text, _txtNumber.text,
+        _txtRemark.text, _txtAdicionalInfo.text);
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           behavior: SnackBarBehavior.floating,
@@ -134,7 +135,7 @@ class _AddAddressState extends State<AddAddress> {
               height: 50,
               child: ElevatedButton(
                 onPressed: () {
-                  cepInserido ? _putAddress() : _getAddress();
+                  cepInserido ? _postAddress() : _getAddress();
                 },
                 child: Text(cepInserido ? 'Salvar endereço' : 'Continuar'),
                 style: ElevatedButton.styleFrom(
@@ -314,7 +315,7 @@ class _AddAddressState extends State<AddAddress> {
           const SizedBox(height: 15),
           TextField(
               controller: _txtAdicionalInfo,
-              onSubmitted: (value) => _putAddress(),
+              onSubmitted: (value) => _postAddress(),
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.only(left: 15),
                 labelText: 'Informações adicionais',

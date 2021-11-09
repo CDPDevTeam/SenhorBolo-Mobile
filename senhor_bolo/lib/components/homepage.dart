@@ -55,10 +55,7 @@ class _HomepageState extends State<Homepage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    InkWell(
-                        onTap: () => Navigator.pushReplacementNamed(
-                            context, 'userProfile'),
-                        child: Padding(
+                        Padding(
                             padding: EdgeInsets.only(right: 10),
                             child: CachedNetworkImage(
                                 imageUrl:
@@ -72,7 +69,7 @@ class _HomepageState extends State<Homepage> {
                                           image: DecorationImage(
                                               image: imageProvider,
                                               fit: BoxFit.fitWidth)),
-                                    )))),
+                                    ))),
                     SizedBox(
                       height: 10,
                     ),
