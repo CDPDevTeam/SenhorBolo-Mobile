@@ -1,4 +1,6 @@
 import 'package:flutter/widgets.dart';
+import 'package:senhor_bolo/components/updatePassword.dart';
+import 'package:senhor_bolo/components/updateUser.dart';
 import 'components/aboutUs.dart';
 import 'components/checkout.dart';
 import 'components/help.dart';
@@ -41,5 +43,7 @@ final Map<String, WidgetBuilder> routes = {
   'checkout' : (context) => Checkout(),
   'help' : (context) => HelpPage(),
   'aboutUs' : (context) => AboutUs(),
-  'cupons': (context) => Cupom()
+  'cupons': (context) => Cupom(),
+  'updateUser': (context) => UpdateUser(),
+  'updatePassword': (context) => UpdatePassword()
 };

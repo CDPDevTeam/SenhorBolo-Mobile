@@ -47,6 +47,9 @@ dependencies:
   #Interface
   cool_alert: ^1.1.0
 
+  #email
+  url_launcher: ^6.0.12
+
   # Outros
   mask_text_input_formatter: ^2.0.0
   password_strength: ^0.2.0

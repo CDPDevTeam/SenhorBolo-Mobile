@@ -11,6 +11,7 @@ import 'package:senhor_bolo/model/address.dart';
 import 'package:senhor_bolo/model/creditcard.dart';
 import 'package:senhor_bolo/services/addressService.dart';
 import 'package:senhor_bolo/services/creditcardService.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 
 class UserProfile extends StatefulWidget {
@@ -23,6 +24,21 @@ class UserProfile extends StatefulWidget {
 class _UserProfileState extends State<UserProfile> {
   late Future<List<CreditCard>> creditcards;
   late Future<List<Address>> adresses;
+
+  void _openSupport() async{
+    final email = 'realsenhorbolo@gmail.com';
+    final subject = Uri.encodeFull('Preciso de ajuda!');
+    final message = Uri.encodeFull('Me ajuda por favor eu to morrendo me ajuda!');
+    final url = 'mailto:$email?subject=$subject&body=$message';
+
+    if(await canLaunch(url)) {
+      await launch(url);
+    }
+  }
+
+  void _updateUser(){
+    Navigator.pushNamed(context, 'updateUser');
+  }
 
   void _deleteAccount(){
     CoolAlert.show(
@@ -195,7 +211,7 @@ class _UserProfileState extends State<UserProfile> {
                     ],
                   ),
                   simpleButton(
-                      127, 41, 'Editar', () {}, 10, 17, Color(0xff707070)),
+                      127, 41, 'Editar', _updateUser, 10, 17, Color(0xff707070)),
                   const SizedBox(height: 10)
                 ],
               ),
@@ -398,7 +414,7 @@ class _UserProfileState extends State<UserProfile> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            simpleButtonIcon(177, 55, "Suporte", () {}, 25, 20, mainColor,
+            simpleButtonIcon(177, 55, "Suporte", _openSupport, 25, 20, mainColor,
                 Icon(Icons.headset), FontWeight.bold),
             simpleButtonIcon(177, 55, "Deletar", _deleteAccount, 25, 20, redButtonColor,
                 Icon(Icons.delete), FontWeight.bold),

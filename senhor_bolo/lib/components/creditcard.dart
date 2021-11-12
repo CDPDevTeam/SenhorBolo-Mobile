@@ -260,10 +260,10 @@ class _FormCartaoState extends State<FormCartao>
             ),
           ),
           title: Text(
-            widget.card == null ? 'Adicionar cartão de crédito' : 'Editar cartão de crédito',
+            widget.card == null ? 'Adicionar cartão' : 'Editar cartão',
             style: const TextStyle(
                 color: mainTextColor,
-                fontSize: 20,
+                fontSize: 25,
                 fontWeight: FontWeight.bold),
           ),
         ),
