@@ -1,4 +1,6 @@
 import 'package:senhor_bolo/constants.dart';
+import 'package:senhor_bolo/model/address.dart';
+import 'package:senhor_bolo/model/creditcard.dart';
 import 'package:senhor_bolo/model/cupom.dart';
 import 'package:senhor_bolo/classes/shoppingCart.dart';
 import 'package:senhor_bolo/classes/user.dart';
@@ -9,8 +11,8 @@ import 'dart:convert';
 class Order{
   static bool haveCoupon = false;
   static Coupon? orderCoupon;
-  static int? orderAddress;
-  static int? orderCC;
+  static Address? orderAddress;
+  static CreditCard? creditCard;
 
   static double getTotalPrice(){
     double subTotal = ShoppingCart.getCartPrice();

@@ -5,6 +5,8 @@ import 'package:senhor_bolo/constants.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:senhor_bolo/services/addressService.dart';
+
 class AddAddress extends StatefulWidget {
   const AddAddress({Key? key}) : super(key: key);
 
@@ -31,7 +33,7 @@ class _AddAddressState extends State<AddAddress> {
         builder: (context){
           return AlertDialog(
             title: Text('Erro ao buscar o CEP',
-              style: TextStyle(fontWeight: FontWeight.bold)),
+                style: TextStyle(fontWeight: FontWeight.bold)),
             content: Text('Entregamos somente na cidade de São Paulo!'),
             actions: [
               TextButton(
@@ -65,14 +67,13 @@ class _AddAddressState extends State<AddAddress> {
     }
   }
 
-  void _putAddress(){
-    /// TODO: Trocar para a conexão com o BD dps
-    print('Rua: $street \nBairro: $district \nCEP: ${_txtCEP.text}'
-    '\nNúmero: ${_txtNumber.text} \nComplemento: ${_txtRemark.text} \n'
-        'Informações adicionais: ${_txtAdicionalInfo.text}');
+  void _postAddress() async{
+    AddressService endereco = AddressService();
+    await endereco.postAddress(street, district, _txtCEP.text, _txtNumber.text,
+        _txtRemark.text, _txtAdicionalInfo.text);
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          behavior: SnackBarBehavior.floating,
+            behavior: SnackBarBehavior.floating,
             content: Row(
               children: [
                 Icon(Icons.check_circle, color: Colors.white,),
@@ -88,45 +89,45 @@ class _AddAddressState extends State<AddAddress> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          toolbarHeight: 88,
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(25),
-                  bottomRight: Radius.circular(25))),
-          leading: IconButton(
-            onPressed: () => Navigator.of(context).pop(),
-            icon: const Icon(
-              Icons.keyboard_arrow_left,
-              size: 50,
+      appBar: AppBar(
+        centerTitle: true,
+        toolbarHeight: 88,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(25),
+                bottomRight: Radius.circular(25))),
+        leading: IconButton(
+          onPressed: () => Navigator.of(context).pop(),
+          icon: const Icon(
+            Icons.keyboard_arrow_left,
+            size: 50,
+          ),
+        ),
+        title: const Text(
+          'Adicionar endereço',
+          style: TextStyle(
+              color: mainTextColor,
+              fontSize: 25,
+              fontWeight: FontWeight.bold),
+        ),
+      ),
+      body: PageTransitionSwitcher(
+        duration: Duration(milliseconds: 800),
+        transitionBuilder: (child, animation, secondaryAnimation) =>
+            SharedAxisTransition(
+                child: child,
+                animation: animation,
+                secondaryAnimation: secondaryAnimation,
+                transitionType: SharedAxisTransitionType.horizontal
             ),
-          ),
-          title: const Text(
-            'Adicionar endereço',
-            style: TextStyle(
-                color: mainTextColor,
-                fontSize: 25,
-                fontWeight: FontWeight.bold),
-          ),
-        ),
-        body: PageTransitionSwitcher(
-          duration: Duration(milliseconds: 800),
-          transitionBuilder: (child, animation, secondaryAnimation) =>
-              SharedAxisTransition(
-                  child: child,
-                  animation: animation,
-                  secondaryAnimation: secondaryAnimation,
-                  transitionType: SharedAxisTransitionType.horizontal
-              ),
-          child: cepInserido ? completeAddress() : insertCEP(),
-        ),
+        child: cepInserido ? completeAddress() : insertCEP(),
+      ),
       bottomNavigationBar: Container(
         height: 100,
         padding: const EdgeInsets.symmetric(horizontal: 20),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
-          color: Color(0xffE6E6E6)
+            borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+            color: Color(0xffE6E6E6)
         ),
         child: Center(
           child: SizedBox(
@@ -134,7 +135,7 @@ class _AddAddressState extends State<AddAddress> {
               height: 50,
               child: ElevatedButton(
                 onPressed: () {
-                  cepInserido ? _putAddress() : _getAddress();
+                  cepInserido ? _postAddress() : _getAddress();
                 },
                 child: Text(cepInserido ? 'Salvar endereço' : 'Continuar'),
                 style: ElevatedButton.styleFrom(
@@ -314,7 +315,7 @@ class _AddAddressState extends State<AddAddress> {
           const SizedBox(height: 15),
           TextField(
               controller: _txtAdicionalInfo,
-              onSubmitted: (value) => _putAddress(),
+              onSubmitted: (value) => _postAddress(),
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.only(left: 15),
                 labelText: 'Informações adicionais',

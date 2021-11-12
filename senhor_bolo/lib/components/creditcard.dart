@@ -1,3 +1,4 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:math' as math;
@@ -8,9 +9,14 @@ import 'package:senhor_bolo/components/widgets/maskedTextField.dart';
 import 'package:senhor_bolo/components/widgets/simpleButton.dart';
 import 'package:senhor_bolo/constants.dart';
 import 'package:credit_card_validator/credit_card_validator.dart';
+import 'package:senhor_bolo/model/creditcard.dart';
+import 'package:senhor_bolo/services/creditcardService.dart';
 
 class FormCartao extends StatefulWidget {
-  const FormCartao({Key? key}) : super(key: key);
+
+  final CreditCard? card;
+
+  const FormCartao({Key? key, this.card}) : super(key: key);
 
   @override
   _FormCartaoState createState() => _FormCartaoState();
@@ -39,18 +45,89 @@ class _FormCartaoState extends State<FormCartao>
   var maskExpirationDate = MaskTextInputFormatter(mask: '##/##', filter: {"#": RegExp(r'[0-9]')});
   var maskCVV = MaskTextInputFormatter(mask: '###', filter: {"#": RegExp(r'[0-9]')});
 
-  String _cardNumber = '0000 0000 0000 0000';
-  String _cardName = 'Marcia X';
-  String _cardExpiration = '00/00';
-  String _cardCVV = '000';
+  late String _cardNumber;
+  late String _cardName;
+  late String _cardExpiration;
+  late String _cardCVV;
+  late String _cardCarrier;
 
-  void addCreditCard() {
+  void setCardColor(){
+    String cardCarrier = getInitials(_cardNumber);
+    corTextoCartao = Colors.white;
+    if (cardCarrier == '4') {
+      _cardCarrier = 'Visa';
+      corCartao = Color(0xff0855A3);
+      imgCard = 'images/visa.png';
+
+    } else {
+      _cardCarrier = 'Mastercard';
+      corCartao = Color(0xffFF5100);
+      imgCard = 'images/mastercard.png';
+    }
+  }
+
+  void setCardNumbers() {
+    if(widget.card != null){
+
+      // Pega o número do cartão que está como INT e separa novamente
+      String cardNum = widget.card!.num.toString();
+      cardNum = cardNum.replaceAllMapped(RegExp(r".{4}"), (match) => "${match.group(0)} ");
+
+      _cardNumber = cardNum;
+      _cardName = widget.card!.name;
+      _cardExpiration = widget.card!.expDate;
+      _cardCVV = widget.card!.cvv.toString();
+      setCardColor();
+      _txtNumCard.text = _cardNumber;
+      _txtCardName.text = _cardName;
+      _txtCVV.text = _cardCVV;
+      _txtExpirationDate.text = _cardExpiration;
+    } else {
+      _cardNumber = '0000 0000 0000 0000';
+      _cardName = 'Marcia X';
+      _cardExpiration = '00/00';
+      _cardCVV = '000';
+    }
+  }
+
+  bool isCCValid(){
+    CreditCardValidator _ccValidator = CreditCardValidator();
+    var ccNumResults = _ccValidator.validateCCNum(_cardNumber);
+    var expDateResults = _ccValidator.validateExpDate(_cardExpiration);
+    var cvvResults = _ccValidator.validateCVV(_cardCVV, ccNumResults.ccType);
+    return ccNumResults.isValid && expDateResults.isValid && cvvResults.isValid;
+  }
+
+  Future<void> updateCreditCard() async{
+    if (isCCValid()){
+      print('teste');
+      String aux = _txtNumCard.text.replaceAll(' ', '');
+      CreditCard newCard = CreditCard(
+          num: int.parse(aux),
+          name: _txtCardName.text,
+          expDate: _txtExpirationDate.text,
+          cvv: int.parse(_txtCVV.text),
+          carrier: _cardCarrier
+      );
+      await CreditcardService.instance.update(newCard);
+      _confirmation();
+    } else {
+      _fakeCC();
+    }
+  }
+
+  Future<void> addCreditCard() async {
     if (_formKey.currentState!.validate()) {
-      CreditCardValidator _ccValidator = CreditCardValidator();
-      var ccNumResults = _ccValidator.validateCCNum(_cardNumber);
-      var expDateResults = _ccValidator.validateExpDate(_cardExpiration);
-      var cvvResults = _ccValidator.validateCVV(_cardCVV, ccNumResults.ccType);
-      if(ccNumResults.isValid && expDateResults.isValid && cvvResults.isValid){
+      if(isCCValid()){
+        String aux = _txtNumCard.text.replaceAll(' ', '');
+        CreditCard newCard = CreditCard(
+            num: int.parse(aux),
+            name: _txtCardName.text,
+            expDate: _txtExpirationDate.text,
+            cvv: int.parse(_txtCVV.text),
+            carrier: _cardCarrier
+        );
+        await CreditcardService.instance.create(newCard);
         _confirmation();
       } else {
         _fakeCC();
@@ -59,41 +136,30 @@ class _FormCartaoState extends State<FormCartao>
   }
 
   void _confirmation() {
-    showDialog(
+    CoolAlert.show(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Cartão clonado com sucesso!'),
-          content: Text('O comando vermelho agradece.'),
-          actions: [
-            TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text('Ok')),
-          ],
-        );
-      },
+      type: CoolAlertType.success,
+      title: 'Cartão cadastrado',
+      text: 'Seu cartão foi cadastrado com sucesso!',
+      confirmBtnColor: mainColor,
+      onConfirmBtnTap: (){
+        Navigator.pop(context);
+        Navigator.pop(context);
+      }
     );
   }
 
   void _fakeCC() {
-    showDialog(
+    CoolAlert.show(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Essa porra ai é falsa!'),
-          content: Text('Tente novamente'),
-          actions: [
-            TextButton(
-                onPressed: () {
-                  cleanText();
-                  Navigator.of(context).pop();
-                },
-                child: Text('Ok')),
-          ],
-        );
-      },
+      type: CoolAlertType.error,
+      title: 'Erro ao cadastrar',
+      text: 'Verifique os dados do cartão',
+      confirmBtnColor: mainColor,
+      onConfirmBtnTap: (){
+        cleanText();
+        Navigator.of(context).pop();
+      }
     );
   }
 
@@ -117,6 +183,9 @@ class _FormCartaoState extends State<FormCartao>
   @override
   void initState(){
     super.initState();
+
+    setCardNumbers();
+
     _flipAnimationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 350));
     _flipAnimation =
@@ -139,15 +208,8 @@ class _FormCartaoState extends State<FormCartao>
         corTextoCartao = textSecondaryColor;
       } else {
         _cardNumber = _txtNumCard.text;
-        String cardCarrier = getInitials(_cardNumber);
         corTextoCartao = Colors.white;
-        if (cardCarrier == '4') {
-          corCartao = Color(0xff0855A3);
-          imgCard = 'images/visa.png';
-        } else {
-          corCartao = Color(0xffFF5100);
-          imgCard = 'images/mastercard.png';
-        }
+        setCardColor();
       }
       setState(() {});
     });
@@ -197,9 +259,9 @@ class _FormCartaoState extends State<FormCartao>
               size: 50,
             ),
           ),
-          title: const Text(
-            'Adicionar cartão de crédito',
-            style: TextStyle(
+          title: Text(
+            widget.card == null ? 'Adicionar cartão de crédito' : 'Editar cartão de crédito',
+            style: const TextStyle(
                 color: mainTextColor,
                 fontSize: 20,
                 fontWeight: FontWeight.bold),
@@ -303,7 +365,11 @@ class _FormCartaoState extends State<FormCartao>
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              simpleButton(175, 55, 'Adicionar', addCreditCard, 25, 20, mainColor),
+              simpleButton(175, 55,
+                  widget.card == null ? 'Adicionar' : 'Salvar',
+                  widget.card == null ? addCreditCard : updateCreditCard,
+                  25, 20, mainColor
+              ),
               simpleButton(175, 55, 'Limpar', cleanText, 25, 20, redButtonColor),
             ],
           ),
