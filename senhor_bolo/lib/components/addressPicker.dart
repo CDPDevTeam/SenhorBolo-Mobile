@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:senhor_bolo/classes/order.dart';
 import 'package:senhor_bolo/components/widgets/simpleButton.dart';
 import 'package:senhor_bolo/model/address.dart';
 import 'package:senhor_bolo/services/addressService.dart';
@@ -12,9 +13,9 @@ class AddressPicker extends StatefulWidget {
 }
 
 class _AddressPickerState extends State<AddressPicker> {
-
-  late Future<List<Address>> listaendereco;
-  int addressIndex = 0;
+  AddressService endereco = AddressService();
+  Future<List<Address>>? listaendereco;
+  late int addressIndex = 0;
 
   _addAddress() {
     Navigator.pushNamed(context, 'addAddress');
@@ -23,7 +24,7 @@ class _AddressPickerState extends State<AddressPicker> {
   @override
   void initState() {
     super.initState();
-    listaendereco = AddressService().getAll();
+    listaendereco = endereco.getAll();
   }
 
   @override
@@ -55,7 +56,7 @@ class _AddressPickerState extends State<AddressPicker> {
           Container(
             width: double.infinity,
             height: 55,
-            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 14),
+            padding: EdgeInsets.symmetric(vertical: 4, horizontal: 14),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(defaultButtonRadius),
@@ -82,11 +83,10 @@ class _AddressPickerState extends State<AddressPicker> {
                       itemCount: snapshot.data!.length,
                       physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
-
-                        Address endereco = snapshot.data![index];
                         return GestureDetector(
                           onTap: () => setState(() {
                             addressIndex = index;
+                            Order.orderAddress = snapshot.data![index].id;
                           }),
                           child: AnimatedContainer(
                             duration: const Duration(milliseconds: 300),
@@ -97,7 +97,7 @@ class _AddressPickerState extends State<AddressPicker> {
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius:
-                                BorderRadius.circular(defaultButtonRadius),
+                                    BorderRadius.circular(defaultButtonRadius),
                                 border: addressIndex == index
                                     ? Border.all(color: mainColor, width: 2)
                                     : null),
@@ -109,20 +109,18 @@ class _AddressPickerState extends State<AddressPicker> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      '${endereco.rua}, ${endereco.num}',
+                                      '${snapshot.data![index].rua}, ${snapshot.data![index].num}',
                                       style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold),
                                     ),
                                     Text(
-                                      endereco.bairro,
+                                      '${snapshot.data![index].bairro}',
                                       style: const TextStyle(fontSize: 15),
                                     ),
                                     const SizedBox(height: 10),
                                     Text(
-                                      endereco.observacao != null
-                                          ? 'Sem observação'
-                                          : '${endereco.observacao}',
+                                      '${snapshot.data?[index].observacao}',
                                       style: const TextStyle(
                                           fontSize: 12,
                                           color: textSecondaryColor),
@@ -152,14 +150,15 @@ class _AddressPickerState extends State<AddressPicker> {
                         );
                       },
                       separatorBuilder: (context, index) =>
-                      const SizedBox(height: 10));
+                          const SizedBox(height: 10));
                 } else if (snapshot.hasError) {
                   print('${snapshot.error}');
                   Text('${snapshot.error}');
                   return Text('${snapshot.error}');
-                } else if (snapshot.data == null){
                 }
-                return Center(child: CircularProgressIndicator());
+                return Expanded(
+                  child: Center(child: CircularProgressIndicator()),
+                );
               }),
           const SizedBox(height: 15),
           simpleButton(242, 50, 'Adicionar endereço', _addAddress,

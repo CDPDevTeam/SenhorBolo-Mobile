@@ -8,9 +8,7 @@ import 'package:senhor_bolo/components/widgets/simpleButton.dart';
 import 'package:senhor_bolo/constants.dart';
 import 'package:senhor_bolo/model/address.dart';
 import 'package:senhor_bolo/model/cake.dart';
-import 'package:senhor_bolo/model/creditcard.dart';
 import 'package:senhor_bolo/services/addressService.dart';
-import 'package:senhor_bolo/services/creditcardService.dart';
 
 class Checkout extends StatefulWidget {
   const Checkout({Key? key}) : super(key: key);
@@ -22,7 +20,14 @@ class Checkout extends StatefulWidget {
 class _CheckoutState extends State<Checkout> {
   Completer<GoogleMapController> _controller = Completer();
   bool _delivery = true;
+  AddressService endereco = AddressService();
+  Future<List<Address>>? listaendereco;
 
+  @override
+  void initState() {
+    super.initState();
+    listaendereco = endereco.getAll();
+  }
   Set<Marker> _markers = {
     Marker(
         markerId: MarkerId('userLocation'),
@@ -58,8 +63,9 @@ class _CheckoutState extends State<Checkout> {
     )));
   }
 
-  String _selectedAddress = 'Rua humaíta, 582';
-  String _selectedAddressInfo = 'Tome cuidado com os mendigos';
+  String _selectedAddress = 'Humaita rua';
+  String _selectedAddressNum = '22';
+  String? _selectedAddressInfo = 'Tome cuidado com os mendigos';
 
   Text _ccNumberText = Text(
     'Método de pagamento',
@@ -115,10 +121,6 @@ class _CheckoutState extends State<Checkout> {
       Navigator.pushReplacementNamed(context, 'orderConfirmed');
     });
   }
-
-  List<String> teste = [
-
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -302,7 +304,8 @@ class _CheckoutState extends State<Checkout> {
               ).then((addressInfo){
                 setState(() {
                   _selectedAddress = addressInfo[0];
-                  _selectedAddressInfo = addressInfo[1];
+                  _selectedAddressNum = addressInfo[1];
+                  _selectedAddressInfo = addressInfo[2];
                 });
               }),
               child: Container(
@@ -335,7 +338,7 @@ class _CheckoutState extends State<Checkout> {
                                   fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              _selectedAddressInfo,
+                              '${_selectedAddressInfo}',
                               style:
                               TextStyle(color: textSecondaryColor, fontSize: 10),
                             )
@@ -527,6 +530,15 @@ class _SelectAddressState extends State<SelectAddress> {
 
   @override
   Widget build(BuildContext context) {
+    List<String> _enderecos = [
+      'Rua valê do Cariri, 276',
+      'Rua humaíta, 582'
+    ];
+
+    List<String> _infoAdicionais = [
+      'Tomar cuidado com os nóias',
+      'Tomar cuidado com os mendigos'
+    ];
 
     late List<String?> addressInfo = [];
 
@@ -535,131 +547,127 @@ class _SelectAddressState extends State<SelectAddress> {
         child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
             child: Column(
-                children: [
-                  const Text(
-                    'Selecione o endereço de entrega',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+              children: [
+                const Text(
+                  'Selecione o endereço de entrega',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
                   ),
-                  const SizedBox(height: 20),
-                  FutureBuilder<List<Address>>(
-                      future: listaendereco,
-                      builder: (context, snapshot){
-                        if (snapshot.hasData){
-                          return ListView.separated(
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              itemCount: snapshot.data!.length,
-                              separatorBuilder: (BuildContext context, int index) {
-                                return const SizedBox(height: 10);
-                              },
-                              itemBuilder: (context, index) {
-
-                                Address endereco = snapshot.data![index];
-
-                                return SizedBox(
-                                    height: 69,
-                                    child: OutlinedButton(
-                                      style: OutlinedButton.styleFrom(
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(10)
-                                          )
-                                      ),
-                                      onPressed: () => Navigator.pop(
-                                          context,
-                                          addressInfo = [snapshot.data![index].rua, snapshot.data![index].num, snapshot.data![index].observacao]
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          Wrap(
-                                            children: [
-                                              const Icon(
-                                                Icons.home,
-                                                color: Colors.black,
-                                                size: 29,
-                                              ),
-                                              SizedBox(width: 10),
-                                              Wrap(
-                                                direction: Axis.vertical,
-                                                children: [
-                                                  Text(
-                                                    '${endereco.rua}, ${endereco.num}',
-                                                    overflow: TextOverflow.fade,
-                                                    style: TextStyle(
-                                                        color: textSecondaryColor,
-                                                        fontSize: 16,
-                                                        fontWeight: FontWeight.bold),
-                                                  ),
-                                                  Text(
-                                                    endereco.observacao != null
-                                                        ? 'Sem observação'
-                                                        : '${endereco.observacao}',
-                                                    overflow: TextOverflow.fade,
-                                                    style: TextStyle(
-                                                        color: textSecondaryColor,
-                                                        fontSize: 12),
-                                                  )
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                          IconButton(
-                                            onPressed: () {
-                                            },
-                                            icon: const Icon(
-                                              Icons.edit,
+                ),
+                const SizedBox(height: 20),
+                FutureBuilder<List<Address>>(
+                    future: listaendereco,
+                    builder: (context, snapshot){
+                      if (snapshot.hasData){
+                        return ListView.separated(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: snapshot.data!.length,
+                            separatorBuilder: (BuildContext context, int index) {
+                              return const SizedBox(height: 10);
+                            },
+                            itemBuilder: (context, index) {
+                              return SizedBox(
+                                  height: 69,
+                                  child: OutlinedButton(
+                                    style: OutlinedButton.styleFrom(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(10)
+                                        )
+                                    ),
+                                    onPressed: () => Navigator.pop(
+                                        context,
+                                        addressInfo = [snapshot.data![index].rua, snapshot.data![index].num, snapshot.data![index].observacao]
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Wrap(
+                                          children: [
+                                            const Icon(
+                                              Icons.home,
                                               color: Colors.black,
-                                              size: 22,
+                                              size: 29,
                                             ),
-                                          )
-                                        ],
-                                      ),
-                                    )
-                                );
-                              }
-                          );
-                        }else if (snapshot.hasError){
-                          print('${snapshot.error}');
-                          Text('${snapshot.error}');
-                          return Text('${snapshot.error}');
-                        }
-                        return Expanded(
-                          child: Center(child: CircularProgressIndicator()),
+                                            SizedBox(width: 10),
+                                            Wrap(
+                                              direction: Axis.vertical,
+                                              children: [
+                                                Text(
+                                                  '${snapshot.data![index].rua}, ${snapshot.data![index].num}',
+                                                  overflow: TextOverflow.fade,
+                                                  style: TextStyle(
+                                                      color: textSecondaryColor,
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.bold),
+                                                ),
+                                                Text(
+                                                  '${snapshot.data?[index].observacao}',
+                                                    overflow: TextOverflow.fade,
+                                                  style: TextStyle(
+                                                      color: textSecondaryColor,
+                                                      fontSize: 12),
+                                                )
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        IconButton(
+                                          onPressed: () {
+                                            print(_enderecos[index] +
+                                                ' foi selecionado para edição!');
+                                          },
+                                          icon: const Icon(
+                                            Icons.edit,
+                                            color: Colors.black,
+                                            size: 22,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  )
+                              );
+                            }
                         );
-
+                      }else if (snapshot.hasError){
+                        print('${snapshot.error}');
+                        Text('${snapshot.error}');
+                        return Text('${snapshot.error}');
                       }
-                  ),
+                      return Expanded(
+                        child: Center(child: CircularProgressIndicator()),
+                      );
 
-                  const SizedBox(height: 10),
-                  OutlinedButton.icon(
-                    style: OutlinedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        )
-                    ),
-                    onPressed: () {
-                      print('Adicionar endereço');
-                    },
-                    icon: const Icon(
-                      Icons.add,
-                    ),
-                    label: const Text(
+                    }
+                ),
+
+                const SizedBox(height: 10),
+                OutlinedButton.icon(
+                  style: OutlinedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)
+                      )
+                  ),
+                  onPressed: () {
+                    print('Adicionar endereço');
+                  },
+                  icon: const Icon(
+                    Icons.add,
+                  ),
+                  label: const Text(
                       'Adicionar endereço',
-                      style: TextStyle(
-                      ),
+                    style: TextStyle(
                     ),
-                  )
-                ]
-            )
+                  ),
+                )
+            ]
+          )
         )
     );
   }
 }
-
 
 class SelectCard extends StatefulWidget {
   const SelectCard({Key? key}) : super(key: key);
@@ -670,15 +678,21 @@ class SelectCard extends StatefulWidget {
 
 class _SelectCardState extends State<SelectCard> {
 
-  late Future<List<CreditCard>> creditcards;
+  List<int> _creditCards = [
+    1049,
+    2103,
+    4642
+  ];
 
-  late List<String> teste;
+  List<String> _ccCarrier = [
+    'Visa',
+    'Mastercard',
+    'Visa'
+  ];
 
-  @override
-  void initState() {
-    super.initState();
-    creditcards = CreditcardService.instance.selectAll();
-  }
+  List<String> teste = [
+
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -686,7 +700,7 @@ class _SelectCardState extends State<SelectCard> {
       height: 379,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-        child: ListView(
+        child: Column(
           children: [
             const Text(
               'Selecione seu método de pagamento',
@@ -696,63 +710,40 @@ class _SelectCardState extends State<SelectCard> {
               ),
             ),
             const SizedBox(height: 20),
-            FutureBuilder<List<CreditCard>>(
-              future: creditcards,
-              builder: (context, snapshot) {
-                if(snapshot.hasData){
-                  return ListView.separated(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: snapshot.data!.length,
-                    itemBuilder: (context, index){
-
-                      CreditCard card = CreditCard(
-                          num: snapshot.data![index].num,
-                          name: snapshot.data![index].name,
-                          expDate: snapshot.data![index].expDate,
-                          cvv: snapshot.data![index].cvv,
-                          carrier: snapshot.data![index].carrier
-                      );
-
-                      String cardNumber = card.num.toString();
-
-                      return SizedBox(
-                          height: 46,
-                          child: OutlinedButton.icon(
-                              style: OutlinedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10)
-                                  )
-                              ),
-                              onPressed: () {
-                                Order.creditCard = card;
-                                Navigator.pop(context);
-                              },
-                              icon: FaIcon(
-                                card.carrier == 'Visa' ? FontAwesomeIcons.ccVisa : FontAwesomeIcons.ccMastercard,
-                                size: 35,
-                                color: card.carrier == 'Visa' ? Colors.blueAccent : Colors.deepOrange,
-                              ),
-                              label: Text(
-                                cardNumber.substring(12, 16),
-                                style: TextStyle(
-                                    fontFamily: 'Montserrat',
-                                    fontSize: 17,
-                                    color: Colors.black
-                                ),
-                              )
-                          ));
-                    },
-                    separatorBuilder: (BuildContext context, int index) {
-                      return const SizedBox(height: 10);
-                    },
-                  );
-                } else if (snapshot.hasError) {
-                    return Text('${snapshot.error}');
-                }
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
+            ListView.separated(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: _creditCards.length,
+                itemBuilder: (context, index){
+                  return SizedBox(
+                      height: 46,
+                      child: OutlinedButton.icon(
+                        style: OutlinedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)
+                            )
+                        ),
+                        onPressed: () => Navigator.pop(
+                            context,
+                            teste = [_creditCards[index].toString(), _ccCarrier[index]]
+                        ),
+                        icon: FaIcon(
+                          _ccCarrier[index] == 'Visa' ? FontAwesomeIcons.ccVisa : FontAwesomeIcons.ccMastercard,
+                          size: 35,
+                          color: _ccCarrier[index] == 'Visa' ? Colors.blueAccent : Colors.deepOrange,
+                        ),
+                        label: Text(
+                          _creditCards[index].toString(),
+                          style: TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontSize: 17,
+                            color: Colors.black
+                          ),
+                      )
+                  ));
+                },
+              separatorBuilder: (BuildContext context, int index) {
+                  return const SizedBox(height: 10);
               },
             ),
             const SizedBox(height: 10),
