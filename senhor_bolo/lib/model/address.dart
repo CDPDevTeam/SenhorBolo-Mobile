@@ -24,8 +24,8 @@ class Address{
         bairro: json['bairro'] as String,
         num: json['numero'] as String,
         cep: json['cep'] as String,
-        complemento: json['complemento'] as String,
-        observacao: json['observacao'] as String,
+        complemento: json['complemento'] as String?,
+        observacao: json['observacao'] as String?,
     );
 
   }

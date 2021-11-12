@@ -250,6 +250,7 @@ class _UserProfileState extends State<UserProfile> {
                                         snapshot.data![index].cep);
                                   }));
                         } else if (snapshot.hasError) {
+                          print('${snapshot.error}');
                           return Text('${snapshot.error}');
                         }
                         return Expanded(

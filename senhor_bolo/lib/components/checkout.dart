@@ -2,10 +2,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:senhor_bolo/classes/order.dart';
 import 'package:senhor_bolo/classes/shoppingCart.dart';
 import 'package:senhor_bolo/components/widgets/simpleButton.dart';
 import 'package:senhor_bolo/constants.dart';
+import 'package:senhor_bolo/model/address.dart';
 import 'package:senhor_bolo/model/cake.dart';
+import 'package:senhor_bolo/services/addressService.dart';
 
 class Checkout extends StatefulWidget {
   const Checkout({Key? key}) : super(key: key);
@@ -17,7 +20,14 @@ class Checkout extends StatefulWidget {
 class _CheckoutState extends State<Checkout> {
   Completer<GoogleMapController> _controller = Completer();
   bool _delivery = true;
+  AddressService endereco = AddressService();
+  Future<List<Address>>? listaendereco;
 
+  @override
+  void initState() {
+    super.initState();
+    listaendereco = endereco.getAll();
+  }
   Set<Marker> _markers = {
     Marker(
         markerId: MarkerId('userLocation'),
@@ -53,8 +63,9 @@ class _CheckoutState extends State<Checkout> {
     )));
   }
 
-  String _selectedAddress = 'Rua humaíta, 582';
-  String _selectedAddressInfo = 'Tome cuidado com os mendigos';
+  String _selectedAddress = 'Humaita rua';
+  String _selectedAddressNum = '22';
+  String? _selectedAddressInfo = 'Tome cuidado com os mendigos';
 
   Text _ccNumberText = Text(
     'Método de pagamento',
@@ -293,7 +304,8 @@ class _CheckoutState extends State<Checkout> {
               ).then((addressInfo){
                 setState(() {
                   _selectedAddress = addressInfo[0];
-                  _selectedAddressInfo = addressInfo[1];
+                  _selectedAddressNum = addressInfo[1];
+                  _selectedAddressInfo = addressInfo[2];
                 });
               }),
               child: Container(
@@ -326,7 +338,7 @@ class _CheckoutState extends State<Checkout> {
                                   fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              _selectedAddressInfo,
+                              '${_selectedAddressInfo}',
                               style:
                               TextStyle(color: textSecondaryColor, fontSize: 10),
                             )
@@ -507,9 +519,17 @@ class SelectAddress extends StatefulWidget {
 }
 
 class _SelectAddressState extends State<SelectAddress> {
+  AddressService endereco = AddressService();
+  Future<List<Address>>? listaendereco;
+
+  @override
+  void initState() {
+    super.initState();
+    listaendereco = endereco.getAll();
+  }
+
   @override
   Widget build(BuildContext context) {
-
     List<String> _enderecos = [
       'Rua valê do Cariri, 276',
       'Rua humaíta, 582'
@@ -520,7 +540,7 @@ class _SelectAddressState extends State<SelectAddress> {
       'Tomar cuidado com os mendigos'
     ];
 
-    late List<String> addressInfo = [];
+    late List<String?> addressInfo = [];
 
     return Container(
         height: 379,
@@ -536,75 +556,93 @@ class _SelectAddressState extends State<SelectAddress> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                ListView.separated(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: _enderecos.length,
-                  separatorBuilder: (BuildContext context, int index) {
-                    return const SizedBox(height: 10);
-                  },
-                  itemBuilder: (context, index) {
-                    return SizedBox(
-                        height: 69,
-                        child: OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10)
-                              )
-                          ),
-                          onPressed: () => Navigator.pop(
-                              context,
-                              addressInfo = [_enderecos[index], _infoAdicionais[index]]
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Wrap(
-                                children: [
-                                  const Icon(
-                                    Icons.home,
-                                    color: Colors.black,
-                                    size: 29,
-                                  ),
-                                  SizedBox(width: 10),
-                                  Wrap(
-                                    direction: Axis.vertical,
-                                    children: [
-                                      Text(
-                                        _enderecos[index],
-                                        style: TextStyle(
-                                            color: textSecondaryColor,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                        _infoAdicionais[index],
-                                        style: TextStyle(
-                                            color: textSecondaryColor,
-                                            fontSize: 12),
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  print(_enderecos[index] +
-                                      ' foi selecionado para edição!');
-                                },
-                                icon: const Icon(
-                                  Icons.edit,
-                                  color: Colors.black,
-                                  size: 22,
-                                ),
-                              )
-                            ],
-                          ),
-                        )
-                    );
-                  }
-            ),
+                FutureBuilder<List<Address>>(
+                    future: listaendereco,
+                    builder: (context, snapshot){
+                      if (snapshot.hasData){
+                        return ListView.separated(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: snapshot.data!.length,
+                            separatorBuilder: (BuildContext context, int index) {
+                              return const SizedBox(height: 10);
+                            },
+                            itemBuilder: (context, index) {
+                              return SizedBox(
+                                  height: 69,
+                                  child: OutlinedButton(
+                                    style: OutlinedButton.styleFrom(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(10)
+                                        )
+                                    ),
+                                    onPressed: () => Navigator.pop(
+                                        context,
+                                        addressInfo = [snapshot.data![index].rua, snapshot.data![index].num, snapshot.data![index].observacao]
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Wrap(
+                                          children: [
+                                            const Icon(
+                                              Icons.home,
+                                              color: Colors.black,
+                                              size: 29,
+                                            ),
+                                            SizedBox(width: 10),
+                                            Wrap(
+                                              direction: Axis.vertical,
+                                              children: [
+                                                Text(
+                                                  '${snapshot.data![index].rua}, ${snapshot.data![index].num}',
+                                                  overflow: TextOverflow.fade,
+                                                  style: TextStyle(
+                                                      color: textSecondaryColor,
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.bold),
+                                                ),
+                                                Text(
+                                                  '${snapshot.data?[index].observacao}',
+                                                    overflow: TextOverflow.fade,
+                                                  style: TextStyle(
+                                                      color: textSecondaryColor,
+                                                      fontSize: 12),
+                                                )
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        IconButton(
+                                          onPressed: () {
+                                            print(_enderecos[index] +
+                                                ' foi selecionado para edição!');
+                                          },
+                                          icon: const Icon(
+                                            Icons.edit,
+                                            color: Colors.black,
+                                            size: 22,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  )
+                              );
+                            }
+                        );
+                      }else if (snapshot.hasError){
+                        print('${snapshot.error}');
+                        Text('${snapshot.error}');
+                        return Text('${snapshot.error}');
+                      }
+                      return Expanded(
+                        child: Center(child: CircularProgressIndicator()),
+                      );
+
+                    }
+                ),
+
                 const SizedBox(height: 10),
                 OutlinedButton.icon(
                   style: OutlinedButton.styleFrom(
