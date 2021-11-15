@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:senhor_bolo/classes/order.dart';
 import 'package:senhor_bolo/classes/shoppingCart.dart';
+import 'package:senhor_bolo/components/updateAddress.dart';
 import 'package:senhor_bolo/components/widgets/simpleButton.dart';
 import 'package:senhor_bolo/constants.dart';
 import 'package:senhor_bolo/model/address.dart';
@@ -519,6 +520,12 @@ class _SelectAddressState extends State<SelectAddress> {
   AddressService endereco = AddressService();
   Future<List<Address>>? listaendereco;
 
+
+  void _editAddress(Address endereco){
+    Navigator.push(context, MaterialPageRoute(
+        builder: (context) => UpdateAddress(endereco: endereco)
+    ));
+  }
   @override
   void initState() {
     super.initState();
@@ -567,10 +574,25 @@ class _SelectAddressState extends State<SelectAddress> {
                                               borderRadius: BorderRadius.circular(10)
                                           )
                                       ),
-                                      onPressed: () => Navigator.pop(
-                                          context,
-                                          addressInfo = [snapshot.data![index].rua, snapshot.data![index].num, snapshot.data![index].observacao]
-                                      ),
+                                      onPressed: (){
+                                        if (snapshot.data?[index].observacao == null || snapshot.data?[index].observacao == ''){
+                                          Navigator.pop(
+                                              context,
+                                              addressInfo = ['${snapshot.data![index].rua}, ${snapshot.data![index].num}',
+                                                'Sem observação'
+                                              ]
+                                          );
+                                        } else {
+                                          Navigator.pop(
+                                              context,
+                                              addressInfo = ['${snapshot.data![index].rua}, ${snapshot.data![index].num}',
+                                                snapshot.data![index].observacao
+                                              ]
+                                          );
+                                        }
+
+
+                                      },
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -596,8 +618,8 @@ class _SelectAddressState extends State<SelectAddress> {
                                                   ),
                                                   Text(
                                                     endereco.observacao != null
-                                                        ? 'Sem observação'
-                                                        : '${endereco.observacao}',
+                                                        ? '${endereco.observacao}'
+                                                        : 'Sem observação',
                                                     overflow: TextOverflow.fade,
                                                     style: TextStyle(
                                                         color: textSecondaryColor,
@@ -609,6 +631,7 @@ class _SelectAddressState extends State<SelectAddress> {
                                           ),
                                           IconButton(
                                             onPressed: () {
+                                              _editAddress(endereco);
                                             },
                                             icon: const Icon(
                                               Icons.edit,

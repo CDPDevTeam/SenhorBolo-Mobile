@@ -52,21 +52,22 @@ class _UserProfileState extends State<UserProfile> {
 
   void _editCard(CreditCard card){
     Navigator.push(context, MaterialPageRoute(
-      builder: (context) => FormCartao(
-        card: card,
-      )
+        builder: (context) => FormCartao(
+          card: card,
+        )
     ));
   }
 
-  void _editAddress(){
+  void _editAddress(Address endereco){
     Navigator.push(context, MaterialPageRoute(
-        builder: (context) => UpdateAddress()
+        builder: (context) => UpdateAddress(endereco: endereco)
     ));
   }
-  
+
+
   void _deleteCard(CreditCard card) async{
     CoolAlert.show(
-        context: context, 
+        context: context,
         type: CoolAlertType.confirm,
         title: 'Deseja deletar esse cartão?',
         cancelBtnText: 'Cancelar',
@@ -95,195 +96,195 @@ class _UserProfileState extends State<UserProfile> {
           elevation: 0,
           toolbarHeight: 88,
           leading: IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: const Icon(
-              Icons.keyboard_arrow_left,
-              color: Colors.white,
-              size: 50,
-            )
+              onPressed: () => Navigator.pop(context),
+              icon: const Icon(
+                Icons.keyboard_arrow_left,
+                color: Colors.white,
+                size: 50,
+              )
           )
       ),
       body: ListView(
-          children: [
-            Container(
-              width: size.width,
-              height: 370,
-              decoration: const BoxDecoration(
-                  color: Color(0xffE6E6E6),
-                  borderRadius: BorderRadius.only(
-                    bottomRight: Radius.circular(25),
-                    bottomLeft: Radius.circular(25),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color(0x33000000),
-                      offset: Offset(0, 2.0),
-                      blurRadius: 4.0,
-                    )
-                  ]),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: size.width,
-                    height: 220,
-                    decoration: const BoxDecoration(
-                      color: mainColor,
-                      borderRadius: BorderRadius.only(
-                        bottomRight: Radius.circular(25),
-                        bottomLeft: Radius.circular(25),
-                      ),
+        children: [
+          Container(
+            width: size.width,
+            height: 370,
+            decoration: const BoxDecoration(
+                color: Color(0xffE6E6E6),
+                borderRadius: BorderRadius.only(
+                  bottomRight: Radius.circular(25),
+                  bottomLeft: Radius.circular(25),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0x33000000),
+                    offset: Offset(0, 2.0),
+                    blurRadius: 4.0,
+                  )
+                ]),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: size.width,
+                  height: 220,
+                  decoration: const BoxDecoration(
+                    color: mainColor,
+                    borderRadius: BorderRadius.only(
+                      bottomRight: Radius.circular(25),
+                      bottomLeft: Radius.circular(25),
                     ),
-                    child: Column(
-                      children: [
-                        Stack(
-                          alignment: Alignment.bottomRight,
-                          children: [
-                            CachedNetworkImage(
-                                imageUrl: 'https://thespacefox.github.io/SenhorBolo-Imagens/images/usuario/${User.image}',
-                                imageBuilder: (context, imageProvider) => Container(
-                                  width: 156,
-                                  height: 156,
-                                  decoration:  BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: DecorationImage(
-                                          image: imageProvider,
-                                          fit: BoxFit.fitWidth)),
-                                )
+                  ),
+                  child: Column(
+                    children: [
+                      Stack(
+                        alignment: Alignment.bottomRight,
+                        children: [
+                          CachedNetworkImage(
+                              imageUrl: 'https://thespacefox.github.io/SenhorBolo-Imagens/images/usuario/${User.image}',
+                              imageBuilder: (context, imageProvider) => Container(
+                                width: 156,
+                                height: 156,
+                                decoration:  BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                        image: imageProvider,
+                                        fit: BoxFit.fitWidth)),
+                              )
+                          ),
+                          Container(
+                            decoration: const ShapeDecoration(
+                              shape: CircleBorder(),
+                              color: Colors.white,
                             ),
-                            Container(
-                              decoration: const ShapeDecoration(
-                                shape: CircleBorder(),
+                            child: IconButton(
                                 color: Colors.white,
-                              ),
-                              child: IconButton(
-                                  color: Colors.white,
-                                  onPressed: () {},
-                                  icon: const Icon(
-                                    Icons.edit,
-                                    size: 30,
-                                    color: mainColor,
-                                  )),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 15),
-                        Text(
-                          User.username,
-                          style: const TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold,
-                              color: mainTextColor),
-                        )
-                      ],
+                                onPressed: () {},
+                                icon: const Icon(
+                                  Icons.edit,
+                                  size: 30,
+                                  color: mainColor,
+                                )),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 15),
+                      Text(
+                        User.username,
+                        style: const TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: mainTextColor),
+                      )
+                    ],
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.email,
+                      color: Color(0xff707070),
                     ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        Icons.email,
-                        color: Color(0xff707070),
-                      ),
-                      const SizedBox(width: 10),
-                      Text(
-                        User.email,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: const TextStyle(fontSize: 15, color: Color(0xff707070)),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        Icons.pin,
-                        color: Color(0xff707070),
-                      ),
-                      const SizedBox(width: 10),
-                      Text(
-                        User.cpf,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: const TextStyle(fontSize: 15, color: Color(0xff707070)),
-                      ),
-                    ],
-                  ),
-                  simpleButton(
-                      127, 41, 'Editar', _updateUser, 10, 17, Color(0xff707070)),
-                  const SizedBox(height: 10)
-                ],
-              ),
+                    const SizedBox(width: 10),
+                    Text(
+                      User.email,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: const TextStyle(fontSize: 15, color: Color(0xff707070)),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.pin,
+                      color: Color(0xff707070),
+                    ),
+                    const SizedBox(width: 10),
+                    Text(
+                      User.cpf,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: const TextStyle(fontSize: 15, color: Color(0xff707070)),
+                    ),
+                  ],
+                ),
+                simpleButton(
+                    127, 41, 'Editar', _updateUser, 10, 17, Color(0xff707070)),
+                const SizedBox(height: 10)
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20, top: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Métodos de Pagamento',
-                    style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                        color: textSecondaryColor),
-                  ),
-                  Container(
-                    height: 80,
-                    child: Row(
-                      children: [
-                        Card(
-                          color: Color(0xff818181),
-                          shape: const RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10))),
-                          child: InkWell(
-                            borderRadius: const BorderRadius.all(Radius.circular(10)),
-                            splashColor: cardTextColor,
-                            onTap: () => Navigator.pushNamed(context, 'addCreditCard'),
-                            child: Container(
-                              height: 64,
-                              width: 64,
-                              child: const Icon(
-                                Icons.add,
-                                color: mainTextColor,
-                                size: 40,
-                              ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 20, top: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Métodos de Pagamento',
+                  style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                      color: textSecondaryColor),
+                ),
+                Container(
+                  height: 80,
+                  child: Row(
+                    children: [
+                      Card(
+                        color: Color(0xff818181),
+                        shape: const RoundedRectangleBorder(
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(10))),
+                        child: InkWell(
+                          borderRadius: const BorderRadius.all(Radius.circular(10)),
+                          splashColor: cardTextColor,
+                          onTap: () => Navigator.pushNamed(context, 'addCreditCard'),
+                          child: Container(
+                            height: 64,
+                            width: 64,
+                            child: const Icon(
+                              Icons.add,
+                              color: mainTextColor,
+                              size: 40,
                             ),
                           ),
                         ),
-                        FutureBuilder<List<CreditCard>>(
-                          future: creditcards,
-                          builder: (context, snapshot){
-                            if(snapshot.hasData){
-                              if(snapshot.data!.length != 0){
-                                return Expanded(
-                                    child: ListView.builder(
-                                        physics: BouncingScrollPhysics(),
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount: snapshot.data!.length,
-                                        itemBuilder: (context, index) {
+                      ),
+                      FutureBuilder<List<CreditCard>>(
+                        future: creditcards,
+                        builder: (context, snapshot){
+                          if(snapshot.hasData){
+                            if(snapshot.data!.length != 0){
+                              return Expanded(
+                                  child: ListView.builder(
+                                      physics: BouncingScrollPhysics(),
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: snapshot.data!.length,
+                                      itemBuilder: (context, index) {
 
-                                          CreditCard card = CreditCard(
-                                              num: snapshot.data![index].num,
-                                              name: snapshot.data![index].name,
-                                              expDate: snapshot.data![index].expDate,
-                                              cvv: snapshot.data![index].cvv,
-                                              carrier: snapshot.data![index].carrier
-                                          );
+                                        CreditCard card = CreditCard(
+                                            num: snapshot.data![index].num,
+                                            name: snapshot.data![index].name,
+                                            expDate: snapshot.data![index].expDate,
+                                            cvv: snapshot.data![index].cvv,
+                                            carrier: snapshot.data![index].carrier
+                                        );
 
-                                          String cardNumber = card.num.toString();
+                                        String cardNumber = card.num.toString();
 
-                                          return cardCard(
-                                              cardNumber.substring(12, 16),
-                                              card.carrier,
-                                              () => _editCard(card),
-                                              () => _deleteCard(card)
-                                          );
-                                        })
-                                );
-                              } else {
-                                return Expanded(
+                                        return cardCard(
+                                            cardNumber.substring(12, 16),
+                                            card.carrier,
+                                                () => _editCard(card),
+                                                () => _deleteCard(card)
+                                        );
+                                      })
+                              );
+                            } else {
+                              return Expanded(
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -303,107 +304,119 @@ class _UserProfileState extends State<UserProfile> {
                                       )
                                     ],
                                   )
-                                );
-                              }
-                            } else if (snapshot.hasError) {
-                              return Text('${snapshot.error}');
-                            }
-                            return Expanded(
-                              child: Center(
-                                child: CircularProgressIndicator()
-                              ),
-                            );
-                          },
-                        )
-                      ],
-                    ),
-                  ),
-              const Text(
-                'Endereços',
-                style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                    color: textSecondaryColor),
-              ),
-              Container(
-                height: 80,
-                child: Row(
-                  children: [
-                    Card(
-                      color: Color(0xff818181),
-                      shape: const RoundedRectangleBorder(
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(10))),
-                      child: InkWell(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        splashColor: cardTextColor,
-                        onTap: () =>
-                            Navigator.pushNamed(context, 'addAddress'),
-                        child: Container(
-                          height: 64,
-                          width: 64,
-                          child: const Icon(
-                            Icons.add,
-                            color: mainTextColor,
-                            size: 40,
-                          ),
-                        ),
-                      ),
-                    ),
-                    FutureBuilder<List<Address>>(
-                        future: adresses,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            if(snapshot.data!.isEmpty){
-                              return Expanded(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Text(
-                                        'Sem endereços adicionados',
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold
-                                        ),
-                                      ),
-                                      const Text(
-                                        'Adicione um endereço no botão ao lado',
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            color: textSecondaryColor
-                                        ),
-                                      )
-                                    ],
-                                  )
                               );
-                            } else {
-                              return Expanded(
-                                  child: ListView.builder(
-                                      physics: BouncingScrollPhysics(),
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount: snapshot.data!.length,
-                                      itemBuilder: (context, index) {
-                                        return enderecoBlock(
-                                            snapshot.data![index].rua,
-                                            snapshot.data![index].cep,
-                                            _editAddress
-                                        );
-                                      }));
                             }
-                          } else if (snapshot.hasError){
-                            return Text('${snapshot.error}', style: TextStyle(fontSize: 5),);
+                          } else if (snapshot.hasError) {
+                            return Text('${snapshot.error}');
                           }
                           return Expanded(
-                            child: Center(child: CircularProgressIndicator()),
+                            child: Center(
+                                child: CircularProgressIndicator()
+                            ),
                           );
-                        })
-                  ],
-                )
-              ),
-                ],
-              ),
+                        },
+                      )
+                    ],
+                  ),
+                ),
+                const Text(
+                  'Endereços',
+                  style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                      color: textSecondaryColor),
+                ),
+                Container(
+                    height: 80,
+                    child: Row(
+                      children: [
+                        Card(
+                          color: Color(0xff818181),
+                          shape: const RoundedRectangleBorder(
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(10))),
+                          child: InkWell(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            splashColor: cardTextColor,
+                            onTap: () =>
+                                Navigator.pushNamed(context, 'addAddress'),
+                            child: Container(
+                              height: 64,
+                              width: 64,
+                              child: const Icon(
+                                Icons.add,
+                                color: mainTextColor,
+                                size: 40,
+                              ),
+                            ),
+                          ),
+                        ),
+                        FutureBuilder<List<Address>>(
+                            future: adresses,
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                if(snapshot.data!.isEmpty){
+                                  return Expanded(
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          const Text(
+                                            'Sem endereços adicionados',
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold
+                                            ),
+                                          ),
+                                          const Text(
+                                            'Adicione um endereço no botão ao lado',
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: textSecondaryColor
+                                            ),
+                                          )
+                                        ],
+                                      )
+                                  );
+                                } else {
+                                  return Expanded(
+                                      child: ListView.builder(
+                                          physics: BouncingScrollPhysics(),
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: snapshot.data!.length,
+                                          itemBuilder: (context, index) {
+                                            Address endereco = Address(
+                                                id: snapshot.data![index].id,
+                                                rua: snapshot.data![index].rua,
+                                                bairro: snapshot.data![index].bairro,
+                                                num: snapshot.data![index].num,
+                                                cep: snapshot.data![index].cep,
+                                                complemento: snapshot.data?[index].complemento,
+                                                observacao: snapshot.data?[index].observacao
+
+                                            );
+
+
+                                            return enderecoBlock(
+                                                endereco.rua,
+                                                endereco.cep,
+                                                    () => _editAddress(endereco)
+                                            );
+                                          }));
+                                }
+                              } else if (snapshot.hasError){
+                                return Text('${snapshot.error}', style: TextStyle(fontSize: 5),);
+                              }
+                              return Expanded(
+                                child: Center(child: CircularProgressIndicator()),
+                              );
+                            })
+                      ],
+                    )
+                ),
+              ],
             ),
-          ],
+          ),
+        ],
       ),
       bottomNavigationBar: Container(
         height: size.height * 0.13,
@@ -451,7 +464,7 @@ Widget cardCard(String digit, String issuer, VoidCallback onTap, VoidCallback on
                       style: TextStyle(fontSize: 18, fontFamily: 'Montserrat')
                   ),
                 ],
-            )
+              )
           )
       )
   );

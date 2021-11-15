@@ -121,8 +121,8 @@ class _AddressPickerState extends State<AddressPicker> {
                                     const SizedBox(height: 10),
                                     Text(
                                       endereco.observacao != null
-                                          ? 'Sem observação'
-                                          : '${endereco.observacao}',
+                                          ? '${endereco.observacao}'
+                                          : 'Sem observação',
                                       style: const TextStyle(
                                           fontSize: 12,
                                           color: textSecondaryColor),
