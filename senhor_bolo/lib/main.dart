@@ -1,9 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:senhor_bolo/classes/order.dart';
+import 'package:senhor_bolo/classes/shoppingCart.dart';
 import 'package:senhor_bolo/routes.dart';
 import 'package:senhor_bolo/theme/style.dart';
 
 void main()  {
-  runApp(const BaseWidget());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+        create: (_) => ShoppingCart(),
+      ),
+      ChangeNotifierProvider(
+        create: (_) => Order(),
+      )
+    ],
+    child: const BaseWidget(),
+  ));
 }
 
 class BaseWidget extends StatelessWidget {
@@ -12,10 +25,10 @@ class BaseWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Senhor Bolo',
-      theme: appTheme(),
-      routes: routes,
-      initialRoute: 'userCheck',
+        title: 'Senhor Bolo',
+        theme: appTheme(),
+        routes: routes,
+        initialRoute: 'userCheck',
     );
   }
 }

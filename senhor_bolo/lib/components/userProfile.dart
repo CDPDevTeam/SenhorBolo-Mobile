@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:senhor_bolo/components/creditcard.dart';
@@ -22,15 +23,15 @@ class UserProfile extends StatefulWidget {
 }
 
 class _UserProfileState extends State<UserProfile> {
-  late Future<List<CreditCard>> creditcards;
-  late Future<List<Address>> adresses;
+
+  final _ccStreamController = StreamController<List<CreditCard>>();
+  final _addressStreamController = StreamController<List<Address>>();
 
   void _openSupport() async{
     final email = 'realsenhorbolo@gmail.com';
     final subject = Uri.encodeFull('Preciso de ajuda!');
-    final message = Uri.encodeFull('Me ajuda por favor eu to morrendo me ajuda!');
+    final message = Uri.encodeFull('Me ajuda por favor eu to tendo um derramjhlkrhkehhseuirykajvbffsbjs');
     final url = 'mailto:$email?subject=$subject&body=$message';
-
     if(await canLaunch(url)) {
       await launch(url);
     }
@@ -53,22 +54,19 @@ class _UserProfileState extends State<UserProfile> {
   void _editCard(CreditCard card){
     Navigator.push(context, MaterialPageRoute(
       builder: (context) => FormCartao(
-        card: card,
-      )
-    ));
+        card: card)));
   }
 
-  void _editAddress(){
+  void _editAddress(Address address){
     Navigator.push(context, MaterialPageRoute(
-        builder: (context) => UpdateAddress()
-    ));
+        builder: (context) => UpdateAddress(endereco: address)));
   }
   
   void _deleteCard(CreditCard card) async{
     CoolAlert.show(
         context: context, 
         type: CoolAlertType.confirm,
-        title: 'Deseja deletar esse cartão?',
+        title: 'Deseja apagar esse cartão?',
         cancelBtnText: 'Cancelar',
         confirmBtnText: 'Deletar',
         confirmBtnColor: redButtonColor,
@@ -79,11 +77,36 @@ class _UserProfileState extends State<UserProfile> {
     );
   }
 
+  void _deleteAddress(int id) async {
+    CoolAlert.show(
+        context: context,
+        type: CoolAlertType.confirm,
+        title: 'Deletar esse endereço?',
+        cancelBtnText: 'Cancelar',
+        confirmBtnText: 'Deletar',
+        confirmBtnColor: redButtonColor,
+        onConfirmBtnTap: () async {
+          await AddressService().deleteAddress(id);
+          Navigator.pop(context);
+        }
+    );
+  }
+
+  _loadCreditCards() async {
+    List<CreditCard> creditcards = await CreditcardService.instance.selectAll();
+    _ccStreamController.add(creditcards);
+  }
+
+  _loadAdresses() async {
+    List<Address> adresses = await AddressService().getAll();
+    _addressStreamController.add(adresses);
+  }
+
   @override
   void initState() {
     super.initState();
-    creditcards = CreditcardService.instance.selectAll();
-    adresses = AddressService().getAll();
+    Timer.periodic(Duration(milliseconds: 500), (_) => _loadCreditCards());
+    Timer.periodic(Duration(milliseconds: 900), (_) => _loadAdresses());
   }
 
   @override
@@ -252,8 +275,8 @@ class _UserProfileState extends State<UserProfile> {
                             ),
                           ),
                         ),
-                        FutureBuilder<List<CreditCard>>(
-                          future: creditcards,
+                        StreamBuilder<List<CreditCard>>(
+                          stream: _ccStreamController.stream,
                           builder: (context, snapshot){
                             if(snapshot.hasData){
                               if(snapshot.data!.length != 0){
@@ -264,21 +287,14 @@ class _UserProfileState extends State<UserProfile> {
                                         itemCount: snapshot.data!.length,
                                         itemBuilder: (context, index) {
 
-                                          CreditCard card = CreditCard(
-                                              num: snapshot.data![index].num,
-                                              name: snapshot.data![index].name,
-                                              expDate: snapshot.data![index].expDate,
-                                              cvv: snapshot.data![index].cvv,
-                                              carrier: snapshot.data![index].carrier
-                                          );
-
+                                          CreditCard card = snapshot.data![index];
                                           String cardNumber = card.num.toString();
 
-                                          return cardCard(
-                                              cardNumber.substring(12, 16),
-                                              card.carrier,
-                                              () => _editCard(card),
-                                              () => _deleteCard(card)
+                                          return CCCard(
+                                              digit: cardNumber.substring(12, 16),
+                                              issuer: card.carrier,
+                                              onTap: () => _editCard(card),
+                                              onLongPress: () => _deleteCard(card)
                                           );
                                         })
                                 );
@@ -337,8 +353,7 @@ class _UserProfileState extends State<UserProfile> {
                       child: InkWell(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         splashColor: cardTextColor,
-                        onTap: () =>
-                            Navigator.pushNamed(context, 'addAddress'),
+                        onTap: () => Navigator.pushNamed(context, 'addAddress'),
                         child: Container(
                           height: 64,
                           width: 64,
@@ -350,8 +365,8 @@ class _UserProfileState extends State<UserProfile> {
                         ),
                       ),
                     ),
-                    FutureBuilder<List<Address>>(
-                        future: adresses,
+                    StreamBuilder<List<Address>>(
+                        stream: _addressStreamController.stream,
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             if(snapshot.data!.isEmpty){
@@ -383,10 +398,11 @@ class _UserProfileState extends State<UserProfile> {
                                       scrollDirection: Axis.horizontal,
                                       itemCount: snapshot.data!.length,
                                       itemBuilder: (context, index) {
-                                        return enderecoBlock(
-                                            snapshot.data![index].rua,
-                                            snapshot.data![index].cep,
-                                            _editAddress
+                                        return AddressCard(
+                                            endereco: snapshot.data![index].rua,
+                                            cep: snapshot.data![index].cep,
+                                            onTap: () => _editAddress(snapshot.data![index]),
+                                            onLongPress: () => _deleteAddress(snapshot.data![index].id)
                                         );
                                       }));
                             }
@@ -425,80 +441,115 @@ class _UserProfileState extends State<UserProfile> {
   }
 }
 
-Widget cardCard(String digit, String issuer, VoidCallback onTap, VoidCallback onLongPress) {
-  return Card(
-      color: Color(0xffE6E6E6),
-      shape: RoundedRectangleBorder(
-          borderRadius: const BorderRadius.all(Radius.circular(10))),
-      child: InkWell(
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
-          splashColor: cardTextColor,
-          onTap: onTap,
-          onLongPress: onLongPress,
-          child: SizedBox(
-              height: 54,
-              width: 123,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  FaIcon(
-                    issuer == 'Visa' ? FontAwesomeIcons.ccVisa : FontAwesomeIcons.ccMastercard,
-                    color: issuer == 'Visa' ? Color(0xff0855A3) : Color(0xffFF5F00),
-                    size: 35,
-                  ),
-                  Text(
-                      digit,
-                      style: TextStyle(fontSize: 18, fontFamily: 'Montserrat')
-                  ),
-                ],
-            )
-          )
-      )
-  );
-}
 
-Widget enderecoBlock(String endereco, String cep, VoidCallback onTap) {
-  return Card(
-    shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(10))),
-    color: cardTextColor,
-    child: InkWell(
-      borderRadius: const BorderRadius.all(Radius.circular(10)),
-      onTap: onTap,
-      child: Container(
-        width: 148,
-        padding: const EdgeInsets.all(8),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Icon(
-              Icons.home,
-              size: 40,
-              color: Colors.black54,
-            ),
-            Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+class CCCard extends StatelessWidget {
+
+  final String digit;
+  final String issuer;
+  final VoidCallback onTap;
+  final VoidCallback onLongPress;
+
+  const CCCard({Key? key,
+    required this.digit,
+    required this.issuer,
+    required this.onTap,
+    required this.onLongPress}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+        color: Color(0xffE6E6E6),
+        shape: RoundedRectangleBorder(
+            borderRadius: const BorderRadius.all(Radius.circular(10))),
+        child: InkWell(
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
+            splashColor: cardTextColor,
+            onTap: onTap,
+            onLongPress: onLongPress,
+            child: SizedBox(
+                height: 54,
+                width: 123,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text(
-                      endereco,
-                      maxLines: 2,
-                      overflow: TextOverflow.clip,
-                      style: const TextStyle(
-                          color: Colors.black54, fontWeight: FontWeight.bold),
+                    FaIcon(
+                      issuer == 'Visa' ? FontAwesomeIcons.ccVisa : FontAwesomeIcons.ccMastercard,
+                      color: issuer == 'Visa' ? Color(0xff0855A3) : Color(0xffFF5F00),
+                      size: 35,
                     ),
                     Text(
-                      cep,
-                      style: const TextStyle(color: Colors.black54),
+                        digit,
+                        style: TextStyle(fontSize: 18, fontFamily: 'Montserrat')
                     ),
                   ],
                 )
             )
-          ],
+        )
+    );
+  }
+}
+
+class AddressCard extends StatelessWidget {
+  final String endereco;
+  final String cep;
+  final VoidCallback onTap;
+  final VoidCallback onLongPress;
+
+  const AddressCard({Key? key,
+    required this.endereco,
+    required this.cep,
+    required this.onTap,
+    required this.onLongPress}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10))),
+      color: cardTextColor,
+      child: InkWell(
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        onTap: onTap,
+        onLongPress: onLongPress,
+        child: Container(
+          width: 148,
+          padding: const EdgeInsets.all(8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.home,
+                size: 40,
+                color: Colors.black54,
+              ),
+              Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        endereco,
+                        maxLines: 2,
+                        overflow: TextOverflow.clip,
+                        style: const TextStyle(
+                            color: Colors.black54,
+                            fontWeight: FontWeight.bold
+                        ),
+                      ),
+                      Text(
+                        cep,
+                        style: const TextStyle(
+                          color: Colors.black54,
+                        ),
+                      ),
+                    ],
+                  )
+              )
+            ],
+          ),
         ),
       ),
-    ),
-  );
+    );
+  }
 }

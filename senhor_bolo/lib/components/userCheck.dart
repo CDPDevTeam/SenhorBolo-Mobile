@@ -50,7 +50,7 @@ class _UserCheckState extends State<UserCheck> {
           if (value){
             Navigator.pushReplacementNamed(context, 'homepage');
           } else {
-            Navigator.pushReplacementNamed(context, 'login');
+            Navigator.pushReplacementNamed(context, 'welcomePage');
           }
         });
       } else {

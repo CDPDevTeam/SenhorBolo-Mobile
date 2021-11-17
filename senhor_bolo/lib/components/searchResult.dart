@@ -1,5 +1,9 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:provider/provider.dart';
+import 'package:senhor_bolo/classes/order.dart';
+import 'package:senhor_bolo/classes/shoppingCart.dart';
 import 'package:senhor_bolo/classes/user.dart';
 import 'package:senhor_bolo/components/widgets/produtoHorizontal.dart';
 import 'package:senhor_bolo/components/widgets/shimmerProdutoHorizontal.dart';
@@ -36,10 +40,27 @@ class _SearchResultState extends State<SearchResult> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () => Navigator.pushNamed(context, 'shoppingCart'),
           backgroundColor: mainColor,
-          child: const Icon(Icons.shopping_cart),
+          label: Text(' Carrinho'),
+          icon: Badge(
+            toAnimate: true,
+            animationType: BadgeAnimationType.slide,
+            badgeContent: Consumer<ShoppingCart> (
+              builder: (context, shoppingCart, child){
+                return Text(
+                  shoppingCart.cartItens.length.toString(),
+                  style: TextStyle(color: mainTextColor, fontFamily: 'Roboto'),
+                );
+              },
+            ),
+            child: Icon(
+              Icons.shopping_cart,
+              color: Colors.white,
+              size: 30,
+            ),
+          ),
         ),
         appBar: AppBar(
           elevation: 0,
@@ -64,7 +85,7 @@ class _SearchResultState extends State<SearchResult> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Column(
-                  children: <Text>[
+                  children: <Widget>[
                     const Text(
                       'Entregar em',
                       style: TextStyle(
@@ -72,13 +93,24 @@ class _SearchResultState extends State<SearchResult> {
                           fontWeight: FontWeight.bold,
                           color: Colors.white),
                     ),
-                    Text(
-                      'Rua Humaitá, 538',
-                      style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w100,
-                          color: Colors.white),
-                    ),
+                    Consumer<Order> (
+                        builder: (context, order, child) {
+                          late String endereco;
+                          if (order.orderAddress == null){
+                            endereco = 'Selecione um endereço';
+                          } else {
+                            endereco = order.orderAddress!.rua + ', '
+                                + order.orderAddress!.num;
+                          }
+                          return Text(
+                            endereco,
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w100,
+                                color: Colors.white),
+                          );
+                        }
+                    )
                   ],
                 ),
                 const Icon(
@@ -144,71 +176,94 @@ class _SearchResultState extends State<SearchResult> {
                 )),
           ),
         ),
-        body: ListView(
-          physics: BouncingScrollPhysics(),
-          scrollDirection: Axis.vertical,
-          children: [
-            const SizedBox(
-              height: 15,
-            ),
-            Text(
-              searchResult(3),
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 15, color: textSecondaryColor),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            FutureBuilder<List<Cake>>(
-              future: resultadoPesquisa,
-              builder: (context, snapshot){
-                if(snapshot.hasData){
-                  return Center(
-                    child: SizedBox(
-                      width: 328,
-                      child: ListView.separated(
-                        itemCount: snapshot.data!.length,
-                        scrollDirection: Axis.vertical,
-                        physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return ProdutoHorizontal(
-                              nomeProduto: snapshot.data![index].name,
-                              categoriaProduto: snapshot.data![index].category,
-                              precoProduto: snapshot.data![index].price.toDouble(),
-                              imgProduto: snapshot.data![index].image,
-                              idProduto: snapshot.data![index].id,);
-                        },
-                        separatorBuilder: (context, int index) {
-                          return const SizedBox(height: 20);
-                        },
-                      ),
+        body: FutureBuilder<List<Cake>>(
+          future: resultadoPesquisa,
+          builder: (context, snapshot){
+            if(snapshot.hasData){
+              if(snapshot.data!.length > 0){
+                return ListView(
+                  physics: BouncingScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  children: [
+                    const SizedBox(height: 15),
+                    Text(
+                      searchResult(3),
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 15, color: textSecondaryColor),
+                    ),
+                    const SizedBox(height: 15),
+                    Center(
+                        child: SizedBox(
+                          width: 328,
+                          child: ListView.separated(
+                            itemCount: snapshot.data!.length,
+                            scrollDirection: Axis.vertical,
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              return ProdutoHorizontal(
+                                nomeProduto: snapshot.data![index].name,
+                                categoriaProduto: snapshot.data![index].category,
+                                precoProduto: snapshot.data![index].price.toDouble(),
+                                imgProduto: snapshot.data![index].image,
+                                idProduto: snapshot.data![index].id,);
+                            },
+                            separatorBuilder: (context, int index) {
+                              return const SizedBox(height: 20);
+                            },
+                          ),
+                        )
                     )
-                  );
-                } else if (snapshot.hasError){
-                  return Text('${snapshot.error}');
-                }
-                return Center(
-                    child: SizedBox(
-                      width: 328,
-                      child: ListView.separated(
-                        itemCount: 4,
-                        scrollDirection: Axis.vertical,
-                        physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return const ShimmerProdutoHorizontal();
-                        },
-                        separatorBuilder: (context, int index) {
-                          return const SizedBox(height: 20);
-                        },
-                      ),
-                    )
+                  ],
                 );
-              },
-            ),
-            const SizedBox(height: 15),
-          ],
+              } else {
+                return Container(
+                  width: double.infinity,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        '(o_o)',
+                        style: TextStyle(
+                            fontSize: 92,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xffD5D5D5)
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      const Text(
+                        'Nenhum bolo encontrado',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontSize: 18,
+                        ),
+                      )
+                    ],
+                  ),
+                );
+              }
+            } else if (snapshot.hasError){
+              return Text('${snapshot.error}');
+            }
+            return Center(
+                child: SizedBox(
+                  width: 328,
+                  child: ListView.separated(
+                    itemCount: 4,
+                    scrollDirection: Axis.vertical,
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return const ShimmerProdutoHorizontal();
+                    },
+                    separatorBuilder: (context, int index) {
+                      return const SizedBox(height: 20);
+                    },
+                  ),
+                )
+            );
+          },
         )
     );
   }

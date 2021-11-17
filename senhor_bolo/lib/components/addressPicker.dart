@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:senhor_bolo/classes/order.dart';
 import 'package:senhor_bolo/components/widgets/simpleButton.dart';
 import 'package:senhor_bolo/model/address.dart';
 import 'package:senhor_bolo/services/addressService.dart';
@@ -14,7 +16,8 @@ class AddressPicker extends StatefulWidget {
 class _AddressPickerState extends State<AddressPicker> {
 
   late Future<List<Address>> listaendereco;
-  int addressIndex = 0;
+  late Order orderAddress;
+  late int addressIndex;
 
   _addAddress() {
     Navigator.pushNamed(context, 'addAddress');
@@ -24,6 +27,10 @@ class _AddressPickerState extends State<AddressPicker> {
   void initState() {
     super.initState();
     listaendereco = AddressService().getAll();
+    orderAddress = context.read<Order>();
+    addressIndex = orderAddress.orderAddress == null
+    ? -1
+    : orderAddress.orderAddress!.id;
   }
 
   @override
@@ -77,82 +84,112 @@ class _AddressPickerState extends State<AddressPicker> {
               future: listaendereco,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return ListView.separated(
-                      shrinkWrap: true,
-                      itemCount: snapshot.data!.length,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
 
-                        Address endereco = snapshot.data![index];
-                        return GestureDetector(
-                          onTap: () => setState(() {
-                            addressIndex = index;
-                          }),
-                          child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 300),
-                            width: double.infinity,
-                            height: 80,
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 4, horizontal: 14),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius:
-                                BorderRadius.circular(defaultButtonRadius),
-                                border: addressIndex == index
-                                    ? Border.all(color: mainColor, width: 2)
-                                    : null),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      '${endereco.rua}, ${endereco.num}',
-                                      style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      endereco.bairro,
-                                      style: const TextStyle(fontSize: 15),
-                                    ),
-                                    const SizedBox(height: 10),
-                                    Text(
-                                      endereco.observacao != null
-                                          ? 'Sem observação'
-                                          : '${endereco.observacao}',
-                                      style: const TextStyle(
-                                          fontSize: 12,
-                                          color: textSecondaryColor),
-                                    )
-                                  ],
-                                ),
-                                AnimatedContainer(
-                                  width: 33,
-                                  height: 33,
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    color: addressIndex == index
-                                        ? mainColor
-                                        : textSecondaryColor,
-                                    borderRadius: BorderRadius.circular(
-                                        defaultButtonRadius),
+                  if(snapshot.data!.length > 0){
+                    return ListView.separated(
+                        shrinkWrap: true,
+                        itemCount: snapshot.data!.length,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+
+                          Address endereco = snapshot.data![index];
+                          int addressID = endereco.id;
+
+                          return GestureDetector(
+                            onTap: () => setState(() {
+                              addressIndex = endereco.id;
+                              orderAddress.orderAddress = endereco;
+                            }),
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
+                              width: double.infinity,
+                              height: 80,
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 4, horizontal: 14),
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius:
+                                  BorderRadius.circular(defaultButtonRadius),
+                                  border: addressIndex == addressID
+                                      ? Border.all(color: mainColor, width: 2)
+                                      : null),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '${endereco.rua}, ${endereco.num}',
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        endereco.bairro,
+                                        style: const TextStyle(fontSize: 15),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Text(
+                                        endereco.observacao != null
+                                            ? '${endereco.observacao}'
+                                            : 'Sem observação',
+                                        style: const TextStyle(
+                                            fontSize: 12,
+                                            color: textSecondaryColor),
+                                      )
+                                    ],
                                   ),
-                                  duration: const Duration(milliseconds: 300),
-                                  child: const Icon(
-                                    Icons.check,
-                                    color: Colors.white,
+                                  AnimatedContainer(
+                                    width: 33,
+                                    height: 33,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      color: addressIndex == addressID
+                                          ? mainColor
+                                          : textSecondaryColor,
+                                      borderRadius: BorderRadius.circular(
+                                          defaultButtonRadius),
+                                    ),
+                                    duration: const Duration(milliseconds: 300),
+                                    child: const Icon(
+                                      Icons.check,
+                                      color: Colors.white,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                        separatorBuilder: (context, index) =>
+                        const SizedBox(height: 10));
+                  } else {
+                    Container(
+                      width: double.infinity,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            'Sem endereços adicionados',
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold
                             ),
                           ),
-                        );
-                      },
-                      separatorBuilder: (context, index) =>
-                      const SizedBox(height: 10));
+                          const Text(
+                            'Adicione um endereço no botão ao lado',
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: textSecondaryColor
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  }
+
                 } else if (snapshot.hasError) {
                   print('${snapshot.error}');
                   Text('${snapshot.error}');

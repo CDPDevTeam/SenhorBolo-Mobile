@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:senhor_bolo/classes/order.dart';
 import '../../constants.dart';
 import 'package:senhor_bolo/classes/user.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -34,33 +36,32 @@ class IconAppBar extends StatelessWidget implements PreferredSizeWidget{
         ),
         title: InkWell(
           onTap: () => Navigator.pushNamed(context, 'addressPicker'),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Column(
-                children: <Text>[
-                  const Text(
-                    'Entregar em',
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
-                  ),
-                  Text(
-                    'Rua Humaitá, 538',
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w100,
-                        color: Colors.white
-                    ),
-                  ),
-                ],
+          child:Column(
+            children: <Widget>[
+              Text(
+                'Entregar em',
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
               ),
-              const Icon(
-                Icons.location_on,
-                color: Colors.white,
-                size: 20,
+              Consumer<Order> (
+                  builder: (context, order, child) {
+                    late String endereco;
+                    if (order.orderAddress == null){
+                      endereco = 'Selecione um endereço';
+                    } else {
+                      endereco = order.orderAddress!.rua + ', '
+                          + order.orderAddress!.num;
+                    }
+                    return Text(
+                      endereco,
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w100,
+                          color: Colors.white),
+                    );
+                  }
               )
             ],
           ),

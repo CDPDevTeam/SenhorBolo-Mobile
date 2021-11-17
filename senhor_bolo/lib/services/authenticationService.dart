@@ -11,7 +11,6 @@ class AuthenticationService{
       String cpf, String password) async{
       var body = jsonEncode(
           {
-            'cadastro': true,
             'email': email,
             'senha': password,
             'nome': name,
@@ -26,8 +25,7 @@ class AuthenticationService{
           },
           body: body
       );
-      final parsed = jsonDecode(response.body);
-      return parsed['success'];
+      return response.statusCode == 200;
   }
 
   Future<bool> authLoggedUser() async {

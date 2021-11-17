@@ -90,7 +90,7 @@ class _UpdatePasswordState extends State<UpdatePassword> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-        appBar: TextAppBar(title: 'Editar conta'),
+        appBar: TextAppBar(title: 'Alterar senha'),
         body: Padding(
           padding: const EdgeInsets.all(20),
           child: Form(

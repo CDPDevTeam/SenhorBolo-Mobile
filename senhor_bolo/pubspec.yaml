@@ -32,7 +32,6 @@ dependencies:
   shimmer_animation: ^2.1.0
 
   # Localização do usuário
-  #geolocator: ^7.7.0
   geocoding: ^2.0.1
   google_maps_flutter: ^2.0.11
 
@@ -50,12 +49,14 @@ dependencies:
   #email
   url_launcher: ^6.0.12
 
+  #Gerencia de estado
+  provider: ^6.0.1
+
   # Outros
   mask_text_input_formatter: ^2.0.0
   password_strength: ^0.2.0
   credit_card_validator: ^2.0.0
-  cached_network_image: ^3.1.0
-  device_preview: ^0.8.0
+  cached_network_image: ^3.1.0+1
 
 dev_dependencies:
   flutter_test:
@@ -86,6 +87,10 @@ flutter:
     - images/boloBoasVindas.png
     - images/splash_image.png
     - images/erroConexao.png
+    - images/pedido_entrega.png
+    - images/pedido_entregue.png
+    - images/pedido_preparacao.png
+    - images/pedido_recebido.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

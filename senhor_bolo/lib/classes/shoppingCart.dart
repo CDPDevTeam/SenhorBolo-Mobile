@@ -1,24 +1,52 @@
+import 'package:flutter/material.dart';
+import 'package:senhor_bolo/classes/order.dart';
 import 'package:senhor_bolo/model/cake.dart';
 
-class ShoppingCart{
-  static List<Cake> cartItens = [];
+class ShoppingCart extends ChangeNotifier{
 
-  static bool addItem(Cake bolo){
-      for(int i = 0; i < cartItens.length; i++){
-        if (cartItens[i].id == bolo.id){
-          cartItens[i].qtde += bolo.qtde;
-          return true;
-        }
+  /*
+   * Como não dá para pegar o valor do carrinho na classe Order,
+   * já que ela não é um widget, ent não tem context, esse _teste
+   * serve para setar o valor do subtotal, possivelmente tem um
+   * jeito melhor de fazer isso.
+   */
+
+  Order _teste = Order();
+  List<Cake> _cartItens = [];
+  List<Cake> get cartItens => _cartItens;
+
+  _updateSubtotal(){
+    _teste.setSubtotal(total);
+  }
+
+  bool addItem(Cake bolo){
+    for(int i = 0; i < _cartItens.length; i++){
+      if (_cartItens[i].id == bolo.id){
+        _cartItens[i].qtde += bolo.qtde;
+        _updateSubtotal();
+        notifyListeners();
+        return true;
       }
-      cartItens.add(bolo);
-      return true;
+    }
+    _cartItens.add(bolo);
+    _updateSubtotal();
+    notifyListeners();
+    return true;
   }
 
-  static void removeItem(int indexBolo){
-    cartItens.removeAt(indexBolo);
+  removeItem(int indexBolo){
+    _cartItens.removeAt(indexBolo);
+    _updateSubtotal();
+    notifyListeners();
   }
 
-  static double getCartPrice(){
+  updateItem(int indexBolo, int qtde){
+    _cartItens[indexBolo].qtde = qtde;
+    _updateSubtotal();
+    notifyListeners();
+  }
+
+  double get total{
     double precoTotal = 0;
     for(int i = 0; i < cartItens.length; i++){
       precoTotal += cartItens[i].qtde * cartItens[i].price;

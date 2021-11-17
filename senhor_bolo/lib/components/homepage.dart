@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:provider/provider.dart';
+import 'package:senhor_bolo/classes/order.dart';
 import 'package:senhor_bolo/classes/shoppingCart.dart';
 import 'package:senhor_bolo/classes/user.dart';
 import 'package:senhor_bolo/components/widgets/shimmerProdutoVertical.dart';
@@ -13,36 +15,13 @@ import 'package:senhor_bolo/components/widgets/produtoVertical.dart';
 import '../constants.dart';
 
 
-class Homepage extends StatefulWidget {
-  const Homepage({Key? key}) : super(key: key);
-
-  @override
-  _HomepageState createState() => _HomepageState();
-}
-
-class _HomepageState extends State<Homepage> {
-
-  User user = User();
-  CakeService api = CakeService();
-  Future<List<Cake>>? recommendedCakes1;
-  Future<List<Cake>>? recommendedCakes2;
-  Future<List<Cake>>? recommendedCakes3;
-
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  int cartItens = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    recommendedCakes1 = api.searchCake('Chocolate');
-    recommendedCakes2 = api.searchCakeByCategory('Bolo piscina');
-    recommendedCakes3 = api.searchCakeByCategory('Bolo recheado');
-  }
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    User user = User();
     return Scaffold(
-      key: _scaffoldKey,
       drawer: Drawer(
         child: Material(
           color: mainColor,
@@ -92,28 +71,28 @@ class _HomepageState extends State<Homepage> {
                 ),
               ),
               SizedBox(height: 20),
-              buildMenuItem(
+              BuildMenuItem(
                   texto: 'Minha conta',
                   icone: Icons.account_circle,
                   onTap: () => Navigator.pushNamed(context, 'userProfile')),
-              buildMenuItem(
+              BuildMenuItem(
                   texto: 'Meus pedidos',
                   icone: Icons.cake,
                   onTap: () => Navigator.pushNamed(context, 'orders')),
-              buildMenuItem(
+              BuildMenuItem(
                   texto: 'Cupons',
                   icone: Icons.local_offer,
                   onTap: () => Navigator.pushNamed(context, 'cupons')),
-              buildMenuItem(
+              BuildMenuItem(
                   texto: 'Ajuda',
                   icone: Icons.help,
                   onTap: () => Navigator.pushNamed(context, 'help')),
-              buildMenuItem(
+              BuildMenuItem(
                   texto: 'Sobre nós',
                   icone: Icons.info,
                   onTap: () => Navigator.pushNamed(context, 'aboutUs')),
               Divider(color: Colors.white),
-              buildMenuItem(texto: 'Logout', icone: Icons.logout, onTap: () {
+              BuildMenuItem(texto: 'Logout', icone: Icons.logout, onTap: () {
                 final storage = FlutterSecureStorage();
                 storage.delete(key: 'email');
                 storage.delete(key: 'password');
@@ -133,41 +112,45 @@ class _HomepageState extends State<Homepage> {
                 borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(25),
                     bottomRight: Radius.circular(25))),
-            leading: IconButton(
-              onPressed: () => _scaffoldKey.currentState!.openDrawer(),
-              icon: Icon(
-                Icons.menu,
-                size: 40,
+            leading: Builder(
+              builder: (context) => IconButton(
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+                icon: Icon(
+                  Icons.menu,
+                  size: 40,
+                ),
               ),
             ),
             title: InkWell(
               onTap: () => Navigator.pushNamed(context, 'addressPicker'),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Column(
-                    children: <Text>[
-                      Text(
-                        'Entregar em',
-                        style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      ),
-                      Text(
-                        'Rua Humaitá, 538',
-                        style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w100,
-                            color: Colors.white),
-                      ),
-                    ],
+              child: Column(
+                children: <Widget>[
+                  Text(
+                    'Entregar em',
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
                   ),
-                  Icon(
-                    Icons.location_on,
-                    color: Colors.white,
-                    size: 20,
+                  Consumer<Order> (
+                      builder: (context, order, child) {
+                        late String endereco;
+                        if (order.orderAddress == null){
+                          endereco = 'Selecione um endereço';
+                        } else {
+                          endereco = order.orderAddress!.rua + ', '
+                              + order.orderAddress!.num;
+                        }
+                        return Text(
+                          endereco,
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w100,
+                              color: Colors.white),
+                        );
+                      }
                   )
                 ],
               ),
@@ -179,16 +162,16 @@ class _HomepageState extends State<Homepage> {
                       padding: EdgeInsets.only(right: 10),
                       child: CachedNetworkImage(
                           imageUrl:
-                              'https://thespacefox.github.io/SenhorBolo-Imagens/images/usuario/${User.image}',
+                          'https://thespacefox.github.io/SenhorBolo-Imagens/images/usuario/${User.image}',
                           imageBuilder: (context, imageProvider) => Container(
-                                width: 50,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                        image: imageProvider,
-                                        fit: BoxFit.contain)),
-                              ))))
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.contain)),
+                          ))))
             ],
             expandedHeight: 311,
             flexibleSpace: FlexibleSpaceBar(
@@ -211,8 +194,8 @@ class _HomepageState extends State<Homepage> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => SearchResult(
-                                      searchText: searchText,
-                                    )));
+                                  searchText: searchText,
+                                )));
                       },
                       decoration: InputDecoration(
                           contentPadding: EdgeInsets.only(left: 20),
@@ -241,28 +224,28 @@ class _HomepageState extends State<Homepage> {
             )),
         SliverList(
             delegate: SliverChildListDelegate(<Widget>[
-          const SizedBox(height: 22),
-          GestureDetector(
-              onTap: () => Navigator.pushNamed(context, 'customCake'),
-              child: Center(
-                child: Image(
-                  image: AssetImage('images/banner_teste.png'),
-                ),
-              )),
-          const SizedBox(height: 15),
-          buildHomeSection(recommendedCakes1, 'Bolos de chocolate'),
-          const SizedBox(height: 15),
-          buildHomeSection(recommendedCakes2, 'Bolos Piscina'),
-          const SizedBox(height: 15),
-          buildHomeSection(recommendedCakes3, 'Bolo recheado'),
-          const SizedBox(height: 30),
-          const Text(
-            'Você chegou ao fim ^_^',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 15),
-          ),
-          const SizedBox(height: 20),
-        ]))
+              const SizedBox(height: 22),
+              GestureDetector(
+                  onTap: () => Navigator.pushNamed(context, 'customCake'),
+                  child: Center(
+                    child: Image(
+                      image: AssetImage('images/banner_teste.png'),
+                    ),
+                  )),
+              const SizedBox(height: 15),
+              HomeSection(categoria: 'Bolo Tradicional'),
+              const SizedBox(height: 15),
+              HomeSection(categoria: 'Bolo recheado'),
+              const SizedBox(height: 15),
+              HomeSection(categoria: 'Piscina'),
+              const SizedBox(height: 30),
+              const Text(
+                'Você chegou ao fim ^_^',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 15),
+              ),
+              const SizedBox(height: 20),
+            ]))
       ]),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => Navigator.pushNamed(context, 'shoppingCart'),
@@ -271,9 +254,13 @@ class _HomepageState extends State<Homepage> {
         icon: Badge(
           toAnimate: true,
           animationType: BadgeAnimationType.slide,
-          badgeContent: Text(
-            ShoppingCart.cartItens.length.toString(),
-            style: TextStyle(color: mainTextColor, fontFamily: 'Roboto'),
+          badgeContent: Consumer<ShoppingCart> (
+            builder: (context, shoppingCart, child){
+              return Text(
+                shoppingCart.cartItens.length.toString(),
+                style: TextStyle(color: mainTextColor, fontFamily: 'Roboto'),
+              );
+            },
           ),
           child: Icon(
             Icons.shopping_cart,
@@ -284,13 +271,21 @@ class _HomepageState extends State<Homepage> {
       ),
     );
   }
+}
 
-  Widget buildMenuItem({
-    required String texto,
-    IconData? icone,
-    required final VoidCallback onTap,
-  }) {
-    final hoverColor = Color(0xff14A8A2);
+class BuildMenuItem extends StatelessWidget {
+
+  final String texto;
+  final IconData icone;
+  final VoidCallback onTap;
+
+  const BuildMenuItem({Key? key,
+    required this.texto,
+    required this.icone,
+    required this.onTap}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return ListTile(
       leading: Icon(
         icone,
@@ -301,30 +296,54 @@ class _HomepageState extends State<Homepage> {
         texto,
         style: TextStyle(fontSize: 22, color: Colors.white),
       ),
-      hoverColor: hoverColor,
+      hoverColor: Color(0xff14A8A2),
       onTap: onTap,
     );
   }
+}
 
-  Widget buildHomeSection(Future<List<Cake>>? cakes, String sectionName){
+class HomeSection extends StatefulWidget {
+  final String categoria;
+
+  const HomeSection({Key? key, required this.categoria}) : super(key: key);
+
+  @override
+  _HomeSectionState createState() => _HomeSectionState();
+}
+
+class _HomeSectionState extends State<HomeSection> {
+
+  CakeService api = CakeService();
+  late Future<List<Cake>> bolos;
+
+  @override
+  void initState() {
+    super.initState();
+    bolos = api.getCakeByCategory(widget.categoria);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: EdgeInsets.only(left: 34),
           child: Text(
-            sectionName,
+            widget.categoria,
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),),
+          )
+        ),
         SizedBox(height: 10),
         FutureBuilder<List<Cake>>(
-          future: cakes,
+          future: bolos,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return Center(
                   child: SizedBox(
                     height: 242,
                     child: ListView.separated(
+                      physics: BouncingScrollPhysics(),
                       itemCount: snapshot.data!.length,
                       scrollDirection: Axis.horizontal,
                       shrinkWrap: true,

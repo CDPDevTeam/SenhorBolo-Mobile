@@ -1,12 +1,17 @@
 import 'dart:convert';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:senhor_bolo/components/widgets/simpleButton.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:http/http.dart' as http;
+import 'package:senhor_bolo/model/address.dart';
+import 'package:senhor_bolo/services/addressService.dart';
 import '../constants.dart';
 
 class UpdateAddress extends StatefulWidget {
-  const UpdateAddress({Key? key}) : super(key: key);
+  final Address endereco;
+
+  const UpdateAddress({Key? key, required this.endereco}) : super(key: key);
 
   @override
   _UpdateAddressState createState() => _UpdateAddressState();
@@ -14,16 +19,20 @@ class UpdateAddress extends StatefulWidget {
 
 class _UpdateAddressState extends State<UpdateAddress> {
 
+  AddressService updateendereco = AddressService();
+
   final _keyAddress = GlobalKey<FormState>();
   var cpfMask = MaskTextInputFormatter(
       mask: '#####-###', filter: {"#": RegExp(r'[0-9]')});
 
+  late int _txtid;
   TextEditingController _txtCEP = TextEditingController();
   TextEditingController _txtStreet = TextEditingController();
   TextEditingController _txtDistrict = TextEditingController();
   TextEditingController _txtNumber = TextEditingController();
   TextEditingController _txtAdicionalInfo = TextEditingController();
   TextEditingController _txtRemark = TextEditingController();
+
 
   void _showErrorDialog(){
     showDialog(
@@ -60,9 +69,75 @@ class _UpdateAddressState extends State<UpdateAddress> {
     }
   }
 
-  void _updateAddress() {}
+  void _updateAddress() async{
+    print(_txtid);
+    if (_keyAddress.currentState!.validate()){
+      bool success = await updateendereco.putAddress(
+          _txtid,
+          _txtStreet.text,
+          _txtDistrict.text,
+          _txtCEP.text,
+          _txtNumber.text,
+          _txtRemark.text,
+          _txtAdicionalInfo.text);
+      if(success) {
+        CoolAlert.show(
+            context: context,
+            type: CoolAlertType.success,
+            title: 'Dados atualizados!',
+            confirmBtnColor: mainColor,
+            onConfirmBtnTap: (){
+              Navigator.pop(context);
+              Navigator.pop(context);
+            }
+        );
+      } else {
+        CoolAlert.show(
+            context: context,
+            type: CoolAlertType.error,
+            title: 'Erro ao atualizar os dados',
+            text: 'Verique sua senha',
+            confirmBtnColor: mainColor,
+            onConfirmBtnTap: (){
+              Navigator.of(context).pop();
+            }
+        );
+      }
+    }
 
-  void _cleanText() {}
+  }
+
+  void _cleanText() {
+    _keyAddress.currentState!.reset();
+    _txtAdicionalInfo.clear();
+    _txtRemark.clear();
+    _txtNumber.clear();
+    _txtDistrict.clear();
+    _txtStreet.clear();
+    _txtCEP.clear();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _txtid = widget.endereco.id;
+    _txtCEP.text = widget.endereco.cep;
+    _txtStreet.text = widget.endereco.rua;
+    _txtDistrict.text = widget.endereco.bairro;
+    _txtNumber.text = widget.endereco.num;
+    if (widget.endereco.complemento != null){
+      _txtRemark.text = widget.endereco.complemento!;
+    } else {
+      _txtRemark.text = '';
+    };
+    if (widget.endereco.observacao != null){
+      _txtAdicionalInfo.text = widget.endereco.observacao!;
+    } else{
+      _txtAdicionalInfo.text = '';
+    }
+
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +174,6 @@ class _UpdateAddressState extends State<UpdateAddress> {
             child: Column(
               children: [
                 TextFormField(
-                    autofocus: true,
                     onFieldSubmitted: (value) => _getAddress(),
                     controller: _txtCEP,
                     keyboardType: TextInputType.number,
@@ -127,7 +201,6 @@ class _UpdateAddressState extends State<UpdateAddress> {
                 const SizedBox(height: 15),
                 TextField(
                     controller: _txtStreet,
-                    enabled: false,
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.only(left: 15),
                       labelText: 'Rua',
@@ -154,7 +227,6 @@ class _UpdateAddressState extends State<UpdateAddress> {
                       width: 214,
                       child: TextField(
                           controller: _txtDistrict,
-                          enabled: false,
                           decoration: InputDecoration(
                             contentPadding: const EdgeInsets.only(left: 15),
                             labelText: 'Bairro',
@@ -177,7 +249,6 @@ class _UpdateAddressState extends State<UpdateAddress> {
                     SizedBox(
                       width: 115,
                       child: TextFormField(
-                          autofocus: true,
                           controller: _txtNumber,
                           textInputAction: TextInputAction.next,
                           keyboardType: TextInputType.number,

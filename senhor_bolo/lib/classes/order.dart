@@ -1,33 +1,54 @@
-import 'package:senhor_bolo/constants.dart';
+import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:senhor_bolo/model/address.dart';
 import 'package:senhor_bolo/model/creditcard.dart';
 import 'package:senhor_bolo/model/cupom.dart';
-import 'package:senhor_bolo/classes/shoppingCart.dart';
-import 'package:senhor_bolo/classes/user.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
-class Order{
-  static bool haveCoupon = false;
-  static Coupon? orderCoupon;
-  static Address? orderAddress;
-  static CreditCard? creditCard;
+class Order extends ChangeNotifier{
+ static double cartSubtotal = 0;
+ Coupon? _orderCoupon;
+ CreditCard? _creditCard;
+ Address? _orderAddress;
+ late LatLng _addressLatLng;
 
-  static double getTotalPrice(){
-    double subTotal = ShoppingCart.getCartPrice();
-    double total = (subTotal * getCouponDiscount()) + 10;
+ Coupon? get orderCoupon => _orderCoupon;
+ CreditCard? get creditCard => _creditCard;
+ Address? get orderAddress => _orderAddress;
+
+  set orderCoupon(Coupon? value) {
+    _orderCoupon = value;
+    notifyListeners();
+  }
+
+ set orderAddress(Address? value) {
+   _orderAddress = value;
+   notifyListeners();
+ }
+
+ set creditCard(CreditCard? value) {
+   _creditCard = value;
+   notifyListeners();
+ }
+
+ void setSubtotal(double subtotal){
+    cartSubtotal = subtotal;
+    notifyListeners();
+ }
+
+ double getOrderPrice(){
+    double total = (cartSubtotal * getCouponDiscount()) + 10;
     return total;
   }
 
-  static double getCouponDiscount(){
-    if (haveCoupon){
-      return 1 - (orderCoupon!.discountPercentage / 100);
+  getCouponDiscount(){
+    if (_orderCoupon != null){
+      return 1 - (_orderCoupon!.discountPercentage / 100);
     } else {
       return 1;
     }
   }
 
+/*
   Future<bool> submitOrder() async{
     FlutterSecureStorage storage = FlutterSecureStorage();
     String? jwtKey = await storage.read(key: 'key');
@@ -73,5 +94,5 @@ class Order{
     } else {
       return false;
     }
-  }
+  }*/
 }

@@ -12,12 +12,6 @@ class WelcomePage extends StatelessWidget {
 
     return Scaffold(
       extendBody: true,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(0),
-        // Essa appBar vazia é para a barra de status ficar na cor do App
-        child: AppBar(),
-      ),
-
       body: Container(
         width: screenSize.width,
         height: screenSize.height * 0.77,
@@ -25,15 +19,14 @@ class WelcomePage extends StatelessWidget {
             image: DecorationImage(
                 image: AssetImage("images/boloBoasVindas.png"),
                 fit: BoxFit.cover)),
+        alignment: Alignment.topLeft,
+        padding: EdgeInsets.only(left: 26, top: 42),
         child: const Align(
           alignment: Alignment.topLeft,
-          child: Padding(
-            padding: EdgeInsets.only(left: 26, top: 12),
-            child: Image(
-              width: 110,
-              height: 110,
-              image: AssetImage("images/logoMarrom.png"),
-            ),
+          child: Image(
+            width: 110,
+            height: 110,
+            image: AssetImage("images/logoMarrom.png"),
           ),
         ),
       ),

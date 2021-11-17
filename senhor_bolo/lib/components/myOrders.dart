@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:senhor_bolo/components/tracking.dart';
+import 'package:senhor_bolo/model/pedido.dart';
+import 'package:senhor_bolo/services/pedidoService.dart';
 import '../../constants.dart';
 import 'package:senhor_bolo/components/widgets/iconAppBar.dart';
 import 'package:senhor_bolo/components/widgets/simpleButton.dart';
@@ -12,19 +15,33 @@ class MeusPedidos extends StatefulWidget {
 }
 
 class _MeusPedidosState extends State<MeusPedidos> {
-  static List _abertosNome = ["Haro Gay Estrogen", "Nicolas"];
-  static List _abertosPreco = ["90,00", "50,00"];
-  static List _abertosImg = [
-    "https://thespacefox.github.io/SenhorBolo-Imagens/images/baba_portuguesa.png",
-    "https://thespacefox.github.io/SenhorBolo-Imagens/images/cocada.png"
-  ];
-  static List _nome = ["Bolo Crente", "BoloZap", "Bolo Nicolas"];
-  static List _preco = ["90,00", "69,00", "99,00"];
-  static List _img = [
-    "https://thespacefox.github.io/SenhorBolo-Imagens/images/cocada.png",
-    "https://thespacefox.github.io/SenhorBolo-Imagens/images/cocada.png",
-    "https://thespacefox.github.io/SenhorBolo-Imagens/images/baba_portuguesa.png"
-  ];
+
+  void _trackingStep(String etapaPedido, int idPedido){
+    int orderStep;
+
+    print(etapaPedido);
+
+    if(etapaPedido == 'Pedido recebido'){
+      orderStep = 0;
+    } else if (etapaPedido == 'Pedido em preparação'){
+      orderStep = 1;
+    } else {
+      orderStep = 2;
+    }
+
+    Navigator.push(context, MaterialPageRoute(
+        builder: (context) => Tracking(currentStep: orderStep, idPedido: idPedido)
+    ));
+  }
+
+  late Future<List<Pedido>>? pedidosAbertos;
+  PedidoService apiPedido = PedidoService();
+
+  @override
+  void initState() {
+    super.initState();
+    pedidosAbertos = apiPedido.getPedidosAbertos();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,44 +52,125 @@ class _MeusPedidosState extends State<MeusPedidos> {
         appBarIcon: Icons.local_shipping,
       ),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: ListView(
           physics: BouncingScrollPhysics(),
           scrollDirection: Axis.vertical,
           children: [
+            const SizedBox(height: 10),
             const Text(
               "Pedidos em aberto",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               textAlign: TextAlign.left,
             ),
-            const SizedBox(height: 10),
-            ListView.builder(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: _abertosNome.length,
-                itemBuilder: (context, index) {
+            FutureBuilder<List<Pedido>>(
+                future: pedidosAbertos,
+                builder: (context, snapshot){
+                  if(snapshot.hasData){
+                    if(snapshot.data!.length != 0){
+                      return ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+
+                            Pedido pedidoLista = Pedido(
+                                idPedido: snapshot.data![index].idPedido,
+                                statusCompra: snapshot.data![index].statusCompra,
+                                itensPedido: snapshot.data![index].itensPedido
+                            );
+                            return Container(
+                              width: double.infinity,
+                              child: Column(
+                                  children: [
+                                    const SizedBox(height: 15),
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        'Pedido #${pedidoLista.idPedido}',
+                                        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                                        textAlign: TextAlign.left,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    ListView.separated(
+                                        shrinkWrap: true,
+                                        physics: ClampingScrollPhysics(),
+                                        separatorBuilder: (context, int index) {
+                                          return const SizedBox(height: 10);
+                                        },
+                                        itemCount: pedidoLista.itensPedido!.length,
+                                        itemBuilder: (context, index){
+
+                                          ItensPedido itemPedido = pedidoLista.itensPedido![index];
+
+                                          return  ProdutoPedido(
+                                              qtde: itemPedido.qtdePedido,
+                                              nomeProduto: itemPedido.nomeProd,
+                                              categoriaProduto: itemPedido.categoriaProdFk,
+                                              precoProduto: itemPedido.totalProd,
+                                              imgProduto: itemPedido.fotoProd
+                                          );
+                                        }
+                                    ),
+                                    const SizedBox(height: 15),
+                                    simpleButtonIcon(306, 47, 'Rastrear',
+                                            () => _trackingStep(pedidoLista.statusCompra, pedidoLista.idPedido),
+                                        10, 25, mainColor, Icon(Icons.near_me), FontWeight.bold),
+                                  ]
+                              ),
+                            );
+                          });
+                    } else {
+                      return Container(
+                          child: Column(
+                            children: [
+                              const Text(
+                                '(¬_¬)',
+                                style: TextStyle(
+                                    fontSize: 92,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xffD5D5D5)
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              const Text(
+                                'Você ainda não pediu nada...',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontFamily: 'Montserrat',
+                                    fontSize: 18,
+                                ),
+                              ),
+                              const Text(
+                                'Temos muitos bolos te esperando!',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: textSecondaryColor
+                                ),
+                              ),
+                            ],
+                          )
+                      );
+                    }
+
+                  } else if (snapshot.hasError) {
+                    return Text('${snapshot.error}');
+                  }
                   return Container(
-                    width: double.infinity,
                     child: Column(
                       children: [
-                        const Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            "Pedido #0000",
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                            textAlign: TextAlign.left,
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        ProdutoPedido(qtde: 32, nomeProduto: _abertosNome[index], categoriaProduto: "Bolo comum", precoProduto: _abertosPreco[index], imgProduto: _abertosImg[index]),
-                        const SizedBox(height: 10),
-                        simpleButtonIcon(306, 47, 'Rastrear', (){}, 10, 25, mainColor, Icon(Icons.near_me), FontWeight.bold),
-                        const SizedBox(height: 10,),
+                        const SizedBox(height: 15),
+                        CircularProgressIndicator(),
+                        const SizedBox(height: 15)
                       ],
                     ),
                   );
-                }),
+                }
+            ),
+            /*
             const Text(
               "Concluído",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -102,7 +200,7 @@ class _MeusPedidosState extends State<MeusPedidos> {
                       ],
                     ),
                   );
-                }),
+                }),*/
           ],
         ),
       )
@@ -144,7 +242,7 @@ class ProdutoPedido extends StatelessWidget {
               color: mainColor,
             ),
             child: CachedNetworkImage(
-              imageUrl: imgProduto,
+              imageUrl: urlImagem + '/bolos/' + imgProduto,
               fit: BoxFit.contain,
             ),
           ),
@@ -160,8 +258,10 @@ class ProdutoPedido extends StatelessWidget {
                       children: [
                         Text(
                           nomeProduto,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.center,
+                          textAlign: TextAlign.left,
                         ),
                         Text(
                           categoriaProduto,
@@ -182,7 +282,7 @@ class ProdutoPedido extends StatelessWidget {
                                 ),
                                 children: [
                                   const TextSpan(text: "qtde ", style: TextStyle(fontSize: 12)),
-                                  TextSpan(text: "32")
+                                  TextSpan(text: qtde.toString())
                                 ]
                             )
                         ),
@@ -195,7 +295,7 @@ class ProdutoPedido extends StatelessWidget {
                                 ),
                                 children: [
                                   const TextSpan(text: "total ", style: TextStyle(fontSize: 12)),
-                                  TextSpan(text: "R\$ $precoProduto")
+                                  TextSpan(text: "R$precoProduto")
                                 ]
                             )
                         ),

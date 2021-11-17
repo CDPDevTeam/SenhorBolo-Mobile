@@ -4,17 +4,21 @@ import 'package:senhor_bolo/constants.dart';
 class Tracking extends StatelessWidget {
 
   final int currentStep;
-  const Tracking({Key? key, required this.currentStep}) : super(key: key);
+  final int idPedido;
+
+  const Tracking({Key? key,
+    required this.currentStep,
+    required this.idPedido}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: const Text(
-            'Pedido #0000',
+          title: Text(
+            'Pedido #$idPedido',
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
                 color: mainTextColor
@@ -53,7 +57,7 @@ class Tracking extends StatelessWidget {
                   title: const Text("Pedido Recebido",style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Raleway')),
                   content: const DeliveryStep(
                       stepText: 'O pedido foi recebido pela nossa central e em breve seu bolo estará sendo feito com todo o carinho',
-                      image: 'banner_teste.png')
+                      image: 'pedido_recebido.png')
               ),
               Step(
                   state: currentStep >= 1 ? StepState.complete : StepState.disabled,
@@ -61,7 +65,7 @@ class Tracking extends StatelessWidget {
                   title: const Text("Pedido em preparação", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Raleway')),
                   content: const DeliveryStep(
                       stepText: 'Seu bolo delicioso está agora saindo do forno e logo mais será enviado para sua casa!',
-                      image: 'banner_teste.png')
+                      image: 'pedido_preparacao.png')
               ),
               Step(
                   state: currentStep >= 2 ? StepState.complete : StepState.disabled,
@@ -69,7 +73,7 @@ class Tracking extends StatelessWidget {
                   title: const Text("Pedido a caminho",style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Raleway')),
                   content: const DeliveryStep(
                       stepText: 'Seu pedido já está com o nosso cuidadoso motoboy, que com certeza não irá fazer grau com a moto a caminho de sua residência!',
-                      image: 'banner_teste.png')
+                      image: 'pedido_entrega.png')
               ),
               Step(
                   state: currentStep >= 2 ? StepState.complete : StepState.disabled,
@@ -77,7 +81,7 @@ class Tracking extends StatelessWidget {
                   title: const Text("Pedido entregue",style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Raleway')),
                   content: const DeliveryStep(
                       stepText: 'Nosso pedido já foi entregue, esperamos que você tenha gostado desse bolo que fizemos com tanto carinho <3',
-                      image: 'banner_teste.png')
+                      image: 'pedido_entregue.png')
               ),
             ],
           ),

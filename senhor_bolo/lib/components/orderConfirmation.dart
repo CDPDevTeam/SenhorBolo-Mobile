@@ -90,9 +90,7 @@ class CardConfirmed extends StatelessWidget {
   final String _resultConfirmacao = "Compra concluída";
   final Icon _resultIcon = Icon(
       Icons.check_circle, size: 70, color: mainTextColor);
-  final Color _resultCor = Color(0xff008824);
-  final String numPedido = "#000000";
-
+  final Color _resultCor = Color(0xff2cbc5c);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,11 +98,8 @@ class CardConfirmed extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Container(
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width,
-                height: 285,
+                width: MediaQuery.of(context).size.width,
+                height: 300,
                 decoration: BoxDecoration(
                   color: _resultCor,
                   borderRadius: BorderRadius.only(
@@ -115,6 +110,7 @@ class CardConfirmed extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     _resultIcon,
+                    const SizedBox(height: 20),
                     Text(_resultConfirmacao, style: TextStyle(
                         color: mainTextColor,
                         fontWeight: FontWeight.bold,
@@ -124,47 +120,41 @@ class CardConfirmed extends StatelessWidget {
             ),
             Expanded(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Seu pedido já está a caminho :)!',
+                  const Text(
+                    '(o^^)o',
                     style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold
+                        fontSize: 92,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xffD5D5D5)
                     ),
                   ),
+                  const SizedBox(height: 10),
+                  const Text(
+                    'Seu pedido já foi recebido \n  no nosso sistema!',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontSize: 19,
+                    ),
+                  )
                 ],
               ),
             ),
-            Container(
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width,
-              height: 150,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  simpleButtonIcon(
-                      368,
-                      51,
-                      "Ver pedido", () {},
-                      20,
-                      20,
-                      Color(0xff089C97),
-                      Icon(Icons.cake),
-                      FontWeight.normal),
-                  simpleButtonIcon(
-                      368,
-                      51,
-                      "Voltar", () => Navigator.pushReplacementNamed(context, 'homepage'),
-                      20,
-                      20,
-                      mainColor,
-                      Icon(Icons.arrow_back),
-                      FontWeight.normal)
-                ],
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 26),
+              child: simpleButton(
+                  double.infinity,
+                  51,
+                  'Voltar a tela inicial',
+                      () => Navigator.pushReplacementNamed(context, 'homepage'),
+                  defaultButtonRadius,
+                  25,
+                  mainColor
               ),
-            )
+            ),
+            const SizedBox(height: 20),
           ],
         )
     );

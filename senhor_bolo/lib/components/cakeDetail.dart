@@ -3,6 +3,8 @@ import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:senhor_bolo/classes/order.dart';
 import 'package:senhor_bolo/classes/shoppingCart.dart';
 import 'package:senhor_bolo/components/widgets/produtoHorizontal.dart';
 import 'package:senhor_bolo/components/widgets/shimmerProdutoHorizontal.dart';
@@ -33,10 +35,11 @@ class CakeDetail extends StatefulWidget {
 class _CakeDetailState extends State<CakeDetail> {
 
   CakeService api = CakeService();
-  Future<List<Cake>>? _recommendedCakes;
+  late Future<List<Cake>> _recommendedCakes;
   int _qtdeItem = 1;
 
   void _adicionarCarrinho() {
+    var shoppingCart = context.read<ShoppingCart>();
     Cake bolo = Cake(
         id: widget.idProduto,
         name: widget.nomeProduto,
@@ -45,16 +48,13 @@ class _CakeDetailState extends State<CakeDetail> {
         price: widget.precoProduto,
         qtde: _qtdeItem
     );
-
-    setState(() {
-      ShoppingCart.addItem(bolo);
-    });
+    shoppingCart.addItem(bolo);
   }
 
   @override
   void initState() {
     super.initState();
-    _recommendedCakes = api.recommendedCake('');
+    _recommendedCakes = api.recommendedCake();
   }
 
   @override
@@ -79,34 +79,34 @@ class _CakeDetailState extends State<CakeDetail> {
             size: 50,
           ),
         ),
-        title: GestureDetector(
+        title: InkWell(
           onTap: () => Navigator.pushNamed(context, 'addressPicker'),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Column(
-                children: <Text>[
-                  const Text(
-                    'Entregar em',
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
-                  ),
-                  Text(
-                    'Rua Humaitá, 538',
-                    style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w100,
-                        color: Colors.white),
-                  ),
-                ],
+          child:Column(
+            children: <Widget>[
+              const Text(
+                'Entregar em',
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
               ),
-              const Icon(
-                Icons.location_on,
-                color: Colors.white,
-                size: 20,
+              Consumer<Order> (
+                  builder: (context, order, child) {
+                    late String endereco;
+                    if (order.orderAddress == null){
+                      endereco = 'Selecione um endereço';
+                    } else {
+                      endereco = order.orderAddress!.rua + ', '
+                          + order.orderAddress!.num;
+                    }
+                    return Text(
+                      endereco,
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w100,
+                          color: Colors.white),
+                    );
+                  }
               )
             ],
           ),
@@ -122,9 +122,13 @@ class _CakeDetailState extends State<CakeDetail> {
           ),
           Badge(
             position: BadgePosition.topEnd(top: 18, end: 6),
-            badgeContent: Text(
-              ShoppingCart.cartItens.length.toString(),
-              style: TextStyle(color: mainTextColor, fontFamily: 'Roboto'),
+            badgeContent: Consumer<ShoppingCart> (
+              builder: (context, shoppingCart, child){
+                return Text(
+                  shoppingCart.cartItens.length.toString(),
+                  style: const TextStyle(color: mainTextColor, fontFamily: 'Roboto'),
+                );
+              },
             ),
             child: IconButton(
               onPressed: () => Navigator.pushNamed(context, 'shoppingCart'),

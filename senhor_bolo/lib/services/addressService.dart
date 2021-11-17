@@ -16,9 +16,7 @@ class AddressService{
           'Authorization' : "Bearer $key"
         }
     );
-
     final jsonDecoded = jsonDecode(response.body);
-
     if(response.statusCode == 200){
       final parsed = jsonDecoded.cast<Map<String, dynamic>>();
       return parsed.map<Address>((json) => Address.fromJson(json)).toList();
@@ -33,6 +31,16 @@ class AddressService{
   Future<bool> postAddress(String rua, String bairro, String cep, String numero,
       String? complemento, String? observacao) async{
     String? key = await storage.read(key: 'key');
+
+    ///TODO: MELHORAR ESSA LÓGICA
+    if(complemento!.isEmpty){
+      complemento = null;
+    }
+
+    if(observacao!.isEmpty){
+      observacao = null;
+    }
+
     var body = jsonEncode({
       'email': User.email,
       'rua': rua,

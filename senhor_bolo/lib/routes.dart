@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
-import 'package:senhor_bolo/components/updatePassword.dart';
-import 'package:senhor_bolo/components/updateUser.dart';
+import 'components/updatePassword.dart';
+import 'components/updateUser.dart';
 import 'components/aboutUs.dart';
 import 'components/checkout.dart';
 import 'components/help.dart';
@@ -19,13 +19,12 @@ import 'components/myOrders.dart';
 import 'components/orderConfirmation.dart';
 import 'components/searchPage.dart';
 import 'components/signUp.dart';
-import 'components/tracking.dart';
 import 'components/userProfile.dart';
 
 final Map<String, WidgetBuilder> routes = {
   'userCheck': (context) => UserCheck(),
   'connectionError': (context) => ConectionError(),
-  'homepage': (context) => Homepage(),
+  'homepage': (context) => HomePage(),
   'welcomePage' : (context) => WelcomePage(),
   'login' : (context) => Login(),
   'signUp': (context) => CadastroApp(),
@@ -34,7 +33,6 @@ final Map<String, WidgetBuilder> routes = {
   'addCreditCard' : (context) => FormCartao(),
   'orders' : (context) => MeusPedidos(),
   'customCake' : (context) => CustomCake(),
-  'tracking' : (context) => Tracking(currentStep: 1),
   'searchPage' : (context) => SearchPage(),
   'cardError' : (context) => CardDenied(),
   'orderConfirmed' : (context) => CardConfirmed(),

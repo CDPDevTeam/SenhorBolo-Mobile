@@ -24,7 +24,6 @@ class CreditcardService {
 
     final storage = FlutterSecureStorage();
     bdPassword = await storage.read(key: 'bdPassword');
-    print(bdPassword);
 
     // Gera uma senha aleatória, caso o BD não tenha sido criado
     if(bdPassword == null){

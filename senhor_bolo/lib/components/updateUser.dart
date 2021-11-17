@@ -175,7 +175,6 @@ class _UpdateUserState extends State<UpdateUser> {
                   onTap: () => Navigator.pushReplacementNamed(context, 'updatePassword'),
                   child: const Text(
                     "Alterar senha",
-                    textAlign: TextAlign.left,
                     style: TextStyle(
                         color: Color(0xffB2B2B2),
                         fontSize: 15,

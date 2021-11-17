@@ -100,7 +100,6 @@ class _FormCartaoState extends State<FormCartao>
 
   Future<void> updateCreditCard() async{
     if (isCCValid()){
-      print('teste');
       String aux = _txtNumCard.text.replaceAll(' ', '');
       CreditCard newCard = CreditCard(
           num: int.parse(aux),
@@ -201,44 +200,48 @@ class _FormCartaoState extends State<FormCartao>
     });
 
     _txtNumCard.addListener(() {
-      if(_txtNumCard.text == ''){
-        _cardNumber = '0000 0000 0000 0000';
-        corCartao = Color(0xffE6E6E6);
-        imgCard = 'images/card.png';
-        corTextoCartao = textSecondaryColor;
-      } else {
-        _cardNumber = _txtNumCard.text;
-        corTextoCartao = Colors.white;
-        setCardColor();
-      }
-      setState(() {});
+      setState(() {
+        if(_txtNumCard.text.isEmpty){
+          _cardNumber = '0000 0000 0000 0000';
+          corCartao = Color(0xffE6E6E6);
+          imgCard = 'images/card.png';
+          corTextoCartao = textSecondaryColor;
+        } else {
+          _cardNumber = _txtNumCard.text;
+          corTextoCartao = Colors.white;
+          setCardColor();
+        }
+      });
     });
 
     _txtCardName.addListener(() {
-      if(_txtCardName.text == ''){
-        _cardName = 'Marcia X';
-      } else {
-        _cardName = _txtCardName.text;
-      }
-      setState(() {});
+      setState(() {
+        if(_txtCardName.text == ''){
+          _cardName = 'Marcia X';
+        } else {
+          _cardName = _txtCardName.text;
+        }
+      });
     });
 
     _txtExpirationDate.addListener(() {
-      if(_txtExpirationDate.text == ''){
-        _cardExpiration = '00/00';
-      } else {
-        _cardExpiration = _txtExpirationDate.text;
-      }
-      setState(() {});
+      setState(() {
+        if(_txtExpirationDate.text == ''){
+          _cardExpiration = '00/00';
+        } else {
+          _cardExpiration = _txtExpirationDate.text;
+        }
+      });
     });
 
     _txtCVV.addListener(() {
-      if(_txtCVV.text == ''){
-        _cardExpiration = '000';
-      } else {
-        _cardCVV = _txtCVV.text;
-      }
-      setState(() {});
+      setState(() {
+        if(_txtCVV.text == ''){
+          _cardExpiration = '000';
+        } else {
+          _cardCVV = _txtCVV.text;
+        }
+      });
     });
   }
 
@@ -281,12 +284,18 @@ class _FormCartaoState extends State<FormCartao>
                           ..rotateY(math.pi * _flipAnimation.value),
                         origin: Offset(MediaQuery.of(context).size.width / 2, 0),
                         child: _flipAnimation.value < 0.5
-                            ? cardFrontView(
-                            corCartao, size, _cardNumber, corTextoCartao, _cardName,_cardExpiration, imgCard
-                        )
+                            ? CardFrontView(
+                            corCartao: corCartao,
+                            size: size,
+                            cardNumber: _cardNumber,
+                            corTextoCartao: corTextoCartao,
+                            cardName: _cardName,
+                            cardExpiration: _cardExpiration,
+                            img: imgCard)
                             : CardBackView(
-                          corCartao: corCartao, size: size, corTexto: corTextoCartao, cvvText: _cardCVV, img: imgCard,
-                        ),
+                            corCartao: corCartao, size: size,
+                            corTexto: corTextoCartao, cvvText: _cardCVV,
+                            img: imgCard),
                       ),
 
                       const SizedBox(height: 20),

@@ -11,14 +11,17 @@ class CakeService{
     if(response.statusCode == 200){
       final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
       return parsed.map<Cake>((json) => Cake.fromJson(json)).toList();
+    } else if (response.statusCode == 404) {
+      List<Cake> listaVazia = [];
+      return listaVazia;
     } else {
       throw Exception('Erro ao buscar bolos');
     }
   }
 
-  Future<List<Cake>> searchCakeByCategory(String cakeCategory) async {
+  Future<List<Cake>> getCakeByCategory(String cakeCategory) async {
     final response = await http.get(
-        Uri.parse(urlAPIBD + '/bolo/$cakeCategory'));
+        Uri.parse(urlAPIBD + '/bolo/categoria/$cakeCategory'));
     if(response.statusCode == 200){
       final parsed = jsonDecode(response.body).cast<Map<String, dynamic>>();
       return parsed.map<Cake>((json) => Cake.fromJson(json)).toList();
@@ -27,7 +30,7 @@ class CakeService{
     }
   }
   
-  Future<List<Cake>> recommendedCake(String cakeCategory) async{
+  Future<List<Cake>> recommendedCake() async{
     final response = await http.get(Uri.parse(urlAPIBD + '/bolo/recomendacao'));
     if(response.statusCode == 200){
       return parseCake(response.body);

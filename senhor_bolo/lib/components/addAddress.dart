@@ -262,7 +262,6 @@ class _AddAddressState extends State<AddAddress> {
               SizedBox(
                 width: 115,
                 child: TextFormField(
-                    autofocus: true,
                     controller: _txtNumber,
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
