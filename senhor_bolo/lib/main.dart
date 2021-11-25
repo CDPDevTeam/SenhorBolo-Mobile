@@ -6,7 +6,8 @@ import 'package:senhor_bolo/routes.dart';
 import 'package:senhor_bolo/theme/style.dart';
 
 void main()  {
-  runApp(MultiProvider(
+  runApp(
+   MultiProvider(
     providers: [
       ChangeNotifierProvider(
         create: (_) => ShoppingCart(),

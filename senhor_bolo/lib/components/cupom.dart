@@ -1,14 +1,9 @@
-import 'dart:convert';
 import 'package:senhor_bolo/services/cupomService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:senhor_bolo/classes/user.dart';
 import 'package:senhor_bolo/model/cupom.dart';
 import '../constants.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:senhor_bolo/components/widgets/iconAppBar.dart';
-import 'package:http/http.dart' as http;
-
 
 class Cupom extends StatefulWidget {
   const Cupom({Key? key}) : super(key: key);
@@ -17,17 +12,9 @@ class Cupom extends StatefulWidget {
 }
 
 class _CupomState extends State<Cupom> {
-  static List _cupomName = ['5% OFF', '10% OFF', '5% OFF', '30% OFF'];
-  static List _cupomDesc = [
-    'Em todo app',
-    'Compras acima de R\$20',
-    'Em todo app',
-    'Em todo app'
-  ];
-
   late Future<List<Coupon>> futureCupom;
-  @override
 
+  @override
   void initState(){
     super.initState();
     futureCupom = CupomService().getCupom();
@@ -88,7 +75,7 @@ class _CupomState extends State<Cupom> {
                                     ),
                                   ),
                                   Text(
-                                    _cupomDesc[index],
+                                   'Em todo o app',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         color: cupomSelecionado == index ? mainTextColor : textSecondaryColor,
@@ -100,8 +87,6 @@ class _CupomState extends State<Cupom> {
                             )));
                   });
             } else if (snapshot.hasError){
-
-              //print(snapshot.hasData);
               throw Exception('Erro ao buscar cupons');
             }
             return Center(
@@ -109,8 +94,6 @@ class _CupomState extends State<Cupom> {
             );
           },
         )
-
-
       ),
     );
   }

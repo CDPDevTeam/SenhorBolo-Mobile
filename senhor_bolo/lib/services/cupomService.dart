@@ -20,15 +20,10 @@ class CupomService{
     final jsonDecoded = jsonDecode(response.body);
     if (response.statusCode == 200){
       print(response.body);
-      print("sexo ${response.statusCode}");
       final parsed = jsonDecoded.cast<Map<String, dynamic>>();
       return parsed.map<Coupon>((json) => Coupon.fromJson(json)).toList();
-    }  /*else if (jsonDecoded['success'] == false){
-    List<Coupon> teste = [];
-    return teste;
-  } */else {
-      print("sexo ${response.statusCode}");
-      throw Exception('Erro ao buscar cupons zap');
+    } else {
+      throw Exception('Erro ao buscar cupons da API');
     }
   }
 }
