@@ -194,7 +194,13 @@ class _UserProfileState extends State<UserProfile> {
                               ),
                               child: IconButton(
                                   color: Colors.white,
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    CoolAlert.show(
+                                      context: context,
+                                      type: CoolAlertType.warning,
+                                      title: 'Não é possível mudar sua foto, ainda!',
+                                    );
+                                  },
                                   icon: const Icon(
                                     Icons.edit,
                                     size: 30,
