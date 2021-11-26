@@ -56,10 +56,10 @@ class HomePage extends StatelessWidget {
                     SizedBox(
                       height: 10,
                     ),
-                    Text(
+                    AutoSizeText(
                       User.username,
+                      minFontSize: 25,
                       style: TextStyle(
-                          fontSize: 30,
                           fontWeight: FontWeight.bold,
                           color: Colors.white),
                     ),
@@ -183,7 +183,7 @@ class HomePage extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       'O que gostaria de pedir?',
                       style: TextStyle(
                           fontSize: 44,

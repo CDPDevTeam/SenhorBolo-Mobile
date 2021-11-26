@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import '../constants.dart';
 import 'package:senhor_bolo/components/widgets/simpleButton.dart';
@@ -14,9 +16,14 @@ class AddressPicker extends StatefulWidget {
 
 class _AddressPickerState extends State<AddressPicker> {
 
-  late Future<List<Address>> listaendereco;
+  final _addressStreamController = StreamController<List<Address>>();
   late Order orderAddress;
   late int addressIndex;
+
+  _loadAdresses() async {
+    List<Address> adresses = await AddressService().getAll();
+    _addressStreamController.add(adresses);
+  }
 
   _addAddress() {
     Navigator.pushNamed(context, 'addAddress');
@@ -25,7 +32,7 @@ class _AddressPickerState extends State<AddressPicker> {
   @override
   void initState() {
     super.initState();
-    listaendereco = AddressService().getAll();
+    Timer.periodic(Duration(milliseconds: 900), (_) => _loadAdresses());
     orderAddress = context.read<Order>();
     addressIndex = orderAddress.orderAddress == null
     ? -1
@@ -66,24 +73,32 @@ class _AddressPickerState extends State<AddressPicker> {
               color: Colors.white,
               borderRadius: BorderRadius.circular(defaultButtonRadius),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Usar a localização atual',
-                  style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                const Icon(Icons.location_searching)
-              ],
-            ),
+            child: InkWell(
+              onTap: (){
+                CoolAlert.show(
+                  context: context,
+                  type: CoolAlertType.warning,
+                  title: 'Não é possível usar sua localização, ainda!',
+                );
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Usar a localização atual',
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  const Icon(Icons.location_searching)
+                ],
+              ),
+            )
           ),
           const SizedBox(height: 15),
-          FutureBuilder<List<Address>>(
-              future: listaendereco,
+          StreamBuilder<List<Address>>(
+              stream: _addressStreamController.stream,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-
                   if(snapshot.data!.length > 0){
                     return ListView.separated(
                         shrinkWrap: true,
@@ -165,7 +180,7 @@ class _AddressPickerState extends State<AddressPicker> {
                         separatorBuilder: (context, index) =>
                         const SizedBox(height: 10));
                   } else {
-                    Container(
+                    return Container(
                       width: double.infinity,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -188,7 +203,6 @@ class _AddressPickerState extends State<AddressPicker> {
                       ),
                     );
                   }
-
                 } else if (snapshot.hasError) {
                   print('${snapshot.error}');
                   Text('${snapshot.error}');

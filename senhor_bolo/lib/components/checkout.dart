@@ -7,6 +7,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:senhor_bolo/classes/order.dart';
 import 'package:senhor_bolo/classes/shoppingCart.dart';
+import 'package:senhor_bolo/components/updateAddress.dart';
 import 'package:senhor_bolo/components/widgets/simpleButton.dart';
 import 'package:senhor_bolo/constants.dart';
 import 'package:senhor_bolo/model/address.dart';
@@ -24,7 +25,6 @@ class Checkout extends StatefulWidget {
 
 class _CheckoutState extends State<Checkout> {
 
-  Set<Marker> _markers = {};
   late Order order;
   late ShoppingCart carrinho;
   late List<Cake> bolos;
@@ -40,16 +40,6 @@ class _CheckoutState extends State<Checkout> {
   _changeAddress(String rua, String numero) async {
     GoogleMapController googleMapController = await _controller.future;
     LatLng mapLocation = await _getAddressCoordinates(rua, numero);
-
-    _markers.add(
-        Marker(
-            markerId: MarkerId('userLocation'),
-            position: mapLocation,
-            infoWindow: InfoWindow(
-              title: "Entregaremos aqui!",
-            )
-        )
-    );
 
     googleMapController.animateCamera(
         CameraUpdate.newCameraPosition(CameraPosition(
@@ -207,7 +197,6 @@ class _CheckoutState extends State<Checkout> {
                                   _controller.complete(googleMapController);
                                   googleMapController.showMarkerInfoWindow(MarkerId('userLocation'));
                                 },
-                                markers: _markers,
                                 mapType: MapType.normal,
                                 myLocationEnabled: false,
                                 mapToolbarEnabled: false,
@@ -225,16 +214,16 @@ class _CheckoutState extends State<Checkout> {
                             ),
                           ),
                         ),
-                            Positioned(
-                                left: 144.5,
-                                top: 60,
-                                child: Icon(
-                                    Icons.place,
-                                    color: Colors.red,
-                                    size: 36.0,
+                        const Positioned(
+                            left: 144.5,
+                            top: 60,
+                            child: Icon(
+                                Icons.place,
+                                color: Colors.red,
+                                size: 36.0,
 
-                                )
-                            )
+                             )
+                        )
                           ],
                         );
 
@@ -551,6 +540,11 @@ class _SelectAddressState extends State<SelectAddress> {
     _addressStreamController.add(adresses);
   }
 
+  _editAddress(Address address){
+    Navigator.push(context, MaterialPageRoute(
+        builder: (context) => UpdateAddress(endereco: address)));
+  }
+
   @override
   void initState() {
     super.initState();
@@ -637,15 +631,6 @@ class _SelectAddressState extends State<SelectAddress> {
                                               ),
                                             ],
                                           ),
-                                          IconButton(
-                                            onPressed: () {
-                                            },
-                                            icon: const Icon(
-                                              Icons.edit,
-                                              color: Colors.black,
-                                              size: 22,
-                                            ),
-                                          )
                                         ],
                                       ),
                                     )
