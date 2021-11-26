@@ -170,37 +170,6 @@ class _MeusPedidosState extends State<MeusPedidos> {
                   );
                 }
             ),
-            /*
-            const Text(
-              "Concluído",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.left,
-            ),
-            const SizedBox(height: 10),
-            ListView.builder(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: _nome.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    child: Column(
-                      children: [
-                        const Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            "Pedido #0000",
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                            textAlign: TextAlign.left,
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        ProdutoPedido(qtde: 32, nomeProduto: _nome[index], categoriaProduto: "Bolo comum", precoProduto: _preco[index], imgProduto: _img[index]),
-                        const SizedBox(height: 10),
-                      ],
-                    ),
-                  );
-                }),*/
           ],
         ),
       )

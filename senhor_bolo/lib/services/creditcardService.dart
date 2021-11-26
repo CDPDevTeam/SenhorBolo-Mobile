@@ -14,9 +14,16 @@ class CreditcardService {
 
   Future<Database> get database async {
     if(_database != null) return _database!;
-
     _database = await _initDB('creditcard.db');
     return _database!;
+  }
+
+  Future<void> deleteDB() async{
+      _database = null;
+      final dbPath = await getDatabasesPath();
+      final path = join(dbPath, 'creditcard.db');
+      deleteDatabase(path);
+      print('banido!');
   }
 
   Future<Database> _initDB(String filepath) async {
@@ -32,7 +39,7 @@ class CreditcardService {
       String getRandomString() => String.fromCharCodes(Iterable.generate(
           32, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
       bdPassword = getRandomString();
-      storage.write(key: 'bdPassword', value: bdPassword);
+      await storage.write(key: 'bdPassword', value: bdPassword);
     }
 
     final dbPath = await getDatabasesPath();

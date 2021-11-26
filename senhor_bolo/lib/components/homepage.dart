@@ -12,6 +12,7 @@ import 'package:senhor_bolo/model/cake.dart';
 import 'package:senhor_bolo/services/cakeService.dart';
 import 'package:senhor_bolo/components/searchResult.dart';
 import 'package:senhor_bolo/components/widgets/produtoVertical.dart';
+import 'package:senhor_bolo/services/creditcardService.dart';
 import '../constants.dart';
 
 
@@ -92,11 +93,13 @@ class HomePage extends StatelessWidget {
                   icone: Icons.info,
                   onTap: () => Navigator.pushNamed(context, 'aboutUs')),
               Divider(color: Colors.white),
-              BuildMenuItem(texto: 'Logout', icone: Icons.logout, onTap: () {
+              BuildMenuItem(texto: 'Sair', icone: Icons.logout, onTap: () {
                 final storage = FlutterSecureStorage();
                 storage.delete(key: 'email');
                 storage.delete(key: 'password');
                 storage.delete(key: 'key');
+                storage.delete(key: 'bdPassword');
+                CreditcardService.instance.deleteDB();
                 Navigator.pushReplacementNamed(context, 'welcomePage');
               })
             ],
@@ -228,9 +231,12 @@ class HomePage extends StatelessWidget {
               GestureDetector(
                   onTap: () => Navigator.pushNamed(context, 'customCake'),
                   child: Center(
-                    child: Image(
-                      image: AssetImage('images/banner_teste.png'),
-                    ),
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 15, right: 15),
+                      child: Image(
+                        image: AssetImage('images/banner_teste.png'),
+                      ),
+                    )
                   )),
               const SizedBox(height: 15),
               HomeSection(categoria: 'Bolo Tradicional'),

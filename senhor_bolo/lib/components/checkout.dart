@@ -1,3 +1,4 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -23,6 +24,9 @@ class Checkout extends StatefulWidget {
 
 class _CheckoutState extends State<Checkout> {
 
+  Set<Marker> _markers = {};
+  late Order order;
+  late ShoppingCart carrinho;
   late List<Cake> bolos;
   late Future<LatLng> latLngAddress;
   Completer<GoogleMapController> _controller = Completer();
@@ -33,57 +37,97 @@ class _CheckoutState extends State<Checkout> {
     return addressLocation;
   }
 
-  void _processarPagamento(){
-    showDialog(
-        context: context,
-        builder: (context)
-        {
-          return Dialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(defaultButtonRadius),
-            ),
-            child: Container(
-              width: 175,
-              height: 133,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text(
-                    'Processando \n pagamento',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold
-                    ),
-                  ),
-                  CircularProgressIndicator(color: mainColor)
-                ],
-              ),
-            ),
-          );
-        }
+  _changeAddress(String rua, String numero) async {
+    GoogleMapController googleMapController = await _controller.future;
+    LatLng mapLocation = await _getAddressCoordinates(rua, numero);
+
+    _markers.add(
+        Marker(
+            markerId: MarkerId('userLocation'),
+            position: mapLocation,
+            infoWindow: InfoWindow(
+              title: "Entregaremos aqui!",
+            )
+        )
     );
-    Future.delayed(Duration(seconds: 2), (){
-      Navigator.pop(context);
-      Navigator.pushReplacementNamed(context, 'orderConfirmed');
-    });
+
+    googleMapController.animateCamera(
+        CameraUpdate.newCameraPosition(CameraPosition(
+          target: mapLocation,
+          zoom: 16,
+    )));
+  }
+
+  void _processarPagamento(){
+    if(order.creditCard != null){
+      order.submitOrder(carrinho.cartItens);
+      showDialog(
+          context: context,
+          builder: (context)
+          {
+            return Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(defaultButtonRadius),
+              ),
+              child: Container(
+                width: 175,
+                height: 133,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text(
+                      'Processando \n pagamento',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold
+                      ),
+                    ),
+                    CircularProgressIndicator(color: mainColor)
+                  ],
+                ),
+              ),
+            );
+          }
+      );
+      Future.delayed(Duration(seconds: 2), (){
+        order.orderCoupon = null;
+        order.creditCard = null;
+        carrinho.cartItens.clear();
+        Navigator.pop(context);
+        Navigator.pushReplacementNamed(context, 'orderConfirmed');
+      });
+    } else {
+      CoolAlert.show(
+          context: context,
+          type: CoolAlertType.error,
+          title: 'Erro no pedido',
+          text: 'Selecione um cartão de crédito',
+          confirmBtnColor: mainColor,
+          onConfirmBtnTap: (){
+            Navigator.of(context).pop();
+          }
+      );
+    }
+
   }
 
   @override
   void initState() {
     super.initState();
-    ShoppingCart carrinho = context.read<ShoppingCart>();
-    Order order = context.read<Order>();
+    order = context.read<Order>();
+    carrinho = context.read<ShoppingCart>();
     latLngAddress = _getAddressCoordinates(order.orderAddress!.rua, order.orderAddress!.num);
     bolos = carrinho.cartItens;
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -141,57 +185,52 @@ class _CheckoutState extends State<Checkout> {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
               const SizedBox(height: 10),
-              FutureBuilder<LatLng>(
-                future: latLngAddress,
-                builder: (context, snapshot) {
-                  if(snapshot.hasData){
+              Consumer<Order>(
+                builder: (context, order, child) {
 
-                    Set<Marker> _markers = {
-                      Marker(
-                        markerId: MarkerId('userLocation'),
-                        position: snapshot.data!,
-                        infoWindow: InfoWindow(
-                        title: "Entregaremos aqui!",
-                        )
-                      )
-                    };
-
-                    return Align(
-                      alignment: Alignment.center,
-                      child: Container(
-                        width: 335,
-                        height: 200,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(25),
-                          child: GoogleMap(
-                            onMapCreated: (GoogleMapController googleMapController) {
-                              _controller.complete(googleMapController);
-                              googleMapController.showMarkerInfoWindow(MarkerId('userLocation'));
-                            },
-                            markers: _markers,
-                            mapType: MapType.normal,
-                            myLocationEnabled: false,
-                            mapToolbarEnabled: false,
-                            rotateGesturesEnabled: false,
-                            scrollGesturesEnabled: false,
-                            tiltGesturesEnabled: false,
-                            zoomGesturesEnabled: false,
-                            zoomControlsEnabled: false,
-                            myLocationButtonEnabled: false,
-                            initialCameraPosition: CameraPosition(
-                                target: snapshot.data!,
-                                zoom: 16,
+                  _changeAddress(order.orderAddress!.rua, order.orderAddress!.bairro);
+                  return FutureBuilder<LatLng>(
+                    future: latLngAddress,
+                    builder: (context, snapshot) {
+                      if(snapshot.hasData){
+                        return Align(
+                          alignment: Alignment.center,
+                          child: Container(
+                            width: 335,
+                            height: 200,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(25),
+                              child: GoogleMap(
+                                onMapCreated: (GoogleMapController googleMapController) {
+                                  _controller.complete(googleMapController);
+                                  googleMapController.showMarkerInfoWindow(MarkerId('userLocation'));
+                                },
+                                markers: _markers,
+                                mapType: MapType.normal,
+                                myLocationEnabled: false,
+                                mapToolbarEnabled: false,
+                                rotateGesturesEnabled: false,
+                                scrollGesturesEnabled: false,
+                                tiltGesturesEnabled: false,
+                                zoomGesturesEnabled: false,
+                                zoomControlsEnabled: false,
+                                myLocationButtonEnabled: false,
+                                initialCameraPosition: CameraPosition(
+                                  target: snapshot.data!,
+                                  zoom: 16,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                    );
-                  } else {
-                    return Container(
-                      width: 335,
-                      height: 200,
-                    );
-                  }
+                        );
+                      } else {
+                        return Container(
+                          width: 335,
+                          height: 200,
+                        );
+                      }
+                    },
+                  );
                 },
               ),
               const SizedBox(height: 10),
@@ -394,29 +433,49 @@ class _CheckoutState extends State<Checkout> {
                         )
                       ],
                     ),
-                    Flex(
-                      direction: Axis.horizontal,
-                      children: [
-                        const Text(
-                          '10% OFF',
-                          style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                              color: textSecondaryColor
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        const Text(
-                          '-R\$ 10,00',
-                          style: TextStyle(
-                              fontFamily: 'Montserrat',
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                      ],
-                    )
+                    Consumer<Order>(
+                    builder: (context, order, child){
+                      if(order.orderCoupon == null){
+                        return Flex(
+                          direction: Axis.horizontal,
+                          children: [
+                            const Text(
+                              "Sem cupom selecionado",
+                              style: TextStyle(
+                                  fontSize: 12, fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                          ],
+                        );
+                      } else {
+                        return Flex(
+                          direction: Axis.horizontal,
+                          children: [
+                            Text(
+                              '${order.orderCoupon!.discountPercentage}%OFF ',
+                              style: const TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: textSecondaryColor
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              '-R\$ ${order.getCouponDiscount().toStringAsFixed(2)}',
+                              style: const TextStyle(
+                                  fontFamily: 'Montserrat',
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                          ],
+                        );
+                      }
+                    }
+                    ),
+
                   ],
                 ),
               ),
@@ -467,13 +526,19 @@ class SelectAddress extends StatefulWidget {
 }
 
 class _SelectAddressState extends State<SelectAddress> {
-  late Future<List<Address>> listaendereco;
+
+  final _addressStreamController = StreamController<List<Address>>();
   late Order orderA;
+
+  _loadAdresses() async {
+    List<Address> adresses = await AddressService().getAll();
+    _addressStreamController.add(adresses);
+  }
 
   @override
   void initState() {
     super.initState();
-    listaendereco = AddressService().getAll();
+    Timer.periodic(Duration(seconds: 1), (_) => _loadAdresses());
     orderA = context.read<Order>();
   }
 
@@ -493,8 +558,8 @@ class _SelectAddressState extends State<SelectAddress> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  FutureBuilder<List<Address>>(
-                      future: listaendereco,
+                  StreamBuilder<List<Address>>(
+                      stream: _addressStreamController.stream,
                       builder: (context, snapshot){
                         if (snapshot.hasData){
                           return ListView.separated(
@@ -544,9 +609,9 @@ class _SelectAddressState extends State<SelectAddress> {
                                                         fontWeight: FontWeight.bold),
                                                   ),
                                                   Text(
-                                                    endereco.observacao != null
-                                                        ? 'Sem observação'
-                                                        : '${endereco.observacao}',
+                                                    endereco.complemento != null
+                                                        ? '${endereco.complemento}'
+                                                        : 'Sem complemento',
                                                     overflow: TextOverflow.fade,
                                                     style: TextStyle(
                                                         color: textSecondaryColor,
@@ -618,13 +683,18 @@ class SelectCard extends StatefulWidget {
 
 class _SelectCardState extends State<SelectCard> {
 
-  late Future<List<CreditCard>> creditcards;
+  final _ccStreamController = StreamController<List<CreditCard>>();
   late Order order;
+
+  _loadCreditCards() async {
+    List<CreditCard> creditcards = await CreditcardService.instance.selectAll();
+    _ccStreamController.add(creditcards);
+  }
 
   @override
   void initState() {
     super.initState();
-    creditcards = CreditcardService.instance.selectAll();
+    Timer.periodic(Duration(seconds: 1), (_) => _loadCreditCards());
     order = context.read<Order>();
   }
 
@@ -645,8 +715,8 @@ class _SelectCardState extends State<SelectCard> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                FutureBuilder<List<CreditCard>>(
-                  future: creditcards,
+                StreamBuilder<List<CreditCard>>(
+                  stream: _ccStreamController.stream,
                   builder: (context, snapshot) {
                     if(snapshot.hasData){
                       return ListView.separated(

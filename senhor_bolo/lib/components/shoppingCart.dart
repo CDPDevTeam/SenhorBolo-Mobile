@@ -179,7 +179,7 @@ class _CartState extends State<Cart> {
                         ),
                         primary: mainTextColor,
                         onPrimary: Colors.black),
-                    onPressed: _goToCheckout,
+                    onPressed: () => Navigator.pushNamed(context, 'cupons'),
                     child: Consumer<Order>(
                       builder: (context, order, child){
                         if(order.orderCoupon == null){
@@ -201,15 +201,15 @@ class _CartState extends State<Cart> {
                                       fontSize: 20, fontWeight: FontWeight.bold)),
                               RichText(
                                 text: TextSpan(
-                                    text: '${order.orderCoupon!.discountPercentage}%',
+                                    text: '${order.orderCoupon!.discountPercentage}%OFF ',
                                     style: const TextStyle(
-                                        fontFamily: 'Raleway',
+                                        fontFamily: 'Montserrat',
                                         fontSize: 19,
                                         color: textSecondaryColor
                                     ),
                                     children: <TextSpan>[
                                       TextSpan(
-                                          text: '${order.getCouponDiscount()}',
+                                          text: '-R\$ ${order.getCouponDiscount().toStringAsFixed(2)}',
                                           style: const TextStyle(
                                               fontWeight: FontWeight.normal,
                                               color: Colors.black

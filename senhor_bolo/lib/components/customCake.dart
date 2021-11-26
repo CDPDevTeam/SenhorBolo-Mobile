@@ -1,5 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/src/provider.dart';
+import 'package:senhor_bolo/classes/shoppingCart.dart';
+import 'package:senhor_bolo/services/cakeService.dart';
 import '../constants.dart';
 import 'package:senhor_bolo/model/opcaoBoloPersonalizado.dart';
 import 'package:senhor_bolo/services/boloPersonalizadoService.dart';
@@ -13,11 +17,9 @@ class CustomCakeInfo{
   String? recheio;
   String? cobertura;
   String? confeito;
-  String? nome;
-  String? imagem;
 
-  CustomCakeInfo({this.massa, this.recheio, this.cobertura, this.confeito,
-      required this.nome, this.imagem});
+
+  CustomCakeInfo({this.massa, this.recheio, this.cobertura, this.confeito});
 
   bool campoPreenchido(int indexPagina){
     switch (indexPagina){
@@ -58,7 +60,7 @@ class CustomCakeInfo{
   }
 }
 
-CustomCakeInfo customCakeObject = CustomCakeInfo(nome: 'Bolo Personalizado');
+CustomCakeInfo customCakeObject = CustomCakeInfo();
 
 class CustomCake extends StatefulWidget {
   const CustomCake({Key? key}) : super(key: key);
@@ -69,9 +71,23 @@ class CustomCake extends StatefulWidget {
 
 class _CustomCakeState extends State<CustomCake> {
 
-  List<String> boloPersonalizado = [];
-
+ List<String> boloPersonalizado = [];
  int indexPagina = 0;
+ int _qtdeItem = 1;
+
+ _postCustomCake() async{
+   var shoppingCart = context.read<ShoppingCart>();
+   final bolo = await CakeService().insertCustomCake(
+       customCakeObject.massa,
+       customCakeObject.recheio,
+       customCakeObject.cobertura,
+       customCakeObject.confeito,
+   );
+   bolo.qtde = _qtdeItem;
+   shoppingCart.addItem(bolo);
+   Navigator.of(context).pop();
+ }
+
  List<Widget> paginas = [
     CustomCakeOptionStep(
         tituloOpcao: 'Selecione a massa do bolo',
@@ -153,8 +169,6 @@ class _CustomCakeState extends State<CustomCake> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-
     return Scaffold(
         appBar: IconAppBar(
           appBarIcon: Icons.cake,
@@ -177,20 +191,70 @@ class _CustomCakeState extends State<CustomCake> {
           ],
         ),
         bottomNavigationBar: Container(
-          height: size.height * 0.13,
-          decoration: const BoxDecoration(
-              color: Color(0xffE6E6E6),
+            height: 90,
+            decoration: const BoxDecoration(
+              color: Colors.white,
               borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(25), topLeft: Radius.circular(25))),
-          child: Row(
+                  topLeft: Radius.circular(25), topRight: Radius.circular(25)),
+            ),
+          child: indexPagina > 3
+            ? Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  if (_qtdeItem > 1) {
+                    setState(() {
+                      _qtdeItem--;
+                    });
+                  }
+                },
+                child: const Icon(
+                  Icons.remove,
+                  size: 30,
+                  color: Colors.black,
+                ),
+                style: ElevatedButton.styleFrom(
+                    primary: const Color(0xffF5F5F5),
+                    shape: const CircleBorder(),
+                    minimumSize: const Size(48.0, 48.0)),
+              ),
+              Text(
+                '$_qtdeItem',
+                style: const TextStyle(
+                    fontFamily: 'Montserrat',
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    _qtdeItem++;
+                  });
+                },
+                child: const Icon(
+                  Icons.add,
+                  size: 30,
+                  color: Colors.black,
+                ),
+                style: ElevatedButton.styleFrom(
+                    primary: const Color(0xffF5F5F5),
+                    shape: const CircleBorder(),
+                    minimumSize: const Size(48.0, 48.0)),
+              ),
+              simpleButton(199, 39, 'Adicionar ao carrinho', _postCustomCake,
+                  10, 16, mainColor)
+            ],
+          )
+          : Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               simpleButton(
-                  175, 55, 'Prosseguir', prosseguir, 25, 20, mainColor),
-              simpleButton(
                   175, 55, txtBtnVermelho, voltar, 25, 20, redButtonColor),
+              simpleButton(
+                  175, 55, 'Prosseguir', prosseguir, 25, 20, mainColor),
             ],
-          ),
+          )
         )
     );
   }
@@ -592,9 +656,6 @@ class CustomCakeFinal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    customCakeObject.nome = 'Bolo personalizado';
-
     return ListView(
       physics: BouncingScrollPhysics(),
       children: [
@@ -626,9 +687,7 @@ class CustomCakeFinal extends StatelessWidget {
                     borderRadius: BorderRadius.circular(25),
                   ),
                   child: CachedNetworkImage(
-                    imageUrl: customCakeObject.imagem == null
-                    ? urlImagem + '/bolos/personalizado.png'
-                    : urlImagem + '/bolos/${customCakeObject.imagem}',
+                    imageUrl: urlImagem + '/bolos/personalizado.png',
                     errorWidget: (context, url, error) => const Center(
                       child: Text(
                         'Erro ao carregar a imagem :(',
@@ -654,7 +713,7 @@ class CustomCakeFinal extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             AutoSizeText(
-                              '${customCakeObject.nome}',
+                              'Seu bolo personalizado',
                               maxLines: 1,
                               style: const TextStyle(
                                   fontSize: 34,

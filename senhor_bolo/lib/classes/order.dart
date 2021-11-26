@@ -1,15 +1,22 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:senhor_bolo/classes/user.dart';
 import 'package:senhor_bolo/model/address.dart';
+import 'package:senhor_bolo/model/cake.dart';
 import 'package:senhor_bolo/model/creditcard.dart';
 import 'package:senhor_bolo/model/cupom.dart';
+import 'package:http/http.dart' as http;
+
+import '../constants.dart';
 
 class Order extends ChangeNotifier{
+
  static double cartSubtotal = 0;
  Coupon? _orderCoupon;
  CreditCard? _creditCard;
  Address? _orderAddress;
- late LatLng _addressLatLng;
 
  Coupon? get orderCoupon => _orderCoupon;
  CreditCard? get creditCard => _creditCard;
@@ -36,63 +43,51 @@ class Order extends ChangeNotifier{
  }
 
  double getOrderPrice(){
-    double total = (cartSubtotal * getCouponDiscount()) + 10;
-    return total;
-  }
+   double total = (cartSubtotal - getCouponDiscount()) + 10;
+   return total;
+ }
 
-  getCouponDiscount(){
-    if (_orderCoupon != null){
-      return 1 - (_orderCoupon!.discountPercentage / 100);
-    } else {
-      return 1;
-    }
-  }
+ getCouponDiscount(){
+   if (_orderCoupon != null){
+     double porcentagemDesconto = (_orderCoupon!.discountPercentage / 100);
+     double valorDesconto = ((cartSubtotal + 10) * porcentagemDesconto);
+     return valorDesconto;
+   } else {
+     return 0;
+   }
+ }
 
-/*
-  Future<bool> submitOrder() async{
+  Future<bool> submitOrder(List<Cake> produtos) async{
+    late int? idCupom;
     FlutterSecureStorage storage = FlutterSecureStorage();
-    String? jwtKey = await storage.read(key: 'key');
+    String? key = await storage.read(key: 'key');
+
+    if(orderCoupon == null){
+      idCupom = null;
+    } else {
+      idCupom = orderCoupon!.id;
+    }
+
     var body = jsonEncode(
         {
           'email': User.email,
-          "endereco": orderAddress,
-          "cupom": orderCoupon!.id,
-          "statusCompra": "Pedido recebido",
-          "ecommerce": true
+          "endereco": orderAddress!.id,
+          "cupom": idCupom,
+          "produtos": produtos
         }
     );
-    http.Response responseOrder = await http.post(
-      Uri.parse(urlAPIBD + '/pedido'),
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $jwtKey'
-      },
-      body: body
+
+    http.Response response = await http.post(
+        Uri.parse(urlAPIBD + '/pedido'),
+        headers: {
+          'Authorization' : 'Bearer $key'
+        },
+        body: body
     );
-    if(responseOrder.statusCode == 200){
-      final parsed = jsonDecode(responseOrder.body);
-      int orderID = parsed['idPedido'];
-      for(int i = 0; i < ShoppingCart.cartItens.length; i++){
-        var itemBody = jsonEncode(
-            {
-              'idProduto': orderID,
-              'idPedido': 1,
-              'valorUnitario': ShoppingCart.cartItens[i].price,
-              'qtde': ShoppingCart.cartItens[i].qtde
-            }
-        );
-        http.post(
-          Uri.parse(urlAPIBD + '/pedido/item'),
-          headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-            'Authorization': 'Bearer $jwtKey'
-          },
-          body: itemBody
-        );
-      }
-      return true;
-    } else {
-      return false;
-    }
-  }*/
+
+    print(body);
+    print(response.statusCode == 200);
+
+    return true;
+  }
 }

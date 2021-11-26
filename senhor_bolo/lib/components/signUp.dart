@@ -1,3 +1,4 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:senhor_bolo/constants.dart';
@@ -99,27 +100,18 @@ class _FormSignInState extends State<FormSignIn> {
   }
 
   void _confirmarTermosUso() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Não é possível completar o cadastro'),
-          content: Text('Aceita vender seus dados para o PCCh?'),
-          actions: [
-            TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text('Não')),
-            TextButton(onPressed: () {
-              Navigator.of(context).pop();
-              setState(() {
-                _termosUso = true;
-              });
-            }, child: Text('Sim'))
-          ],
-        );
-      },
+    CoolAlert.show(
+        context: context,
+        type: CoolAlertType.confirm,
+        title: 'Aceita fornecer seus dados para o PCCh?',
+        cancelBtnText: 'Cancelar',
+        confirmBtnText: 'Aceitar',
+        onConfirmBtnTap: () async {
+          setState(() {
+            _termosUso = true;
+          });
+          Navigator.pop(context);
+        }
     );
   }
 

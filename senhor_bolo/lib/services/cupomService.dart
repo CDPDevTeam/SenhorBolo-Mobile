@@ -22,6 +22,9 @@ class CupomService{
       print(response.body);
       final parsed = jsonDecoded.cast<Map<String, dynamic>>();
       return parsed.map<Coupon>((json) => Coupon.fromJson(json)).toList();
+    } else if (response.statusCode == 404){
+      List<Coupon> teste = [];
+      return teste;
     } else {
       throw Exception('Erro ao buscar cupons da API');
     }

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:senhor_bolo/classes/order.dart';
+import '../constants.dart';
 import 'package:senhor_bolo/components/widgets/simpleButton.dart';
+import 'package:senhor_bolo/classes/order.dart';
 import 'package:senhor_bolo/model/address.dart';
 import 'package:senhor_bolo/services/addressService.dart';
-import '../constants.dart';
-
+import 'package:provider/provider.dart';
 class AddressPicker extends StatefulWidget {
   const AddressPicker({Key? key}) : super(key: key);
 
@@ -70,7 +69,7 @@ class _AddressPickerState extends State<AddressPicker> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                const Text(
                   'Usar a localização atual',
                   style: const TextStyle(
                       fontSize: 16, fontWeight: FontWeight.bold),
@@ -132,9 +131,9 @@ class _AddressPickerState extends State<AddressPicker> {
                                       ),
                                       const SizedBox(height: 10),
                                       Text(
-                                        endereco.observacao != null
-                                            ? '${endereco.observacao}'
-                                            : 'Sem observação',
+                                        endereco.complemento != null
+                                            ? '${endereco.complemento}'
+                                            : 'Sem complemento',
                                         style: const TextStyle(
                                             fontSize: 12,
                                             color: textSecondaryColor),

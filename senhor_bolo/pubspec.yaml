@@ -45,6 +45,7 @@ dependencies:
   password_strength: ^0.2.0
   credit_card_validator: ^2.0.0
   cached_network_image: ^3.1.0+1
+  device_preview: ^1.0.0-alpha.15
 
 dev_dependencies:
   flutter_test:

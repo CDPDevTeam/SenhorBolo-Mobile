@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:senhor_bolo/components/creditcard.dart';
 import 'package:senhor_bolo/components/updateAddress.dart';
 import 'package:senhor_bolo/constants.dart';
@@ -41,13 +42,25 @@ class _UserProfileState extends State<UserProfile> {
     Navigator.pushNamed(context, 'updateUser');
   }
 
+  void _deleteUserInfo() async {
+    Navigator.of(context).popUntil((route) => route.isFirst);
+    final storage = FlutterSecureStorage();
+    storage.delete(key: 'email');
+    storage.delete(key: 'password');
+    storage.delete(key: 'key');
+    storage.delete(key: 'bdPassword');
+    await CreditcardService.instance.deleteDB();
+    Navigator.pushReplacementNamed(context, 'welcomePage');
+  }
+
   void _deleteAccount(){
     CoolAlert.show(
         context: context,
-        type: CoolAlertType.error,
-        title: 'Uma vez dentro, já era...',
-        text: 'Não é possivel prosseguir, já que os registros no BD ficarão errados.',
-        confirmBtnColor: mainColor
+        type: CoolAlertType.confirm,
+        title: 'Deseja sair ?',
+        cancelBtnText: 'Cancelar',
+        confirmBtnColor: mainColor,
+        onConfirmBtnTap: () => _deleteUserInfo()
     );
   }
 
@@ -432,8 +445,8 @@ class _UserProfileState extends State<UserProfile> {
           children: [
             simpleButtonIcon(177, 55, "Suporte", _openSupport, 25, 20, mainColor,
                 Icon(Icons.headset), FontWeight.bold),
-            simpleButtonIcon(177, 55, "Deletar", _deleteAccount, 25, 20, redButtonColor,
-                Icon(Icons.delete), FontWeight.bold),
+            simpleButtonIcon(177, 55, "Sair", _deleteAccount, 25, 20, redButtonColor,
+                Icon(Icons.logout), FontWeight.bold),
           ],
         ),
       ),

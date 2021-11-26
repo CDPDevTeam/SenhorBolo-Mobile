@@ -56,9 +56,9 @@ class WelcomePage extends StatelessWidget {
                 mainColor
             ),
             GestureDetector(
-              onTap: () => Navigator.pushReplacementNamed(context, 'homepage'),
+              onTap: () => Navigator.pushReplacementNamed(context, 'signUp'),
               child: const Text(
-                "Continuar como convidado",
+                "Fazer cadastro no Senhor Bolo",
                 style: TextStyle(
                     color: Color(0xffB2B2B2),
                     fontSize: 15,

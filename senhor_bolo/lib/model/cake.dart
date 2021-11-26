@@ -26,4 +26,12 @@ class Cake {
         qtde: 0,
     );
   }
+
+  Map<String,dynamic> toJson(){
+    return {
+      "idProduto": this.id,
+      "valorUnitario": this.price,
+      "qtdePedido": this.qtde
+    };
+  }
 }
