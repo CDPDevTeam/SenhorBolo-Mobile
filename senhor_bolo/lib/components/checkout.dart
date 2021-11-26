@@ -193,7 +193,9 @@ class _CheckoutState extends State<Checkout> {
                     future: latLngAddress,
                     builder: (context, snapshot) {
                       if(snapshot.hasData){
-                        return Align(
+                        return Stack(
+                          children: [
+                          Align(
                           alignment: Alignment.center,
                           child: Container(
                             width: 335,
@@ -222,7 +224,21 @@ class _CheckoutState extends State<Checkout> {
                               ),
                             ),
                           ),
+                        ),
+                            Positioned(
+                                left: 144.5,
+                                top: 60,
+                                child: Icon(
+                                    Icons.place,
+                                    color: Colors.red,
+                                    size: 36.0,
+
+                                )
+                            )
+                          ],
                         );
+
+
                       } else {
                         return Container(
                           width: 335,
