@@ -11,63 +11,59 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: CustomScrollView(
-          physics: NeverScrollableScrollPhysics(),
-          slivers: <Widget>[
-            SliverAppBar(
-              pinned: true,
-              toolbarHeight: 88,
-              centerTitle: true,
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(25),
-                      bottomRight: Radius.circular(25))),
-                title: const Image(
-                  image: AssetImage('images/logo_login.png'),
-                  width: 200,
-                ),
-                expandedHeight: 438,
-          flexibleSpace: FlexibleSpaceBar(
-            background: Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                    alignment: Alignment.bottomCenter,
-                    image: AssetImage('images/bolo_login.png',),
-                    fit: BoxFit.fitWidth),
-              ),
-              padding: const EdgeInsets.fromLTRB(34, 110, 34, 32),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Text>[
-                  const Text(
-                    'Bem vindo!',
-                    style: TextStyle(
-                        fontSize: 50,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
+      appBar: AppBar(
+        elevation: 0,
+        toolbarHeight: 88,
+        centerTitle: true,
+        title: const Image(
+          image: AssetImage('images/logo_login.png'),
+          width: 200,
+        )),
+        body: Container(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: 400,
+                  decoration: const BoxDecoration(
+                    color: mainColor,
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(25),
+                        bottomRight: Radius.circular(25)),
+                    image: DecorationImage(
+                        alignment: Alignment.bottomCenter,
+                        image: AssetImage('images/bolo_login.png',),
+                        fit: BoxFit.fitWidth
+                    ),
                   ),
-                  const Text(
-                    'Entre para comprar',
-                    style: TextStyle(fontSize: 25, color: Colors.white),
-                  ),
-                ],
-              ),
-            ),
-            )),
-            SliverList(
-              delegate: SliverChildListDelegate(
-                [
-                  Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 30,
-                        horizontal: 40,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Text>[
+                      const Text(
+                        'Bem vindo!',
+                        style: TextStyle(
+                            fontSize: 50,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
                       ),
-                      child: FormLogin()
-                  )
-                ]
-              ),
-            )
-          ],
+                      const Text(
+                        'Entre para comprar',
+                        style: TextStyle(fontSize: 25, color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 30,
+                    horizontal: 40,
+                  ),
+                  child: FormLogin(),
+                ),
+              ],
+            ),
+          )
         )
     );
   }

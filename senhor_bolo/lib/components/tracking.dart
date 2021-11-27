@@ -62,7 +62,7 @@ class Tracking extends StatelessWidget {
               Step(
                   state: currentStep >= 1 ? StepState.complete : StepState.disabled,
                   isActive: currentStep >= 1,
-                  title: const Text("Pedido em preparação", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Raleway')),
+                  title: const Text("Pedido pronto", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Raleway')),
                   content: const DeliveryStep(
                       stepText: 'Seu bolo delicioso está agora saindo do forno e logo mais será enviado para sua casa!',
                       image: 'pedido_preparacao.png')
@@ -70,7 +70,7 @@ class Tracking extends StatelessWidget {
               Step(
                   state: currentStep >= 2 ? StepState.complete : StepState.disabled,
                   isActive: currentStep >= 2,
-                  title: const Text("Pedido a caminho",style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Raleway')),
+                  title: const Text("Pedido à caminho",style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Raleway')),
                   content: const DeliveryStep(
                       stepText: 'Seu pedido já está com o nosso cuidadoso motoboy, que com certeza não irá fazer grau com a moto a caminho de sua residência!',
                       image: 'pedido_entrega.png')

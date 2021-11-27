@@ -48,6 +48,8 @@ class _CakeDetailState extends State<CakeDetail> {
         price: widget.precoProduto,
         qtde: _qtdeItem
     );
+    //Método para comparar
+    
     shoppingCart.addItem(bolo);
   }
 
