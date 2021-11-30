@@ -11,5 +11,5 @@ O projeto ainda está em desenvolvimento e as próximas atualizações serão vo
 - [X] Fazer as telas do APP
 - [X] Conexão com o banco de dados
 - [X] POO
-- [ ] Testes de qualidade
-- [ ] Lançamento
+- [X] Testes de qualidade
+- [X] Lançamento
